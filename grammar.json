@@ -1,0 +1,1991 @@
+[
+ {
+  "id": "A1-01",
+  "level": "A1",
+  "title": "Personalpronomen und sein / haben",
+  "title_fa": "ضمایر شخصی و افعال sein و haben",
+  "explain": [
+   "ضمایر: ich (من)، du (تو)، er/sie/es (او)، wir (ما)، ihr (شما، جمع)، sie (آن‌ها)، Sie (شما، رسمی).",
+   "sein (بودن): ich bin، du bist، er/sie/es ist، wir sind، ihr seid، sie/Sie sind.",
+   "haben (داشتن): ich habe، du hast، er/sie/es hat، wir haben، ihr habt، sie/Sie haben."
+  ],
+  "examples": [
+   {
+    "de": "Ich bin Student.",
+    "fa": "من دانشجو هستم."
+   },
+   {
+    "de": "Du hast ein Auto.",
+    "fa": "تو یک ماشین داری."
+   },
+   {
+    "de": "Wir sind aus Spanien.",
+    "fa": "ما اهل اسپانیا هستیم."
+   },
+   {
+    "de": "Haben Sie Zeit, Herr Müller?",
+    "fa": "آقای مولر، وقت دارید؟"
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Er ___ müde.",
+    "options": [
+     "ist",
+     "bin",
+     "sind"
+    ],
+    "answer": 1,
+    "explain": "برای er/sie/es فعل sein می‌شود ist."
+   },
+   {
+    "q": "Ihr ___ Hunger.",
+    "options": [
+     "habt",
+     "hast",
+     "haben"
+    ],
+    "answer": 1,
+    "explain": "برای ihr فعل haben می‌شود habt."
+   },
+   {
+    "q": "Wir ___ in Berlin.",
+    "options": [
+     "seid",
+     "sind",
+     "bin"
+    ],
+    "answer": 2,
+    "explain": "برای wir فعل sein می‌شود sind."
+   }
+  ]
+ },
+ {
+  "id": "A1-02",
+  "level": "A1",
+  "title": "Präsens: regelmäßige Verben",
+  "title_fa": "حال ساده: فعل‌های باقاعده",
+  "explain": [
+   "ریشه‌ی فعل را از مصدر (-en) جدا کن و پایانه بگذار: ich -e، du -st، er/sie/es -t، wir -en، ihr -t، sie/Sie -en.",
+   "مثال: machen ← ich mache، du machst، er macht، wir machen، ihr macht، sie machen.",
+   "اگر ریشه به t یا d ختم شود، برای du/er/ihr یک e اضافه می‌شود: arbeiten ← du arbeitest، er arbeitet."
+  ],
+  "examples": [
+   {
+    "de": "Ich wohne in Berlin.",
+    "fa": "من در برلین زندگی می‌کنم."
+   },
+   {
+    "de": "Du lernst Deutsch.",
+    "fa": "تو آلمانی یاد می‌گیری."
+   },
+   {
+    "de": "Er arbeitet bei Siemens.",
+    "fa": "او در زیمنس کار می‌کند."
+   },
+   {
+    "de": "Wir spielen Fußball.",
+    "fa": "ما فوتبال بازی می‌کنیم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Du ___ gern Kaffee. (trinken)",
+    "options": [
+     "trinkt",
+     "trinkst",
+     "trinke"
+    ],
+    "answer": 2,
+    "explain": "برای du پایانه‌ی -st می‌آید."
+   },
+   {
+    "q": "Er ___ heute lange. (arbeiten)",
+    "options": [
+     "arbeitet",
+     "arbeitt",
+     "arbeiten"
+    ],
+    "answer": 1,
+    "explain": "ریشه‌ی arbeit- به t ختم می‌شود، پس e اضافه می‌شود."
+   },
+   {
+    "q": "Ihr ___ viel. (lernen)",
+    "options": [
+     "lernst",
+     "lernt",
+     "lernen"
+    ],
+    "answer": 2,
+    "explain": "برای ihr پایانه‌ی -t می‌آید."
+   }
+  ]
+ },
+ {
+  "id": "A1-03",
+  "level": "A1",
+  "title": "Artikel und Genus",
+  "title_fa": "حرف تعریف و جنسیت اسم‌ها",
+  "explain": [
+   "هر اسم آلمانی یکی از سه جنس را دارد: der (مذکر)، die (مؤنث)، das (خنثی). جنس را همراه اسم یاد بگیر!",
+   "حرف تعریف نامعین: ein (مذکر/خنثی)، eine (مؤنث). جمع حرف تعریف نامعین ندارد و حرف تعریف معین جمع همیشه die است.",
+   "راهنما: اسم‌های با پایان -ung، -heit، -keit، -schaft معمولاً مؤنث‌اند؛ پایان -chen و -lein همیشه خنثی است."
+  ],
+  "examples": [
+   {
+    "de": "der Tisch – ein Tisch",
+    "fa": "میز"
+   },
+   {
+    "de": "die Lampe – eine Lampe",
+    "fa": "چراغ"
+   },
+   {
+    "de": "das Kind – ein Kind",
+    "fa": "کودک"
+   },
+   {
+    "de": "die Wohnung",
+    "fa": "آپارتمان (پایان -ung ← مؤنث)"
+   }
+  ],
+  "quiz": [
+   {
+    "q": "___ Zeitung ist neu.",
+    "options": [
+     "Der",
+     "Die",
+     "Das"
+    ],
+    "answer": 2,
+    "explain": "Zeitung مؤنث است (پایان -ung)."
+   },
+   {
+    "q": "___ Mädchen spielt im Garten.",
+    "options": [
+     "Der",
+     "Die",
+     "Das"
+    ],
+    "answer": 3,
+    "explain": "پایان -chen همیشه خنثی است."
+   },
+   {
+    "q": "Das ist ___ Lampe.",
+    "options": [
+     "ein",
+     "eine",
+     "einen"
+    ],
+    "answer": 2,
+    "explain": "Lampe مؤنث است، پس eine."
+   }
+  ]
+ },
+ {
+  "id": "A1-04",
+  "level": "A1",
+  "title": "Plural der Nomen",
+  "title_fa": "جمع اسم‌ها",
+  "explain": [
+   "جمع چند شکل دارد: -e (der Tag ← die Tage)، -n/-en (die Frau ← die Frauen)، -er (das Kind ← die Kinder)، -s (das Auto ← die Autos)، بدون پایانه (der Lehrer ← die Lehrer) و گاهی با Umlaut: der Vater ← die Väter.",
+   "جمع را همراه اسم یاد بگیر. در جمع، حرف تعریف معین همیشه die است."
+  ],
+  "examples": [
+   {
+    "de": "der Tisch ← die Tische",
+    "fa": "میزها"
+   },
+   {
+    "de": "die Frau ← die Frauen",
+    "fa": "زن‌ها"
+   },
+   {
+    "de": "das Kind ← die Kinder",
+    "fa": "بچه‌ها"
+   },
+   {
+    "de": "das Auto ← die Autos",
+    "fa": "ماشین‌ها"
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Plural von „das Buch“",
+    "options": [
+     "die Buche",
+     "die Bücher",
+     "die Buchs"
+    ],
+    "answer": 2,
+    "explain": "Buch ← Bücher (پایان -er و Umlaut)."
+   },
+   {
+    "q": "Plural von „die Blume“",
+    "options": [
+     "die Blumen",
+     "die Blume",
+     "die Blumes"
+    ],
+    "answer": 1,
+    "explain": "اسم‌های مؤنث با پایان -e معمولاً -n می‌گیرند."
+   },
+   {
+    "q": "Plural von „das Auto“",
+    "options": [
+     "die Autos",
+     "die Auter",
+     "die Autoen"
+    ],
+    "answer": 1,
+    "explain": "واژه‌های خارجی معمولاً -s می‌گیرند."
+   }
+  ]
+ },
+ {
+  "id": "A1-05",
+  "level": "A1",
+  "title": "Negation: nicht und kein",
+  "title_fa": "نفی: nicht و kein",
+  "explain": [
+   "kein برای نفی اسمی است که ein دارد یا حرف تعریف ندارد: Ich habe ein Auto ← Ich habe kein Auto.",
+   "nicht برای نفی فعل، صفت، قید یا اسم با حرف تعریف معین: Ich komme nicht. Das Auto ist nicht neu.",
+   "kein مثل ein صرف می‌شود: kein، keine، kein؛ در جمع: keine."
+  ],
+  "examples": [
+   {
+    "de": "Ich habe keine Zeit.",
+    "fa": "من وقت ندارم."
+   },
+   {
+    "de": "Er ist nicht zu Hause.",
+    "fa": "او خانه نیست."
+   },
+   {
+    "de": "Das ist kein Problem.",
+    "fa": "این مشکلی نیست."
+   },
+   {
+    "de": "Wir spielen heute nicht.",
+    "fa": "ما امروز بازی نمی‌کنیم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich habe ___ Geld.",
+    "options": [
+     "nicht",
+     "kein",
+     "keine"
+    ],
+    "answer": 2,
+    "explain": "Geld خنثی است و حرف تعریف ندارد ← kein."
+   },
+   {
+    "q": "Das Wetter ist ___ schön.",
+    "options": [
+     "nicht",
+     "kein",
+     "keine"
+    ],
+    "answer": 1,
+    "explain": "قبل از صفت از nicht استفاده می‌کنیم."
+   },
+   {
+    "q": "Sie hat ___ Schwester.",
+    "options": [
+     "nicht",
+     "kein",
+     "keine"
+    ],
+    "answer": 3,
+    "explain": "Schwester مؤنث است ← keine."
+   }
+  ]
+ },
+ {
+  "id": "A1-06",
+  "level": "A1",
+  "title": "Satzstellung und Fragen",
+  "title_fa": "ساختار جمله و پرسش",
+  "explain": [
+   "در جمله‌ی خبری، فعل صرف‌شده همیشه در جایگاه دوم است: Ich lerne heute Deutsch. / Heute lerne ich Deutsch.",
+   "پرسش بله/خیر: فعل در جایگاه اول: Lernst du Deutsch؟",
+   "پرسش با کلمه‌ی پرسشی: کلمه‌ی پرسشی اول، فعل دوم: Wo wohnst du؟ (wer، was، wo، woher، wohin، wann، wie، warum)"
+  ],
+  "examples": [
+   {
+    "de": "Ich komme aus Spanien.",
+    "fa": "من اهل اسپانیا هستم."
+   },
+   {
+    "de": "Heute habe ich Zeit.",
+    "fa": "امروز وقت دارم."
+   },
+   {
+    "de": "Kommst du aus Berlin?",
+    "fa": "تو اهل برلین هستی؟"
+   },
+   {
+    "de": "Woher kommst du?",
+    "fa": "اهل کجایی؟"
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Heute ___ ich ins Kino.",
+    "options": [
+     "gehe",
+     "gehen",
+     "gehst"
+    ],
+    "answer": 1,
+    "explain": "فعل در جایگاه دوم است و با ich می‌شود gehe."
+   },
+   {
+    "q": "___ wohnst du?",
+    "options": [
+     "Wo",
+     "Was",
+     "Wer"
+    ],
+    "answer": 1,
+    "explain": "پرسش درباره‌ی مکان ← Wo."
+   },
+   {
+    "q": "___ du Tee?",
+    "options": [
+     "Trinkst",
+     "Du trinkst",
+     "Trinken"
+    ],
+    "answer": 1,
+    "explain": "پرسش بله/خیر با فعل شروع می‌شود."
+   }
+  ]
+ },
+ {
+  "id": "A1-07",
+  "level": "A1",
+  "title": "Akkusativ",
+  "title_fa": "مفعول مستقیم (Akkusativ)",
+  "explain": [
+   "مفعول مستقیم در Akkusativ است (سؤال: wen یا was؟). فقط مذکر تغییر می‌کند: der ← den، ein ← einen، kein ← keinen. die و das و جمع تغییر نمی‌کنند.",
+   "ضمایر: ich ← mich، du ← dich، er ← ihn، sie ← sie، es ← es، wir ← uns، ihr ← euch، sie/Sie ← sie/Sie."
+  ],
+  "examples": [
+   {
+    "de": "Ich kaufe einen Tisch.",
+    "fa": "من یک میز می‌خرم."
+   },
+   {
+    "de": "Er liebt die Frau.",
+    "fa": "او آن زن را دوست دارد."
+   },
+   {
+    "de": "Siehst du das Haus?",
+    "fa": "خانه را می‌بینی؟"
+   },
+   {
+    "de": "Ich kenne ihn nicht.",
+    "fa": "من او را نمی‌شناسم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich sehe ___ Hund.",
+    "options": [
+     "der",
+     "den",
+     "dem"
+    ],
+    "answer": 2,
+    "explain": "Hund مذکر و مفعول است ← den."
+   },
+   {
+    "q": "Wir haben ___ Auto. (ein)",
+    "options": [
+     "ein",
+     "einen",
+     "eine"
+    ],
+    "answer": 1,
+    "explain": "Auto خنثی است و در Akkusativ تغییر نمی‌کند."
+   },
+   {
+    "q": "Kennst du Peter? Ja, ich kenne ___ .",
+    "options": [
+     "er",
+     "ihn",
+     "ihm"
+    ],
+    "answer": 2,
+    "explain": "ضمیر مفعولی er ← ihn."
+   }
+  ]
+ },
+ {
+  "id": "A1-08",
+  "level": "A1",
+  "title": "Modalverben",
+  "title_fa": "افعال کمکی (Modalverben)",
+  "explain": [
+   "können (توانستن)، müssen (باید)، wollen (خواستن)، dürfen (اجازه داشتن)، sollen (قرار است/توصیه)، möchten (دوست داشتن، مؤدبانه).",
+   "فعل modal صرف می‌شود و فعل اصلی به شکل مصدر آخر جمله می‌آید: Ich kann gut schwimmen.",
+   "صرف: ich kann، du kannst، er kann، wir können، ihr könnt، sie können (در ich و er پایانه نداریم)."
+  ],
+  "examples": [
+   {
+    "de": "Ich muss heute arbeiten.",
+    "fa": "من امروز باید کار کنم."
+   },
+   {
+    "de": "Kannst du mir helfen?",
+    "fa": "می‌توانی به من کمک کنی؟"
+   },
+   {
+    "de": "Wir möchten einen Kaffee trinken.",
+    "fa": "ما می‌خواهیم یک قهوه بنوشیم."
+   },
+   {
+    "de": "Hier darf man nicht rauchen.",
+    "fa": "اینجا نباید سیگار کشید."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Er ___ gut Deutsch sprechen.",
+    "options": [
+     "kannst",
+     "kann",
+     "können"
+    ],
+    "answer": 2,
+    "explain": "برای er فعل kann می‌آید."
+   },
+   {
+    "q": "Ich muss jetzt Hausaufgaben ___ .",
+    "options": [
+     "machen",
+     "mache",
+     "macht"
+    ],
+    "answer": 1,
+    "explain": "بعد از فعل modal، فعل اصلی مصدر می‌شود."
+   },
+   {
+    "q": "___ ich hier parken? (اجازه)",
+    "options": [
+     "Darf",
+     "Muss",
+     "Soll"
+    ],
+    "answer": 1,
+    "explain": "برای پرسیدن اجازه از dürfen استفاده می‌کنیم."
+   }
+  ]
+ },
+ {
+  "id": "A1-09",
+  "level": "A1",
+  "title": "Trennbare Verben",
+  "title_fa": "افعال جداشدنی",
+  "explain": [
+   "بعضی افعال پیشوند جداشدنی دارند (an-، auf-، ein-، mit-، zu-، ab-، aus-): aufstehen، anrufen، einkaufen.",
+   "در جمله‌ی خبری پیشوند به آخر جمله می‌رود: Ich stehe um 7 Uhr auf. با modal یا مصدر دوباره یکی می‌شود: Ich muss früh aufstehen."
+  ],
+  "examples": [
+   {
+    "de": "Ich rufe dich morgen an.",
+    "fa": "فردا به تو زنگ می‌زنم."
+   },
+   {
+    "de": "Der Zug fährt um acht ab.",
+    "fa": "قطار ساعت هشت حرکت می‌کند."
+   },
+   {
+    "de": "Wir kaufen heute ein.",
+    "fa": "ما امروز خرید می‌کنیم."
+   },
+   {
+    "de": "Ich muss früh aufstehen.",
+    "fa": "باید زود بلند شوم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wähle den richtigen Satz:",
+    "options": [
+     "Er steht um sieben auf.",
+     "Er aufsteht um sieben.",
+     "Er um sieben aufsteht."
+    ],
+    "answer": 1,
+    "explain": "پیشوند جداشدنی در جمله‌ی خبری به آخر می‌رود."
+   },
+   {
+    "q": "Wähle den richtigen Satz:",
+    "options": [
+     "Ich rufe dich später an.",
+     "Ich anrufe dich später.",
+     "Ich rufe an dich später."
+    ],
+    "answer": 1,
+    "explain": "پیشوند an- آخر جمله می‌آید."
+   },
+   {
+    "q": "Ich muss morgen früh ___ .",
+    "options": [
+     "aufstehen",
+     "auf stehe",
+     "stehe auf"
+    ],
+    "answer": 1,
+    "explain": "با فعل modal، فعل یکپارچه و به شکل مصدر می‌آید."
+   }
+  ]
+ },
+ {
+  "id": "A1-10",
+  "level": "A1",
+  "title": "Possessivartikel",
+  "title_fa": "صفت ملکی",
+  "explain": [
+   "mein (من)، dein (تو)، sein (او-مذکر/خنثی)، ihr (او-مؤنث)، unser (ما)، euer (شما)، ihr (آن‌ها)، Ihr (شما-رسمی).",
+   "مثل ein صرف می‌شوند: mein Vater، meine Mutter، mein Kind، meine Eltern. در Akkusativ مذکر: meinen Vater."
+  ],
+  "examples": [
+   {
+    "de": "Das ist mein Bruder.",
+    "fa": "این برادر من است."
+   },
+   {
+    "de": "Wo ist deine Tasche?",
+    "fa": "کیفت کجاست؟"
+   },
+   {
+    "de": "Ich besuche meinen Onkel.",
+    "fa": "من به عمویم سر می‌زنم."
+   },
+   {
+    "de": "Das ist unser Haus.",
+    "fa": "این خانه‌ی ماست."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Das ist ___ Schwester. (ich)",
+    "options": [
+     "mein",
+     "meine",
+     "meinen"
+    ],
+    "answer": 2,
+    "explain": "Schwester مؤنث است ← meine."
+   },
+   {
+    "q": "Er liebt ___ Frau. (er)",
+    "options": [
+     "seine",
+     "sein",
+     "ihre"
+    ],
+    "answer": 1,
+    "explain": "ملکیت مرد ← sein-؛ اسم مؤنث ← seine."
+   },
+   {
+    "q": "Ich besuche ___ Opa. (ich)",
+    "options": [
+     "mein",
+     "meinen",
+     "meine"
+    ],
+    "answer": 2,
+    "explain": "Opa مذکر و مفعول است ← meinen."
+   }
+  ]
+ },
+ {
+  "id": "A2-01",
+  "level": "A2",
+  "title": "Dativ",
+  "title_fa": "حالت سوم (Dativ)",
+  "explain": [
+   "Dativ برای مفعول غیرمستقیم است (به چه کسی؟ wem؟): Ich gebe dem Mann das Buch.",
+   "حروف تعریف: dem (مذکر)، der (مؤنث)، dem (خنثی)، den + n (جمع: den Kindern). ein ← einem / einer / einem.",
+   "ضمایر: mir، dir، ihm، ihr، ihm، uns، euch، ihnen / Ihnen.",
+   "فعل‌های همراه Dativ: helfen، danken، gefallen، gehören، schmecken. حروف اضافه‌ی Dativ: mit، nach، bei، seit، von، zu، aus."
+  ],
+  "examples": [
+   {
+    "de": "Ich helfe dem Kind.",
+    "fa": "به کودک کمک می‌کنم."
+   },
+   {
+    "de": "Das Buch gehört mir.",
+    "fa": "این کتاب مال من است."
+   },
+   {
+    "de": "Ich fahre mit dem Bus.",
+    "fa": "با اتوبوس می‌روم."
+   },
+   {
+    "de": "Wie geht es Ihnen?",
+    "fa": "حال شما چطور است؟"
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich fahre mit ___ Zug.",
+    "options": [
+     "der",
+     "dem",
+     "den"
+    ],
+    "answer": 2,
+    "explain": "mit همیشه Dativ می‌خواهد؛ Zug مذکر ← dem."
+   },
+   {
+    "q": "Der Film gefällt ___ . (ich)",
+    "options": [
+     "mich",
+     "mir",
+     "ich"
+    ],
+    "answer": 2,
+    "explain": "gefallen با Dativ می‌آید ← mir."
+   },
+   {
+    "q": "Ich helfe ___ Frau. (die)",
+    "options": [
+     "die",
+     "der",
+     "den"
+    ],
+    "answer": 2,
+    "explain": "مؤنث در Dativ ← der."
+   }
+  ]
+ },
+ {
+  "id": "A2-02",
+  "level": "A2",
+  "title": "Wechselpräpositionen",
+  "title_fa": "حروف اضافه‌ی دوحالته",
+  "explain": [
+   "an، auf، hinter، in، neben، über، unter، vor، zwischen: برای مکان ثابت (wo؟) Dativ و برای حرکت به سمت مکان (wohin؟) Akkusativ می‌گیرند."
+  ],
+  "examples": [
+   {
+    "de": "Das Buch liegt auf dem Tisch.",
+    "fa": "کتاب روی میز است."
+   },
+   {
+    "de": "Ich lege das Buch auf den Tisch.",
+    "fa": "کتاب را روی میز می‌گذارم."
+   },
+   {
+    "de": "Wir sind in der Küche.",
+    "fa": "ما در آشپزخانه‌ایم."
+   },
+   {
+    "de": "Wir gehen in die Küche.",
+    "fa": "ما به آشپزخانه می‌رویم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Die Katze sitzt auf ___ Sofa. (wo?)",
+    "options": [
+     "dem",
+     "das",
+     "den"
+    ],
+    "answer": 1,
+    "explain": "مکان ثابت ← Dativ؛ Sofa خنثی ← dem."
+   },
+   {
+    "q": "Ich hänge das Bild an ___ Wand. (wohin?)",
+    "options": [
+     "der",
+     "die",
+     "den"
+    ],
+    "answer": 2,
+    "explain": "جهت ← Akkusativ؛ Wand مؤنث ← die."
+   },
+   {
+    "q": "Er geht in ___ Schule. (wohin?)",
+    "options": [
+     "der",
+     "die",
+     "dem"
+    ],
+    "answer": 2,
+    "explain": "جهت ← Akkusativ مؤنث ← die."
+   }
+  ]
+ },
+ {
+  "id": "A2-03",
+  "level": "A2",
+  "title": "Perfekt",
+  "title_fa": "گذشته‌ی نقلی (Perfekt)",
+  "explain": [
+   "ساختار: haben یا sein (صرف‌شده، جایگاه دوم) + Partizip II (آخر جمله).",
+   "Partizip II باقاعده: ge + ریشه + t (machen ← gemacht)؛ بی‌قاعده: ge + ... + en (trinken ← getrunken). فعل جداشدنی: aufgemacht؛ بدون ge: besucht، verstanden.",
+   "با sein: فعل‌های حرکت و تغییر حالت (gehen، fahren، kommen، aufstehen، einschlafen) و sein/bleiben. بقیه با haben."
+  ],
+  "examples": [
+   {
+    "de": "Ich habe Pizza gegessen.",
+    "fa": "من پیتزا خوردم."
+   },
+   {
+    "de": "Wir sind nach Berlin gefahren.",
+    "fa": "ما به برلین رفتیم."
+   },
+   {
+    "de": "Er hat den Film gesehen.",
+    "fa": "او فیلم را دید."
+   },
+   {
+    "de": "Sie ist früh aufgestanden.",
+    "fa": "او زود بلند شد."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Gestern ___ ich lange geschlafen.",
+    "options": [
+     "bin",
+     "habe",
+     "hat"
+    ],
+    "answer": 2,
+    "explain": "schlafen با haben ساخته می‌شود."
+   },
+   {
+    "q": "Wir ___ nach Hamburg gefahren.",
+    "options": [
+     "haben",
+     "sind",
+     "hat"
+    ],
+    "answer": 2,
+    "explain": "فعل حرکت fahren با sein ساخته می‌شود."
+   },
+   {
+    "q": "Partizip II von „machen“",
+    "options": [
+     "gemachen",
+     "gemacht",
+     "gemach"
+    ],
+    "answer": 2,
+    "explain": "فعل باقاعده: ge + ریشه + t."
+   }
+  ]
+ },
+ {
+  "id": "A2-04",
+  "level": "A2",
+  "title": "Präteritum von sein, haben und Modalverben",
+  "title_fa": "گذشته‌ی ساده‌ی sein، haben و modal",
+  "explain": [
+   "در گفتار، برای sein، haben و افعال modal معمولاً Präteritum به‌کار می‌رود.",
+   "sein: war، warst، war، waren، wart، waren. haben: hatte، hattest، hatte، hatten، hattet، hatten. modal (بدون Umlaut): konnte، musste، wollte، durfte، sollte."
+  ],
+  "examples": [
+   {
+    "de": "Gestern war ich krank.",
+    "fa": "دیروز مریض بودم."
+   },
+   {
+    "de": "Wir hatten keine Zeit.",
+    "fa": "ما وقت نداشتیم."
+   },
+   {
+    "de": "Ich konnte nicht kommen.",
+    "fa": "نتوانستم بیایم."
+   },
+   {
+    "de": "Er musste lange arbeiten.",
+    "fa": "او مجبور شد مدت طولانی کار کند."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Letzte Woche ___ wir in Wien.",
+    "options": [
+     "waren",
+     "sind",
+     "war"
+    ],
+    "answer": 1,
+    "explain": "Präteritum فعل sein برای wir ← waren."
+   },
+   {
+    "q": "Ich ___ gestern keine Zeit.",
+    "options": [
+     "habe",
+     "hatte",
+     "hattest"
+    ],
+    "answer": 2,
+    "explain": "Präteritum فعل haben برای ich ← hatte."
+   },
+   {
+    "q": "Er ___ nicht schwimmen. (können، Präteritum)",
+    "options": [
+     "kannte",
+     "konnte",
+     "könnte"
+    ],
+    "answer": 2,
+    "explain": "Präteritum فعل können ← konnte (بدون Umlaut)."
+   }
+  ]
+ },
+ {
+  "id": "A2-05",
+  "level": "A2",
+  "title": "Nebensätze mit weil und dass",
+  "title_fa": "جمله‌ی وابسته با weil و dass",
+  "explain": [
+   "در جمله‌ی وابسته، فعل صرف‌شده به آخر می‌رود: Ich lerne Deutsch, weil ich in Deutschland arbeiten möchte.",
+   "weil = چون (دلیل)؛ dass = که (محتوا): Ich weiß, dass er krank ist. قبل از weil و dass ویرگول می‌آید.",
+   "اگر جمله‌ی وابسته اول بیاید، فعل جمله‌ی اصلی بلافاصله بعد از ویرگول می‌آید: Weil ich krank bin, bleibe ich zu Hause."
+  ],
+  "examples": [
+   {
+    "de": "Ich bleibe zu Hause, weil ich krank bin.",
+    "fa": "در خانه می‌مانم چون مریضم."
+   },
+   {
+    "de": "Er sagt, dass er keine Zeit hat.",
+    "fa": "او می‌گوید که وقت ندارد."
+   },
+   {
+    "de": "Ich weiß, dass du Deutsch lernst.",
+    "fa": "می‌دانم که تو آلمانی یاد می‌گیری."
+   },
+   {
+    "de": "Weil es regnet, bleiben wir hier.",
+    "fa": "چون باران می‌بارد، اینجا می‌مانیم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich lerne Deutsch, weil ich ___ .",
+    "options": [
+     "in Berlin arbeiten möchte",
+     "möchte in Berlin arbeiten",
+     "arbeiten in Berlin möchte"
+    ],
+    "answer": 1,
+    "explain": "فعل صرف‌شده (möchte) آخر جمله‌ی وابسته می‌آید."
+   },
+   {
+    "q": "Er sagt, ___ er müde ist.",
+    "options": [
+     "weil",
+     "dass",
+     "denn"
+    ],
+    "answer": 2,
+    "explain": "بعد از «گفتن» محتوا می‌آید ← dass."
+   },
+   {
+    "q": "Weil ich müde bin, ___ früh ins Bett.",
+    "options": [
+     "gehe ich",
+     "ich gehe",
+     "ich gehen"
+    ],
+    "answer": 1,
+    "explain": "بعد از جمله‌ی وابسته، فعل جمله‌ی اصلی جایگاه اول را می‌گیرد: gehe ich."
+   }
+  ]
+ },
+ {
+  "id": "A2-06",
+  "level": "A2",
+  "title": "Konjunktionen: und, aber, oder, denn, deshalb",
+  "title_fa": "حروف ربط: und، aber، oder، denn، deshalb",
+  "explain": [
+   "und، aber، oder، denn، sondern ترتیب جمله را تغییر نمی‌دهند (جایگاه صفر).",
+   "deshalb، darum، trotzdem، dann: بعد از آن‌ها فعل بلافاصله می‌آید (جایگاه دوم): Es regnet. Deshalb bleibe ich zu Hause."
+  ],
+  "examples": [
+   {
+    "de": "Ich bin müde, aber ich arbeite weiter.",
+    "fa": "خسته‌ام ولی ادامه می‌دهم."
+   },
+   {
+    "de": "Er kommt nicht, denn er ist krank.",
+    "fa": "او نمی‌آید چون بیمار است."
+   },
+   {
+    "de": "Es regnet. Deshalb bleiben wir zu Hause.",
+    "fa": "باران می‌بارد، برای همین در خانه می‌مانیم."
+   },
+   {
+    "de": "Ich möchte Tee oder Kaffee.",
+    "fa": "چای یا قهوه می‌خواهم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich bin krank. ___ bleibe ich zu Hause.",
+    "options": [
+     "Deshalb",
+     "Weil",
+     "Dass"
+    ],
+    "answer": 1,
+    "explain": "deshalb جمله‌ی اصلی می‌سازد و فعل بعد از آن می‌آید."
+   },
+   {
+    "q": "Er ist müde, ___ er arbeitet noch.",
+    "options": [
+     "aber",
+     "weil",
+     "dass"
+    ],
+    "answer": 1,
+    "explain": "برای تضاد از aber استفاده می‌کنیم."
+   },
+   {
+    "q": "Ich bleibe hier, ___ ich bin krank.",
+    "options": [
+     "denn",
+     "weil",
+     "dass"
+    ],
+    "answer": 1,
+    "explain": "denn جمله‌ی اصلی می‌سازد (فعل جایگاه دوم)؛ weil فعل را به آخر می‌برد."
+   }
+  ]
+ },
+ {
+  "id": "A2-07",
+  "level": "A2",
+  "title": "Reflexive Verben",
+  "title_fa": "افعال بازتابی",
+  "explain": [
+   "ضمیر بازتابی (Akkusativ): mich، dich، sich، uns، euch، sich. فعل‌های رایج: sich freuen، sich treffen، sich beeilen، sich interessieren، sich ärgern."
+  ],
+  "examples": [
+   {
+    "de": "Ich freue mich auf das Wochenende.",
+    "fa": "منتظر آخر هفته‌ام."
+   },
+   {
+    "de": "Wir treffen uns um acht.",
+    "fa": "ساعت هشت همدیگر را می‌بینیم."
+   },
+   {
+    "de": "Du musst dich beeilen.",
+    "fa": "باید عجله کنی."
+   },
+   {
+    "de": "Sie interessiert sich für Musik.",
+    "fa": "او به موسیقی علاقه دارد."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich freue ___ auf den Urlaub.",
+    "options": [
+     "mich",
+     "dich",
+     "sich"
+    ],
+    "answer": 1,
+    "explain": "با ich ضمیر بازتابی mich می‌آید."
+   },
+   {
+    "q": "Er interessiert ___ für Sport.",
+    "options": [
+     "mich",
+     "sich",
+     "ihn"
+    ],
+    "answer": 2,
+    "explain": "برای er ضمیر بازتابی sich می‌آید."
+   },
+   {
+    "q": "Wir treffen ___ morgen.",
+    "options": [
+     "uns",
+     "euch",
+     "sich"
+    ],
+    "answer": 1,
+    "explain": "برای wir ضمیر بازتابی uns می‌آید."
+   }
+  ]
+ },
+ {
+  "id": "A2-08",
+  "level": "A2",
+  "title": "Komparativ und Superlativ",
+  "title_fa": "صفت تفضیلی و عالی",
+  "explain": [
+   "تفضیلی: صفت + er (schnell ← schneller)، مقایسه با als. عالی: am + صفت + sten (am schnellsten).",
+   "بی‌قاعده: gut ← besser ← am besten؛ viel ← mehr ← am meisten؛ gern ← lieber ← am liebsten؛ hoch ← höher ← am höchsten. حروف a/o/u اغلب Umlaut می‌گیرند: alt ← älter ← am ältesten."
+  ],
+  "examples": [
+   {
+    "de": "Mein Auto ist schneller als dein Auto.",
+    "fa": "ماشین من سریع‌تر از ماشین توست."
+   },
+   {
+    "de": "Berlin ist größer als München.",
+    "fa": "برلین بزرگ‌تر از مونیخ است."
+   },
+   {
+    "de": "Er läuft am schnellsten.",
+    "fa": "او از همه سریع‌تر می‌دود."
+   },
+   {
+    "de": "Ich trinke lieber Tee als Kaffee.",
+    "fa": "ترجیح می‌دهم چای بنوشم تا قهوه."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Mein Bruder ist ___ als ich.",
+    "options": [
+     "älter",
+     "alter",
+     "am ältesten"
+    ],
+    "answer": 1,
+    "explain": "تفضیلی با er و Umlaut ← älter."
+   },
+   {
+    "q": "Das Wetter ist heute ___ als gestern. (gut)",
+    "options": [
+     "gutter",
+     "besser",
+     "am besten"
+    ],
+    "answer": 2,
+    "explain": "gut بی‌قاعده است ← besser."
+   },
+   {
+    "q": "Sie läuft ___ von allen. (schnell)",
+    "options": [
+     "am schnellsten",
+     "schnellsten",
+     "schneller"
+    ],
+    "answer": 1,
+    "explain": "عالی (قیدی) ← am + sten."
+   }
+  ]
+ },
+ {
+  "id": "A2-09",
+  "level": "A2",
+  "title": "Adjektivdeklination",
+  "title_fa": "صرف صفت‌ها (پایانه‌ی صفت)",
+  "explain": [
+   "صفتِ قبل از اسم پایانه می‌گیرد. بعد از der/die/das: Nominativ همه -e (جمع -en)، Akkusativ مذکر -en، بقیه مثل Nominativ، Dativ همه -en.",
+   "بعد از ein: Nominativ مذکر -er، مؤنث -e، خنثی -es؛ Akkusativ مذکر -en، مؤنث -e، خنثی -es."
+  ],
+  "examples": [
+   {
+    "de": "Der neue Lehrer ist nett.",
+    "fa": "معلم جدید مهربان است."
+   },
+   {
+    "de": "Ich kaufe einen neuen Computer.",
+    "fa": "یک کامپیوتر جدید می‌خرم."
+   },
+   {
+    "de": "Das ist eine interessante Geschichte.",
+    "fa": "این یک داستان جالب است."
+   },
+   {
+    "de": "Sie hat ein kleines Haus.",
+    "fa": "او خانه‌ی کوچکی دارد."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Das ist ein ___ Auto.",
+    "options": [
+     "neues",
+     "neue",
+     "neuen"
+    ],
+    "answer": 1,
+    "explain": "بعد از ein، خنثی، Nominativ ← -es."
+   },
+   {
+    "q": "Ich sehe den ___ Mann.",
+    "options": [
+     "alte",
+     "alten",
+     "alter"
+    ],
+    "answer": 2,
+    "explain": "Akkusativ مذکر بعد از den ← -en."
+   },
+   {
+    "q": "Die ___ Frau lacht.",
+    "options": [
+     "nette",
+     "netten",
+     "netter"
+    ],
+    "answer": 1,
+    "explain": "بعد از die مؤنث، Nominativ ← -e."
+   }
+  ]
+ },
+ {
+  "id": "A2-10",
+  "level": "A2",
+  "title": "Imperativ",
+  "title_fa": "امر",
+  "explain": [
+   "du: ریشه‌ی فعل بدون -st: Komm! Mach! (فعل‌های با e←i: Lies! Sprich! Nimm!)",
+   "ihr: مثل صرف ihr: Kommt! Macht! Sie: مصدر + Sie: Kommen Sie! Machen Sie bitte...",
+   "sein: Sei! Seid! Seien Sie!"
+  ],
+  "examples": [
+   {
+    "de": "Komm bitte hierher!",
+    "fa": "لطفاً بیا اینجا!"
+   },
+   {
+    "de": "Lest den Text!",
+    "fa": "متن را بخوانید!"
+   },
+   {
+    "de": "Rufen Sie mich morgen an!",
+    "fa": "فردا به من زنگ بزنید!"
+   },
+   {
+    "de": "Sei nicht traurig!",
+    "fa": "غمگین نباش!"
+   }
+  ],
+  "quiz": [
+   {
+    "q": "___ bitte langsam! (du، sprechen)",
+    "options": [
+     "Sprich",
+     "Sprech",
+     "Sprichst"
+    ],
+    "answer": 1,
+    "explain": "sprechen با تغییر e←i: Sprich!"
+   },
+   {
+    "q": "___ Sie bitte Platz! (nehmen)",
+    "options": [
+     "Nehmen",
+     "Nimm",
+     "Nehmt"
+    ],
+    "answer": 1,
+    "explain": "برای Sie: مصدر + Sie."
+   },
+   {
+    "q": "___ bitte pünktlich, Kinder! (ihr، sein)",
+    "options": [
+     "Seid",
+     "Sei",
+     "Sind"
+    ],
+    "answer": 1,
+    "explain": "امر ihr از sein ← Seid."
+   }
+  ]
+ },
+ {
+  "id": "A2-11",
+  "level": "A2",
+  "title": "Temporale Präpositionen",
+  "title_fa": "حروف اضافه‌ی زمان",
+  "explain": [
+   "um + ساعت (um 8 Uhr)؛ am + روز و بخش‌های روز (am Montag، am Morgen)؛ im + ماه و فصل (im Mai، im Winter)؛ von ... bis؛ seit + Dativ (از زمانی که هنوز ادامه دارد)؛ vor + Dativ (پیش از اکنون)؛ nach + Dativ (بعد از)."
+  ],
+  "examples": [
+   {
+    "de": "Der Kurs beginnt um neun Uhr.",
+    "fa": "کلاس ساعت نه شروع می‌شود."
+   },
+   {
+    "de": "Am Montag habe ich frei.",
+    "fa": "دوشنبه تعطیلم."
+   },
+   {
+    "de": "Ich wohne seit zwei Jahren hier.",
+    "fa": "دو سال است اینجا زندگی می‌کنم."
+   },
+   {
+    "de": "Im Sommer fahren wir ans Meer.",
+    "fa": "تابستان به دریا می‌رویم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "___ Mai habe ich Urlaub.",
+    "options": [
+     "Am",
+     "Im",
+     "Um"
+    ],
+    "answer": 2,
+    "explain": "ماه‌ها با im می‌آیند."
+   },
+   {
+    "q": "Ich lerne Deutsch ___ einem Jahr.",
+    "options": [
+     "seit",
+     "vor",
+     "nach"
+    ],
+    "answer": 1,
+    "explain": "کاری که هنوز ادامه دارد ← seit + Dativ."
+   },
+   {
+    "q": "Wir treffen uns ___ Samstag.",
+    "options": [
+     "am",
+     "im",
+     "um"
+    ],
+    "answer": 1,
+    "explain": "روزهای هفته با am می‌آیند."
+   }
+  ]
+ },
+ {
+  "id": "B1-01",
+  "level": "B1",
+  "title": "Präteritum",
+  "title_fa": "گذشته‌ی ساده (Präteritum)",
+  "explain": [
+   "بیشتر در نوشتار، گزارش و داستان. فعل باقاعده: ریشه + te (machen ← machte، wir machten)؛ فعل بی‌قاعده: تغییر ریشه (gehen ← ging، kommen ← kam، sehen ← sah، schreiben ← schrieb).",
+   "در ich و er/sie/es پایانه نداریم: ich ging، er ging. در wir و sie: -en (wir gingen)."
+  ],
+  "examples": [
+   {
+    "de": "Er machte jeden Tag Sport.",
+    "fa": "او هر روز ورزش می‌کرد."
+   },
+   {
+    "de": "Wir gingen ins Kino.",
+    "fa": "ما به سینما رفتیم."
+   },
+   {
+    "de": "Sie kam spät nach Hause.",
+    "fa": "او دیر به خانه آمد."
+   },
+   {
+    "de": "Ich sah einen interessanten Film.",
+    "fa": "فیلم جالبی دیدم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Gestern ___ er einen Brief. (schreiben)",
+    "options": [
+     "schreibte",
+     "schrieb",
+     "geschrieben"
+    ],
+    "answer": 2,
+    "explain": "schreiben بی‌قاعده است ← schrieb."
+   },
+   {
+    "q": "Wir ___ lange im Park. (spielen)",
+    "options": [
+     "spielten",
+     "spielte",
+     "gespielt"
+    ],
+    "answer": 1,
+    "explain": "فعل باقاعده + wir ← -ten."
+   },
+   {
+    "q": "Sie ___ nach Hause. (kommen)",
+    "options": [
+     "kommte",
+     "kam",
+     "kamt"
+    ],
+    "answer": 2,
+    "explain": "kommen ← kam."
+   }
+  ]
+ },
+ {
+  "id": "B1-02",
+  "level": "B1",
+  "title": "Plusquamperfekt",
+  "title_fa": "گذشته‌ی کامل (Plusquamperfekt)",
+  "explain": [
+   "برای رویدادی که پیش از رویداد دیگری در گذشته رخ داده: hatte یا war + Partizip II.",
+   "Nachdem ich gegessen hatte, ging ich spazieren. (بعد از nachdem معمولاً Plusquamperfekt می‌آید.)"
+  ],
+  "examples": [
+   {
+    "de": "Nachdem er gegessen hatte, ging er spazieren.",
+    "fa": "بعد از اینکه غذا خورده بود، به گردش رفت."
+   },
+   {
+    "de": "Ich hatte schon geschlafen, als du anriefst.",
+    "fa": "وقتی زنگ زدی، خوابیده بودم."
+   },
+   {
+    "de": "Wir waren schon gegangen.",
+    "fa": "ما قبلاً رفته بودیم."
+   },
+   {
+    "de": "Sie hatte vorher nie Sushi gegessen.",
+    "fa": "او قبلاً هرگز سوشی نخورده بود."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Nachdem sie gearbeitet ___, ging sie nach Hause.",
+    "options": [
+     "hatte",
+     "hat",
+     "war"
+    ],
+    "answer": 1,
+    "explain": "Plusquamperfekt: hatte + Partizip II."
+   },
+   {
+    "q": "Als ich ankam, ___ der Zug schon abgefahren.",
+    "options": [
+     "war",
+     "hatte",
+     "ist"
+    ],
+    "answer": 1,
+    "explain": "abfahren با sein ساخته می‌شود ← war abgefahren."
+   },
+   {
+    "q": "Wir ___ schon gegangen, als du kamst.",
+    "options": [
+     "waren",
+     "hatten",
+     "sind"
+    ],
+    "answer": 1,
+    "explain": "gehen با sein ساخته می‌شود ← waren gegangen."
+   }
+  ]
+ },
+ {
+  "id": "B1-03",
+  "level": "B1",
+  "title": "Futur I",
+  "title_fa": "آینده (Futur I)",
+  "explain": [
+   "werden (صرف‌شده) + مصدر در آخر جمله: Ich werde morgen anrufen. صرف werden: ich werde، du wirst، er wird، wir werden، ihr werdet، sie werden.",
+   "در گفتار اغلب حال + قید زمان به‌کار می‌رود (Morgen fahre ich nach Hamburg). Futur برای قصد، پیش‌بینی و حدس است: Er wird wohl krank sein."
+  ],
+  "examples": [
+   {
+    "de": "Ich werde nächstes Jahr in Berlin studieren.",
+    "fa": "سال آینده در برلین درس خواهم خواند."
+   },
+   {
+    "de": "Es wird morgen regnen.",
+    "fa": "فردا باران خواهد بارید."
+   },
+   {
+    "de": "Wirst du mir helfen?",
+    "fa": "به من کمک خواهی کرد؟"
+   },
+   {
+    "de": "Sie werden bald kommen.",
+    "fa": "آن‌ها به‌زودی خواهند آمد."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Er ___ morgen kommen.",
+    "options": [
+     "wird",
+     "werde",
+     "wirst"
+    ],
+    "answer": 1,
+    "explain": "werden برای er ← wird."
+   },
+   {
+    "q": "Wir werden den Film ___ .",
+    "options": [
+     "sehen",
+     "gesehen",
+     "sah"
+    ],
+    "answer": 1,
+    "explain": "بعد از werden مصدر می‌آید."
+   },
+   {
+    "q": "Ich ___ dir morgen helfen.",
+    "options": [
+     "werden",
+     "werde",
+     "wird"
+    ],
+    "answer": 2,
+    "explain": "werden برای ich ← werde."
+   }
+  ]
+ },
+ {
+  "id": "B1-04",
+  "level": "B1",
+  "title": "Passiv",
+  "title_fa": "مجهول (Passiv)",
+  "explain": [
+   "Passiv Präsens: werden + Partizip II: Das Auto wird repariert. (تأکید روی عمل است، نه فاعل.)",
+   "Präteritum: wurde + Partizip II: Das Haus wurde 1990 gebaut. Perfekt: ist + Partizip II + worden.",
+   "فاعل در صورت نیاز با von + Dativ: Das Buch wird von vielen Menschen gelesen."
+  ],
+  "examples": [
+   {
+    "de": "Das Essen wird gekocht.",
+    "fa": "غذا پخته می‌شود."
+   },
+   {
+    "de": "Der Brief wurde gestern geschickt.",
+    "fa": "نامه دیروز فرستاده شد."
+   },
+   {
+    "de": "Hier wird Deutsch gesprochen.",
+    "fa": "اینجا آلمانی صحبت می‌شود."
+   },
+   {
+    "de": "Das Fenster wird von ihm geöffnet.",
+    "fa": "پنجره توسط او باز می‌شود."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Das Haus ___ gerade renoviert.",
+    "options": [
+     "wird",
+     "wurde",
+     "hat"
+    ],
+    "answer": 1,
+    "explain": "مجهول حال: wird + Partizip II."
+   },
+   {
+    "q": "Der Film ___ gestern gezeigt.",
+    "options": [
+     "wird",
+     "wurde",
+     "ist"
+    ],
+    "answer": 2,
+    "explain": "مجهول گذشته‌ی ساده: wurde + Partizip II."
+   },
+   {
+    "q": "In der Schweiz ___ Deutsch gesprochen.",
+    "options": [
+     "wird",
+     "werden",
+     "wurden"
+    ],
+    "answer": 1,
+    "explain": "«Deutsch» مفرد است ← wird."
+   }
+  ]
+ },
+ {
+  "id": "B1-05",
+  "level": "B1",
+  "title": "Konjunktiv II",
+  "title_fa": "وجه التزامی (Konjunktiv II)",
+  "explain": [
+   "برای آرزو، درخواست مؤدبانه، توصیه و حالت غیرواقعی. بیشتر با würde + مصدر. برای sein، haben و modal شکل خاص: wäre، hätte، könnte، müsste، dürfte.",
+   "Wenn ich Zeit hätte, würde ich kommen. (اگر وقت داشتم، می‌آمدم.)"
+  ],
+  "examples": [
+   {
+    "de": "Könnten Sie mir bitte helfen?",
+    "fa": "می‌توانید لطفاً به من کمک کنید؟"
+   },
+   {
+    "de": "Ich würde gern nach Italien reisen.",
+    "fa": "دوست دارم به ایتالیا سفر کنم."
+   },
+   {
+    "de": "Wenn ich reich wäre, würde ich ein Haus kaufen.",
+    "fa": "اگر پولدار بودم، خانه می‌خریدم."
+   },
+   {
+    "de": "An deiner Stelle würde ich den Arzt anrufen.",
+    "fa": "جای تو بودم به پزشک زنگ می‌زدم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Wenn ich Zeit ___, würde ich dich besuchen.",
+    "options": [
+     "hätte",
+     "habe",
+     "hatte"
+    ],
+    "answer": 1,
+    "explain": "حالت غیرواقعی ← hätte."
+   },
+   {
+    "q": "___ Sie mir bitte das Salz geben?",
+    "options": [
+     "Könnten",
+     "Können",
+     "Konnten"
+    ],
+    "answer": 1,
+    "explain": "برای درخواست مؤدبانه ← Könnten."
+   },
+   {
+    "q": "Ich ___ gern ein Eis essen.",
+    "options": [
+     "würde",
+     "werde",
+     "wurde"
+    ],
+    "answer": 1,
+    "explain": "آرزو ← würde + مصدر."
+   }
+  ]
+ },
+ {
+  "id": "B1-06",
+  "level": "B1",
+  "title": "Relativsätze",
+  "title_fa": "جمله‌ی موصولی (Relativsätze)",
+  "explain": [
+   "ضمیر موصولی جنس و تعداد را از اسمِ قبل از خود می‌گیرد و حالت را از نقشش در جمله‌ی موصولی. فعل جمله‌ی موصولی آخر می‌آید و قبل از آن ویرگول است.",
+   "Nominativ: der، die، das، die. Akkusativ: den (مذکر)، بقیه مثل Nominativ. Dativ: dem، der، dem، denen."
+  ],
+  "examples": [
+   {
+    "de": "Der Mann, der dort steht, ist mein Lehrer.",
+    "fa": "مردی که آنجا ایستاده معلم من است."
+   },
+   {
+    "de": "Das ist das Buch, das ich gelesen habe.",
+    "fa": "این کتابی است که خوانده‌ام."
+   },
+   {
+    "de": "Die Frau, mit der ich spreche, ist nett.",
+    "fa": "زنی که با او صحبت می‌کنم مهربان است."
+   },
+   {
+    "de": "Das sind die Kinder, denen ich helfe.",
+    "fa": "این‌ها بچه‌هایی‌اند که به آن‌ها کمک می‌کنم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Der Mann, ___ ich gestern gesehen habe, ist Arzt.",
+    "options": [
+     "der",
+     "den",
+     "dem"
+    ],
+    "answer": 2,
+    "explain": "Mann مذکر است و در جمله‌ی موصولی مفعول است ← den."
+   },
+   {
+    "q": "Die Frau, ___ dort wohnt, ist freundlich.",
+    "options": [
+     "die",
+     "der",
+     "den"
+    ],
+    "answer": 1,
+    "explain": "مؤنث و فاعل ← die."
+   },
+   {
+    "q": "Das Kind, ___ ich helfe, ist klein.",
+    "options": [
+     "das",
+     "dem",
+     "den"
+    ],
+    "answer": 2,
+    "explain": "helfen + Dativ؛ Kind خنثی ← dem."
+   }
+  ]
+ },
+ {
+  "id": "B1-07",
+  "level": "B1",
+  "title": "Infinitiv mit zu, um ... zu, damit",
+  "title_fa": "مصدر با zu، um ... zu و damit",
+  "explain": [
+   "بعد از بعضی عبارت‌ها (Ich habe Lust... / Es ist wichtig...) مصدر با zu می‌آید. در فعل جداشدنی zu وسط می‌آید: anzurufen.",
+   "um ... zu = برای اینکه (هدف، فاعل یکسان). اگر فاعل متفاوت باشد: damit + جمله‌ی وابسته. بعد از فعل‌های modal zu نمی‌آید."
+  ],
+  "examples": [
+   {
+    "de": "Ich habe keine Lust, heute zu arbeiten.",
+    "fa": "حوصله‌ی کار کردن امروز را ندارم."
+   },
+   {
+    "de": "Er lernt Deutsch, um in Berlin zu arbeiten.",
+    "fa": "او آلمانی یاد می‌گیرد تا در برلین کار کند."
+   },
+   {
+    "de": "Ich rufe an, damit du nicht warten musst.",
+    "fa": "زنگ می‌زنم تا مجبور نباشی منتظر بمانی."
+   },
+   {
+    "de": "Vergiss nicht, die Tür abzuschließen.",
+    "fa": "یادت نرود در را قفل کنی."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich habe vergessen, dich ___ .",
+    "options": [
+     "anzurufen",
+     "zu anrufen",
+     "anrufen zu"
+    ],
+    "answer": 1,
+    "explain": "در فعل جداشدنی zu بین پیشوند و فعل قرار می‌گیرد."
+   },
+   {
+    "q": "Sie spart Geld, ___ ein Auto zu kaufen.",
+    "options": [
+     "um",
+     "damit",
+     "dass"
+    ],
+    "answer": 1,
+    "explain": "فاعل یکسان و هدف ← um ... zu."
+   },
+   {
+    "q": "Er erklärt es noch einmal, ___ wir es verstehen.",
+    "options": [
+     "um",
+     "damit",
+     "zu"
+    ],
+    "answer": 2,
+    "explain": "فاعل‌ها متفاوت‌اند (او / ما) ← damit."
+   }
+  ]
+ },
+ {
+  "id": "B1-08",
+  "level": "B1",
+  "title": "Nebensätze: obwohl, als, wenn, ob, bevor, nachdem, während",
+  "title_fa": "جمله‌ی وابسته: obwohl، als، wenn، ob، bevor، nachdem، während",
+  "explain": [
+   "obwohl = با اینکه؛ wenn = هر وقت/اگر؛ als = وقتی (یک بار در گذشته)؛ ob = آیا (پرسش غیرمستقیم)؛ bevor = قبل از اینکه؛ nachdem = بعد از اینکه؛ während = در حالی که.",
+   "فعل صرف‌شده در جمله‌ی وابسته همیشه آخر می‌آید."
+  ],
+  "examples": [
+   {
+    "de": "Obwohl es regnet, gehen wir spazieren.",
+    "fa": "با اینکه باران می‌بارد، به پیاده‌روی می‌رویم."
+   },
+   {
+    "de": "Als ich Kind war, wohnte ich in Teheran.",
+    "fa": "وقتی بچه بودم، در تهران زندگی می‌کردم."
+   },
+   {
+    "de": "Wenn ich Zeit habe, lese ich viel.",
+    "fa": "هر وقت وقت دارم، زیاد می‌خوانم."
+   },
+   {
+    "de": "Ich weiß nicht, ob er kommt.",
+    "fa": "نمی‌دانم آیا او می‌آید."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "___ ich zehn war, bin ich umgezogen.",
+    "options": [
+     "Als",
+     "Wenn",
+     "Ob"
+    ],
+    "answer": 1,
+    "explain": "یک رویداد مشخص در گذشته ← als."
+   },
+   {
+    "q": "___ er krank ist, arbeitet er.",
+    "options": [
+     "Obwohl",
+     "Weil",
+     "Damit"
+    ],
+    "answer": 1,
+    "explain": "برای تضاد (با اینکه) ← obwohl."
+   },
+   {
+    "q": "Ich frage mich, ___ sie kommt.",
+    "options": [
+     "ob",
+     "dass",
+     "weil"
+    ],
+    "answer": 1,
+    "explain": "پرسش بله/خیر غیرمستقیم ← ob."
+   }
+  ]
+ },
+ {
+  "id": "B1-09",
+  "level": "B1",
+  "title": "Genitiv",
+  "title_fa": "حالت دوم (Genitiv)",
+  "explain": [
+   "برای مالکیت: das Auto des Mannes. مذکر و خنثی: des + اسم + (e)s؛ مؤنث و جمع: der.",
+   "حروف اضافه‌ی Genitiv: wegen، trotz، während، statt: wegen des Wetters. برای اسم خاص: Annas Buch."
+  ],
+  "examples": [
+   {
+    "de": "Das ist das Auto des Lehrers.",
+    "fa": "این ماشین معلم است."
+   },
+   {
+    "de": "Die Farbe der Tür ist rot.",
+    "fa": "رنگ در قرمز است."
+   },
+   {
+    "de": "Wegen des Regens bleiben wir zu Hause.",
+    "fa": "به خاطر باران در خانه می‌مانیم."
+   },
+   {
+    "de": "Trotz der Kälte gehen sie schwimmen.",
+    "fa": "با وجود سرما به شنا می‌روند."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Das ist das Haus ___ Frau.",
+    "options": [
+     "der",
+     "die",
+     "des"
+    ],
+    "answer": 1,
+    "explain": "مؤنث در Genitiv ← der."
+   },
+   {
+    "q": "Das ist das Buch ___ Kindes.",
+    "options": [
+     "des",
+     "dem",
+     "der"
+    ],
+    "answer": 1,
+    "explain": "خنثی در Genitiv ← des + es."
+   },
+   {
+    "q": "___ des Staus kam er zu spät.",
+    "options": [
+     "Wegen",
+     "Mit",
+     "Nach"
+    ],
+    "answer": 1,
+    "explain": "wegen + Genitiv."
+   }
+  ]
+ },
+ {
+  "id": "B1-10",
+  "level": "B1",
+  "title": "Verben mit Präpositionen",
+  "title_fa": "فعل‌های با حرف اضافه‌ی ثابت",
+  "explain": [
+   "بعضی فعل‌ها حرف اضافه‌ی ثابت دارند: warten auf + Akk، sich freuen auf + Akk، sich interessieren für + Akk، denken an + Akk، sich ärgern über + Akk، sprechen mit + Dat، träumen von + Dat.",
+   "پرسش برای چیز: wo(r) + حرف اضافه (Worauf wartest du؟)؛ برای شخص: حرف اضافه + wen/wem (Auf wen wartest du؟). پاسخ: darauf، daran، davon..."
+  ],
+  "examples": [
+   {
+    "de": "Ich warte auf den Bus.",
+    "fa": "منتظر اتوبوس هستم."
+   },
+   {
+    "de": "Er interessiert sich für Geschichte.",
+    "fa": "او به تاریخ علاقه دارد."
+   },
+   {
+    "de": "Worauf freust du dich?",
+    "fa": "منتظر چه چیزی هستی؟"
+   },
+   {
+    "de": "Wir denken oft an unsere Familie.",
+    "fa": "ما اغلب به خانواده‌مان فکر می‌کنیم."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich warte ___ meinen Freund.",
+    "options": [
+     "auf",
+     "für",
+     "an"
+    ],
+    "answer": 1,
+    "explain": "warten auf + Akkusativ."
+   },
+   {
+    "q": "Sie interessiert sich ___ Kunst.",
+    "options": [
+     "für",
+     "auf",
+     "über"
+    ],
+    "answer": 1,
+    "explain": "sich interessieren für."
+   },
+   {
+    "q": "___ ärgerst du dich? (چیز)",
+    "options": [
+     "Worüber",
+     "Wofür",
+     "Woran"
+    ],
+    "answer": 1,
+    "explain": "sich ärgern über ← worüber."
+   }
+  ]
+ },
+ {
+  "id": "B1-11",
+  "level": "B1",
+  "title": "Indirekte Fragen",
+  "title_fa": "پرسش غیرمستقیم",
+  "explain": [
+   "پرسش با کلمه‌ی پرسشی: کلمه‌ی پرسشی + فعل در آخر: Ich weiß nicht, wo er wohnt. پرسش بله/خیر: ob + فعل در آخر: Ich frage, ob du kommst.",
+   "بعد از عبارت‌هایی مثل: Können Sie mir sagen, ... / Ich möchte wissen, ..."
+  ],
+  "examples": [
+   {
+    "de": "Können Sie mir sagen, wie spät es ist?",
+    "fa": "می‌توانید بگویید ساعت چند است؟"
+   },
+   {
+    "de": "Ich weiß nicht, wo er wohnt.",
+    "fa": "نمی‌دانم او کجا زندگی می‌کند."
+   },
+   {
+    "de": "Sie fragt, ob wir Zeit haben.",
+    "fa": "او می‌پرسد آیا ما وقت داریم."
+   },
+   {
+    "de": "Weißt du, wann der Zug kommt?",
+    "fa": "می‌دانی قطار کی می‌آید؟"
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich möchte wissen, wann der Film ___ .",
+    "options": [
+     "beginnt",
+     "beginnt er",
+     "er beginnt"
+    ],
+    "answer": 1,
+    "explain": "فعل صرف‌شده آخر جمله‌ی وابسته می‌آید."
+   },
+   {
+    "q": "Er fragt, ___ ich Hunger habe.",
+    "options": [
+     "ob",
+     "wann",
+     "dass"
+    ],
+    "answer": 1,
+    "explain": "پرسش بله/خیر غیرمستقیم ← ob."
+   },
+   {
+    "q": "Weißt du, ___ die Bank ist?",
+    "options": [
+     "wo",
+     "ob",
+     "dass"
+    ],
+    "answer": 1,
+    "explain": "پرسش مکانی با کلمه‌ی پرسشی ← wo."
+   }
+  ]
+ },
+ {
+  "id": "B1-12",
+  "level": "B1",
+  "title": "Wortstellung: Zeit, Art und Weise, Ort",
+  "title_fa": "ترتیب اجزای جمله: زمان، چگونگی، مکان",
+  "explain": [
+   "ترتیب معمول: زمان (کی؟) ← دلیل (چرا؟) ← چگونگی (چطور؟) ← مکان (کجا؟): Ich fahre morgen mit dem Zug nach Berlin.",
+   "ضمیر مفعولی قبل از اسم می‌آید: Ich gebe ihm das Buch. اگر هر دو ضمیر باشند، مفعول مستقیم اول می‌آید: Ich gebe es ihm."
+  ],
+  "examples": [
+   {
+    "de": "Wir fliegen im Sommer mit dem Flugzeug nach Spanien.",
+    "fa": "ما تابستان با هواپیما به اسپانیا پرواز می‌کنیم."
+   },
+   {
+    "de": "Ich gebe dem Kind das Buch.",
+    "fa": "کتاب را به کودک می‌دهم."
+   },
+   {
+    "de": "Ich gebe es ihm.",
+    "fa": "من آن را به او می‌دهم."
+   },
+   {
+    "de": "Er geht heute zu Fuß zur Arbeit.",
+    "fa": "او امروز پیاده به محل کار می‌رود."
+   }
+  ],
+  "quiz": [
+   {
+    "q": "Ich fahre ___ .",
+    "options": [
+     "mit dem Auto morgen nach Köln",
+     "morgen mit dem Auto nach Köln",
+     "nach Köln morgen mit dem Auto"
+    ],
+    "answer": 2,
+    "explain": "ترتیب: زمان، چگونگی، مکان."
+   },
+   {
+    "q": "Ich gebe ___ . (das Buch ← es؛ dem Mann ← ihm)",
+    "options": [
+     "es ihm",
+     "ihm es",
+     "ihm das"
+    ],
+    "answer": 1,
+    "explain": "وقتی هر دو ضمیرند، مفعول مستقیم (es) اول می‌آید."
+   },
+   {
+    "q": "Er geht ___ .",
+    "options": [
+     "heute zu Fuß zur Schule",
+     "zur Schule heute zu Fuß",
+     "zu Fuß heute zur Schule"
+    ],
+    "answer": 1,
+    "explain": "ترتیب: زمان، چگونگی، مکان."
+   }
+  ]
+ }
+]

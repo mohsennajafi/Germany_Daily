@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<!--
+  German Daily – واژگان روزانه آلمانی (PWA)
+  ------------------------------------------------------------
+  تماس با توسعه‌دهنده / Contact
+    ایمیل : mohsen.najafi.najafi@gmail.com
+    تلفن  : 00989177662400
+  ------------------------------------------------------------
+  فایل‌های پروژه (همه کنار هم، بدون پوشه):
+    index.html        ← HTML + CSS + JavaScript (یکپارچه)
+    words.min.json    ← واژگان
+    grammar.json      ← درس‌های گرامر
+    sw.js             ← Service Worker (کار آفلاین)
+    manifest.json     ← تنظیمات PWA
+    icon.svg          ← آیکن
+-->
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="author" content="mohsen.najafi.najafi@gmail.com" />
+  <title>German Daily</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <style>
+/**
+ * German Daily – استایل‌ها (CSS)
+ * ------------------------------------------------------------
+ * تماس با توسعه‌دهنده / Contact
+ *   ایمیل  : mohsen.najafi.najafi@gmail.com
+ *   تلفن   : 00989177662400
+ * ------------------------------------------------------------
+ */
+
+/* ===== متغیرهای رنگ و پایه ===== */
+:root{--bg:#0f172a;--card:#1e293b;--primary:#3b82f6;--accent:#38bdf8;--text:#f1f5f9;--muted:#94a3b8;--success:#22c55e;--danger:#ef4444;--radius:14px}
+
+/* ===== ریست و چیدمان کلی صفحه ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--text);min-height:100%;line-height:1.45;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+.app{max-width:520px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:calc(56px + env(safe-area-inset-bottom))}
+
+/* ===== هدر و نوار تب‌ها ===== */
+header{background:linear-gradient(135deg,#1e3a8a,#1e40af);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+header h1{font-size:1.1rem;font-weight:700}
+.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:20px;font-size:.72rem}
+nav{display:flex;background:var(--card);border-bottom:1px solid #334155;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:1;min-width:60px;background:none;border:none;color:var(--muted);padding:11px 5px;font-size:.76rem;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+nav button.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+
+/* ===== کارت واژه (تب «امروز») ===== */
+.content{flex:1;padding:14px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:12px;border:1px solid #334155}
+.word-main{font-size:1.55rem;font-weight:700;text-align:center;direction:ltr;margin-bottom:4px}
+.ipa{font-size:.9rem;color:var(--accent);text-align:center;direction:ltr;margin-bottom:8px;font-family:ui-monospace,monospace}
+.persian{font-size:1.15rem;text-align:center;margin-bottom:12px}
+.example{background:#0f172a;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.88rem}
+.example .de{direction:ltr;text-align:left;color:#cbd5e1;margin-bottom:4px}
+.example .fa{color:var(--muted)}
+.chapter{display:inline-block;background:#1e3a8a;color:#93c5fd;font-size:.68rem;padding:2px 9px;border-radius:20px;margin-bottom:10px}
+
+/* ===== دکمه‌ها ===== */
+.btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn{flex:1;min-width:90px;background:var(--primary);color:#fff;border:none;padding:11px 12px;border-radius:11px;font-size:.88rem;font-weight:600;cursor:pointer}
+.btn:active{opacity:.85;transform:scale(.98)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.secondary{background:#334155}
+.btn.success{background:var(--success)}
+.btn.ai{background:linear-gradient(135deg,#7c3aed,#2563eb)}
+
+/* ===== جستجو و لیست نتایج ===== */
+.search-box{margin-bottom:12px}
+.search-box input,.ai-input{width:100%;background:var(--card);border:1px solid #475569;color:#fff;padding:11px 14px;border-radius:11px;font-size:1rem;outline:none}
+.search-box input:focus,.ai-input:focus{border-color:var(--primary)}
+.result-item{background:var(--card);border-radius:11px;padding:12px 14px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
+.result-item:active{background:#273549}
+.result-item .g{font-weight:700;direction:ltr;text-align:right}
+.result-item .p{color:var(--muted);font-size:.86rem}
+.tag{display:inline-block;background:#1e3a8a;color:#93c5fd;font-size:.65rem;padding:1px 7px;border-radius:7px;margin-right:4px}
+.tag.ai-tag{background:#5b21b6;color:#e9d5ff}
+
+/* ===== لیست گرامر ===== */
+.grammar-item{background:var(--card);border-radius:11px;padding:12px 14px;border:1px solid #334155;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.grammar-item:active{background:#273549}
+.level{font-size:.68rem;background:#1e3a8a;color:#93c5fd;padding:2px 8px;border-radius:10px;flex-shrink:0}
+
+/* ===== ابزارهای کمکی: پنهان‌سازی، نوار پیشرفت، حالت خالی ===== */
+.hidden{display:none!important}
+.progress{height:3px;background:#334155;border-radius:2px;margin-bottom:12px;overflow:hidden}
+.progress-bar{height:100%;background:var(--accent);width:0%;transition:width .25s ease}
+.empty{text-align:center;color:var(--muted);padding:36px 16px}
+
+/* ===== تنظیمات ===== */
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #334155;gap:10px}
+select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff;padding:7px 10px;border-radius:8px;font-size:.88rem}
+
+/* ===== پنجره مودال (جزئیات واژه / صرف فعل / گرامر) ===== */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:flex-end;justify-content:center;overscroll-behavior:contain}
+.modal-content{background:var(--card);width:100%;max-width:520px;max-height:88vh;border-radius:18px 18px 0 0;padding:18px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:sticky;top:0;background:var(--card);z-index:2;padding-bottom:8px}
+.close-btn{background:#334155;border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:1.15rem;cursor:pointer;flex-shrink:0}
+
+/* ===== لودر ===== */
+.loader{text-align:center;padding:40px;color:var(--muted)}
+.loader::after{content:"";display:inline-block;width:22px;height:22px;border:2px solid #475569;border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== جدول صرف فعل و بخش هوش مصنوعی ===== */
+.conj-block{direction:ltr;text-align:left;font-size:.84rem;background:#0f172a;padding:10px 12px;border-radius:10px;white-space:pre-line;margin-bottom:6px}
+.ai-box{background:#1e1b4b;border:1px solid #4c1d95;border-radius:12px;padding:14px;margin-top:12px}
+.ai-box h3{font-size:.9rem;color:#c4b5fd;margin-bottom:8px}
+.hint{font-size:.78rem;color:var(--muted);margin-top:6px;line-height:1.5}
+.status{font-size:.82rem;padding:8px 0;color:var(--accent)}
+.error{color:var(--danger)}
+
+/* ===== بخش «درباره / تماس» در تنظیمات ===== */
+.about{margin-top:16px;padding-top:12px;border-top:1px solid #334155;text-align:center;font-size:.8rem;color:var(--muted)}
+.about a{color:var(--accent);text-decoration:none;direction:ltr;unicode-bidi:embed}
+.about div{margin-top:4px}
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>🇩🇪 German Daily</h1>
+      <div class="badge" id="day-info">—</div>
+    </header>
+    <nav id="main-nav">
+      <button class="active" data-tab="daily">امروز</button>
+      <button data-tab="search">جستجو</button>
+      <button data-tab="verbs">افعال</button>
+      <button data-tab="grammar">گرامر</button>
+      <button data-tab="ai">هوش مصنوعی</button>
+      <button data-tab="settings">تنظیمات</button>
+    </nav>
+    <div class="content" id="content">
+      <div id="tab-daily">
+        <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
+        <div id="daily-card" class="card"><div class="loader">بارگذاری</div></div>
+        <div class="btn-row">
+          <button class="btn secondary" id="btn-prev">قبلی</button>
+          <button class="btn" id="btn-speak">🔊 تلفظ</button>
+          <button class="btn secondary" id="btn-next">بعدی</button>
+        </div>
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn success" id="btn-known">یاد گرفتم ✓</button>
+        </div>
+      </div>
+
+      <div id="tab-search" class="hidden">
+        <div class="search-box"><input type="search" id="search-input" placeholder="جستجو (آلمانی یا فارسی)..." enterkeyhint="search" /></div>
+        <div id="search-results"></div>
+        <div id="search-ai-hint" class="hidden">
+          <div class="ai-box">
+            <h3>کلمه در لیست نیست</h3>
+            <p class="hint">می‌توانید از هوش مصنوعی بخواهید آن را کامل کند و به لیست شخصی‌تان اضافه کند.</p>
+            <button class="btn ai" id="btn-search-ai" style="width:100%;margin-top:10px">✨ از هوش مصنوعی بپرس</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-verbs" class="hidden">
+        <div class="search-box"><input type="search" id="verb-search" placeholder="جستجوی فعل..." enterkeyhint="search" /></div>
+        <div id="verb-list"></div>
+      </div>
+
+      <div id="tab-grammar" class="hidden">
+        <div id="grammar-list"></div>
+      </div>
+
+      <div id="tab-ai" class="hidden">
+        <div class="card">
+          <h3 style="margin-bottom:10px">اضافه کردن کلمه با هوش مصنوعی</h3>
+          <input class="ai-input" id="ai-word-input" placeholder="کلمه آلمانی را بنویسید (مثلاً: die Verantwortung)" />
+          <button class="btn ai" id="btn-ai-generate" style="width:100%;margin-top:12px">✨ تولید با هوش مصنوعی</button>
+          <div id="ai-status" class="status hidden"></div>
+          <div id="ai-result" class="hidden" style="margin-top:14px"></div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h3 style="margin-bottom:8px">کلمات اضافه‌شده توسط شما</h3>
+          <div id="custom-words-list" class="hint">هنوز کلمه‌ای اضافه نکرده‌اید.</div>
+        </div>
+      </div>
+
+      <div id="tab-settings" class="hidden">
+        <div class="card">
+          <div class="settings-row">
+            <span>تعداد واژه در روز</span>
+            <input type="number" id="per-day" min="1" max="20" value="5" style="width:64px" />
+          </div>
+          <div class="settings-row">
+            <span>فقط افعال</span>
+            <input type="checkbox" id="only-verbs" />
+          </div>
+          <div class="settings-row">
+            <span>فصل</span>
+            <select id="filter-chapter"><option value="">همه</option></select>
+          </div>
+          <hr style="border:none;border-top:1px solid #334155;margin:14px 0" />
+          <h3 style="font-size:.95rem;margin-bottom:8px">تنظیمات هوش مصنوعی</h3>
+          <p class="hint" style="margin-bottom:8px">کلید API خود را وارد کنید (OpenAI، Groq، OpenRouter یا سازگار با OpenAI). فقط روی دستگاه شما ذخیره می‌شود.</p>
+          <input class="ai-input" id="api-key" type="password" placeholder="sk-... یا gsk-..." style="margin-bottom:8px" />
+          <input class="ai-input" id="api-base" placeholder="Base URL (اختیاری)" style="margin-bottom:8px" />
+          <select id="api-model" style="width:100%;margin-bottom:8px">
+            <option value="gpt-4o-mini">gpt-4o-mini (OpenAI)</option>
+            <option value="gpt-4o">gpt-4o</option>
+            <option value="llama-3.3-70b-versatile">llama-3.3-70b (Groq)</option>
+            <option value="llama-3.1-8b-instant">llama-3.1-8b (Groq سریع)</option>
+            <option value="google/gemini-3.8-flash">gemini-3.8-flash (OpenRouter)</option>
+          </select>
+          <!-- مدل دلخواه: اگر پر شود، به‌جای لیست بالا استفاده می‌شود (مثلاً google/gemini-3.7-flash) -->
+          <input class="ai-input" id="api-model-custom" placeholder="مدل دلخواه (اختیاری) مثلاً google/gemini-3.7-flash" style="margin-bottom:8px;direction:ltr" />
+          <button class="btn secondary" id="btn-save-api" style="width:100%">ذخیره تنظیمات AI</button>
+          <div style="margin-top:18px">
+            <button class="btn" id="btn-reset" style="width:100%">شروع مجدد (روز ۱)</button>
+          </div>
+          <p style="margin-top:14px;font-size:.78rem;color:var(--muted);text-align:center">نسخه هوشمند • داده و کلید API فقط روی دستگاه شماست</p>
+          <!-- اطلاعات تماس با توسعه‌دهنده -->
+          <div class="about">
+            <div>تماس با توسعه‌دهنده</div>
+            <div>✉️ <a href="mailto:mohsen.najafi.najafi@gmail.com">mohsen.najafi.najafi@gmail.com</a></div>
+            <div>📞 <a href="tel:+989177662400">00989177662400</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title" style="font-size:1.05rem"></h2>
+        <button class="close-btn" id="modal-close">×</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+
+  <script>
+(function () {
+  "use strict";
+
+  // ==================================================================
+  // تنظیمات پایه و وضعیت مشترک
+  // ==================================================================
+  // فضای نام اصلی برنامه؛ همه ماژول‌ها توابعشان را روی این آبجکت قرار می‌دهند
+  window.GD = window.GD || {};
+
+  // اطلاعات توسعه‌دهنده
+  GD.AUTHOR = {
+    email: "mohsen.najafi.najafi@gmail.com",
+    phone: "00989177662400"
+  };
+
+  // کلیدهای ذخیره‌سازی در localStorage
+  GD.KEYS = {
+    SETTINGS: "gd_v3",        // تنظیمات کاربر
+    WORDS:    "gd_words_v3",  // کش لیست واژگان
+    GRAMMAR:  "gd_gram_v3",   // کش درس‌های گرامر
+    CUSTOM:   "gd_custom_v3"  // واژه‌های ساخته‌شده با هوش مصنوعی
+  };
+
+  // مسیر فایل‌های داده
+  GD.PATHS = {
+    WORDS:     "words.min.json",
+    GRAMMAR:   "grammar.json",
+    WORDS_CSV: "words.csv"   // پشتیبان (در صورت نبودن JSON)
+  };
+
+  // وضعیت مشترک برنامه (همه ماژول‌ها از اینجا می‌خوانند و می‌نویسند)
+  GD.state = {
+    words: [],        // همه واژه‌ها (شامل واژه‌های شخصی)
+    verbs: [],        // فقط افعال
+    grammar: [],      // درس‌های گرامر
+    customWords: [],  // واژه‌های اضافه‌شده توسط کاربر/AI
+
+    settings: {
+      perDay: 5,                                          // تعداد واژه در روز
+      startDate: new Date().toISOString().slice(0, 10),   // تاریخ شروع (برای شمارش روز)
+      onlyVerbs: false,                                   // فقط افعال
+      chapter: "",                                        // فیلتر فصل
+      known: {},                                          // واژه‌های یادگرفته‌شده
+      apiKey: "",                                         // کلید API
+      apiBase: "",                                        // آدرس پایه API (اختیاری)
+      apiModel: "gpt-4o-mini"                             // مدل هوش مصنوعی
+    },
+
+    dailyIndex: 0,    // اندیس واژه فعلی در لیست امروز
+    dailyList: [],    // لیست واژه‌های امروز
+    searchTimer: null, // تایمر debounce جستجو
+    verbTimer: null,   // تایمر debounce جستجوی فعل
+    lastSearchQ: ""    // آخرین عبارت جستجو شده
+  };
+
+  // ==================================================================
+  // توابع کمکی
+  // ==================================================================
+  // میان‌بر برای document.getElementById
+  GD.$ = function (id) { return document.getElementById(id); };
+
+  // خنثی‌سازی کاراکترهای HTML (جلوگیری از XSS هنگام درج متن در innerHTML)
+  GD.esc = function (s) {
+    if (!s) return "";
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  };
+
+  // هش ساده‌ی رشته → عدد (برای مرتب‌سازی تصادفی ولی ثابتِ هر روز)
+  GD.hash = function (str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+    return h;
+  };
+
+  // ==================================================================
+  // ذخیره‌سازی (localStorage)
+  // ==================================================================
+  // بارگذاری تنظیمات کاربر و ادغام با مقادیر پیش‌فرض
+  GD.loadSettings = function () {
+    try {
+      const s = localStorage.getItem(GD.KEYS.SETTINGS);
+      if (s) Object.assign(GD.state.settings, JSON.parse(s));
+    } catch (_) {}
+  };
+
+  // ذخیره تنظیمات
+  GD.saveSettings = function () {
+    try { localStorage.setItem(GD.KEYS.SETTINGS, JSON.stringify(GD.state.settings)); } catch (_) {}
+  };
+
+  // بارگذاری واژه‌های شخصی (ساخته‌شده با AI)
+  GD.loadCustom = function () {
+    try {
+      const c = localStorage.getItem(GD.KEYS.CUSTOM);
+      if (c) GD.state.customWords = JSON.parse(c);
+    } catch (_) {}
+  };
+
+  // ذخیره واژه‌های شخصی
+  GD.saveCustom = function () {
+    try { localStorage.setItem(GD.KEYS.CUSTOM, JSON.stringify(GD.state.customWords)); } catch (_) {}
+  };
+
+  // ==================================================================
+  // بارگذاری داده‌ها
+  // ==================================================================
+  // بارگذاری اولیه داده‌ها
+  // 1) اگر کش localStorage موجود بود: فوراً از آن استفاده کن و در پس‌زمینه به‌روزرسانی کن
+  // 2) در غیر این صورت از فایل‌های JSON بخوان و کش کن
+  // 3) اگر JSON در دسترس نبود، از CSV پشتیبان استفاده کن
+  GD.loadData = async function () {
+    const S = GD.state;
+
+    // --- مرحله ۱: کش ---
+    try {
+      const cached = localStorage.getItem(GD.KEYS.WORDS);
+      const cachedG = localStorage.getItem(GD.KEYS.GRAMMAR);
+      if (cached && cachedG) {
+        S.words = JSON.parse(cached);
+        S.grammar = JSON.parse(cachedG);
+        GD.mergeCustom();
+        GD.initApp();
+        GD.refreshData(); // به‌روزرسانی بی‌صدا در پس‌زمینه
+        return;
+      }
+    } catch (_) {}
+
+    // --- مرحله ۲: شبکه (JSON) ---
+    try {
+      const [wRes, gRes] = await Promise.all([fetch(GD.PATHS.WORDS), fetch(GD.PATHS.GRAMMAR)]);
+      S.words = await wRes.json();
+      S.grammar = await gRes.json();
+      try {
+        localStorage.setItem(GD.KEYS.WORDS, JSON.stringify(S.words));
+        localStorage.setItem(GD.KEYS.GRAMMAR, JSON.stringify(S.grammar));
+      } catch (_) {}
+      GD.mergeCustom();
+      GD.initApp();
+    } catch (err) {
+      // --- مرحله ۳: CSV پشتیبان ---
+      try {
+        const [wRes, gRes] = await Promise.all([fetch(GD.PATHS.WORDS_CSV), fetch(GD.PATHS.GRAMMAR)]);
+        S.words = GD.parseCSV(await wRes.text());
+        S.grammar = await gRes.json();
+        GD.mergeCustom();
+        GD.initApp();
+      } catch (e2) {
+        GD.$("daily-card").innerHTML =
+          `<div class="empty">خطا در بارگذاری<br><small>${e2.message}</small></div>`;
+      }
+    }
+  };
+
+  // دریافت نسخه جدید داده‌ها در پس‌زمینه؛ فقط اگر تعداد واژه‌ها تغییر کرده باشد جایگزین می‌شود
+  GD.refreshData = async function () {
+    const S = GD.state;
+    try {
+      const [wRes, gRes] = await Promise.all([fetch(GD.PATHS.WORDS), fetch(GD.PATHS.GRAMMAR)]);
+      const newW = await wRes.json(), newG = await gRes.json();
+      if (newW.length !== S.words.length - S.customWords.length) {
+        S.words = newW;
+        S.grammar = newG;
+        GD.mergeCustom();
+        try {
+          localStorage.setItem(GD.KEYS.WORDS, JSON.stringify(newW));
+          localStorage.setItem(GD.KEYS.GRAMMAR, JSON.stringify(newG));
+        } catch (_) {}
+      }
+    } catch (_) {}
+  };
+
+  // ادغام واژه‌های شخصی در ابتدای لیست و ساخت لیست افعال
+  GD.mergeCustom = function () {
+    const S = GD.state;
+    // ابتدا واژه‌های شخصی قبلی را حذف می‌کنیم تا تکراری نشوند
+    S.words = S.words.filter(w => !w._custom);
+    for (const c of S.customWords) { c._custom = true; S.words.unshift(c); }
+    S.verbs = S.words.filter(w => w.f); // فیلد f فقط برای افعال پر است
+  };
+
+  // تبدیل متن CSV به آرایه‌ای از آبجکت‌های واژه
+  // ستون‌های CSV به کلیدهای کوتاه JSON نگاشت می‌شوند (german → g و ...)
+  GD.parseCSV = function (text) {
+    const lines = text.trim().split(/\r?\n/);
+    if (lines.length < 2) return [];
+    const delim = lines[0].includes(";") ? ";" : ",";
+    const headers = lines[0].split(delim).map(h => h.trim().replace(/^\uFEFF/, ""));
+    const map = {german:"g",ipa:"i",persian:"p",example_de:"ed",example_fa:"ef",chapter:"c",formen:"f",praeteritum:"pt",praeteritum_fa:"ptf",perfekt:"pf",perfekt_fa:"pff",plusquamperfekt:"pq",plusquamperfekt_fa:"pqf",futur:"fu",futur_fa:"fuf",konj_praesens:"kp",konj_praeteritum:"kpt",konj_perfekt:"kpf",konj_plusquamperfekt:"kpq",konj_futur:"kfu",konj_praeteritum_fa:"kptf",konj_perfekt_fa:"kpff",konj_plusquamperfekt_fa:"kpqf",konj_futur_fa:"kfuf"};
+    const out = [];
+    for (let i = 1; i < lines.length; i++) {
+      const cols = GD.splitCSV(lines[i], delim);
+      if (!cols[0]) continue;
+      const obj = {};
+      headers.forEach((h, idx) => {
+        const v = (cols[idx] || "").trim();
+        if (v && map[h]) obj[map[h]] = v;
+      });
+      if (obj.g) out.push(obj);
+    }
+    return out;
+  };
+
+  // جداکننده‌ی یک خط CSV با پشتیبانی از فیلدهای داخل کوتیشن
+  GD.splitCSV = function (line, delim) {
+    const r = [];
+    let cur = "", q = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') q = !q;
+      else if (c === delim && !q) { r.push(cur); cur = ""; }
+      else cur += c;
+    }
+    r.push(cur);
+    return r;
+  };
+
+  // ==================================================================
+  // تلفظ (TTS)
+  // ==================================================================
+  let voicesReady = false; // آیا لیست صداها بارگذاری شده است؟
+
+  // خواندن متن آلمانی با صدای de-DE (در صورت وجود)
+  GD.speak = function (text) {
+    if (!window.speechSynthesis) return;
+    speechSynthesis.cancel(); // قطع صدای قبلی
+
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "de-DE";
+    u.rate = 0.9; // کمی آهسته‌تر برای یادگیری
+
+    if (!voicesReady) {
+      const vs = speechSynthesis.getVoices();
+      if (vs.length) voicesReady = true;
+    }
+    // انتخاب اولین صدای آلمانی موجود
+    const de = speechSynthesis.getVoices().find(v => v.lang.startsWith("de"));
+    if (de) u.voice = de;
+
+    speechSynthesis.speak(u);
+  };
+
+  // برخی مرورگرها صداها را دیرتر بارگذاری می‌کنند
+  if (window.speechSynthesis) speechSynthesis.onvoiceschanged = () => { voicesReady = true; };
+
+  // ==================================================================
+  // کارت واژه و مودال
+  // ==================================================================
+  // ساخت HTML کارت یک واژه
+  // showTenses = true  → زمان‌های Präteritum/Perfekt و دکمه صرف کامل (برای افعال) نمایش داده می‌شود
+  GD.renderCard = function (w, showTenses) {
+    const esc = GD.esc;
+    let h = `<div class="chapter">${esc(w.c || "عمومی")}${w._custom ? ' <span class="tag ai-tag">AI</span>' : ""}</div>
+      <div class="word-main">${esc(w.g)}</div><div class="ipa">${esc(w.i || "")}</div><div class="persian">${esc(w.p || "")}</div>`;
+
+    // جمله مثال
+    if (w.ed) h += `<div class="example"><div class="de">${esc(w.ed)}</div><div class="fa">${esc(w.ef || "")}</div></div>`;
+
+    // اطلاعات ویژه افعال
+    if (showTenses && w.f) {
+      h += `<div style="margin-top:12px;font-size:.82rem;color:var(--accent)">${esc(w.f)}</div>`;
+      if (w.pt) h += `<div class="example" style="margin-top:8px"><div style="color:var(--muted);font-size:.72rem;margin-bottom:3px">Präteritum</div><div class="de">${esc(w.pt)}</div><div class="fa">${esc(w.ptf || "")}</div></div>`;
+      if (w.pf) h += `<div class="example" style="margin-top:6px"><div style="color:var(--muted);font-size:.72rem;margin-bottom:3px">Perfekt</div><div class="de">${esc(w.pf)}</div><div class="fa">${esc(w.pff || "")}</div></div>`;
+    }
+
+    // دکمه صرف کامل فعل
+    if (w.f && w.kp) h += `<button class="btn secondary" style="width:100%;margin-top:12px" data-conj="${esc(w.g)}">صرف کامل فعل</button>`;
+    return h;
+  };
+
+  // نمایش صرف کامل یک فعل در مودال (Präsens تا Futur I)
+  GD.showFullConj = function (german) {
+    const esc = GD.esc;
+    const w = GD.state.words.find(x => x.g === german);
+    if (!w) return;
+
+    let h = `<div class="persian" style="margin-bottom:10px">${esc(w.p)}</div>`;
+    if (w.f) h += `<p style="color:var(--accent);margin-bottom:10px;direction:ltr;text-align:left;font-size:.9rem">${esc(w.f)}</p>`;
+
+    // [عنوان زمان، کلید آلمانی، کلید ترجمه فارسی]
+    [["Präsens", "kp"], ["Präteritum", "kpt", "kptf"], ["Perfekt", "kpf", "kpff"],
+     ["Plusquamperfekt", "kpq", "kpqf"], ["Futur I", "kfu", "kfuf"]].forEach(([title, key, faKey]) => {
+      if (!w[key]) return;
+      h += `<h3 style="margin:14px 0 6px;color:var(--accent);font-size:.9rem">${title}</h3><div class="conj-block">${esc(w[key])}</div>`;
+      if (faKey && w[faKey]) h += `<div style="font-size:.78rem;color:var(--muted);margin-bottom:8px;white-space:pre-line">${esc(w[faKey])}</div>`;
+    });
+    GD.openModal(w.g, h);
+  };
+
+  // نمایش جزئیات یک واژه در مودال
+  GD.showWordDetail = function (german) {
+    const w = GD.state.words.find(x => x.g === german);
+    if (!w) return;
+    GD.openModal(w.g, GD.renderCard(w, true));
+  };
+
+  // باز و بسته کردن مودال
+  GD.openModal = function (title, body) {
+    GD.$("modal-title").textContent = title;
+    GD.$("modal-body").innerHTML = body;
+    GD.$("modal").classList.remove("hidden");
+  };
+  GD.closeModal = function () { GD.$("modal").classList.add("hidden"); };
+
+  // ==================================================================
+  // لیست روزانه
+  // ==================================================================
+  // شماره روز از تاریخ شروع (حداقل ۱)
+  GD.getDayNumber = function () {
+    const start = new Date(GD.state.settings.startDate), today = new Date();
+    start.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    return Math.max(1, Math.floor((today - start) / 864e5) + 1);
+  };
+
+  // ساخت لیست واژه‌های امروز
+  // واژه‌ها با یک seed ثابتِ هر روز مرتب می‌شوند تا ترتیب در طول روز تغییر نکند،
+  // سپس به‌اندازه perDay از موقعیت مربوط به روز جاری برداشته می‌شوند
+  GD.buildDailyList = function () {
+    const S = GD.state;
+    let pool = S.settings.onlyVerbs ? S.verbs : S.words;
+    if (S.settings.chapter) pool = pool.filter(w => w.c === S.settings.chapter);
+
+    const day = GD.getDayNumber(), seed = day * 7919;
+    const sorted = pool.slice().sort((a, b) => GD.hash(a.g + seed) - GD.hash(b.g + seed));
+    const start = ((day - 1) * S.settings.perDay) % Math.max(1, sorted.length);
+
+    S.dailyList = [];
+    for (let i = 0; i < S.settings.perDay && i < sorted.length; i++) {
+      S.dailyList.push(sorted[(start + i) % sorted.length]);
+    }
+    S.dailyIndex = 0;
+    GD.$("day-info").textContent = "روز " + day;
+    GD.showDailyCard();
+  };
+
+  // به‌روزرسانی نوار پیشرفت
+  GD.updateProgress = function () {
+    const S = GD.state;
+    const pct = S.dailyList.length ? ((S.dailyIndex + 1) / S.dailyList.length) * 100 : 0;
+    GD.$("progress-bar").style.width = pct + "%";
+  };
+
+  // نمایش کارت واژه فعلی
+  GD.showDailyCard = function () {
+    const S = GD.state, el = GD.$("daily-card");
+    if (!S.dailyList.length) { el.innerHTML = `<div class="empty">واژه‌ای یافت نشد</div>`; return; }
+    el.innerHTML = GD.renderCard(S.dailyList[S.dailyIndex], true);
+    GD.updateProgress();
+  };
+
+  // ==================================================================
+  // جستجو
+  // ==================================================================
+  // جستجو در همه واژه‌ها (حداکثر ۳۵ نتیجه)
+  GD.doSearch = function (q) {
+    const S = GD.state, esc = GD.esc;
+    q = q.trim();
+    S.lastSearchQ = q;
+    const qLow = q.toLowerCase();
+    const box = GD.$("search-results"), hint = GD.$("search-ai-hint");
+
+    // ورودی خالی → پاک‌کردن نتایج
+    if (!q) { box.innerHTML = ""; hint.classList.add("hidden"); return; }
+
+    const results = [];
+    for (let i = 0; i < S.words.length && results.length < 35; i++) {
+      const w = S.words[i];
+      if ((w.g && w.g.toLowerCase().includes(qLow)) ||   // کلمه آلمانی
+          (w.p && w.p.includes(q)) ||                    // ترجمه فارسی
+          (w.ed && w.ed.toLowerCase().includes(qLow)))   // جمله مثال
+        results.push(w);
+    }
+
+    // نتیجه‌ای نبود → پیشنهاد ساخت با هوش مصنوعی
+    if (!results.length) {
+      box.innerHTML = `<div class="empty">نتیجه‌ای یافت نشد</div>`;
+      hint.classList.remove("hidden");
+      return;
+    }
+
+    hint.classList.add("hidden");
+    let html = "";
+    for (const w of results) {
+      html += `<div class="result-item" data-word="${esc(w.g)}"><div class="g">${esc(w.g)}${w.f ? ' <span class="tag">فعل</span>' : ""}${w._custom ? ' <span class="tag ai-tag">AI</span>' : ""}</div><div class="p">${esc(w.p)}</div></div>`;
+    }
+    box.innerHTML = html;
+  };
+
+  // ==================================================================
+  // افعال
+  // ==================================================================
+  // نمایش لیست افعال (حداکثر ۵۰ مورد)؛ filter اختیاری است
+  GD.renderVerbList = function (filter) {
+    const S = GD.state, esc = GD.esc;
+    const q = (filter || "").trim().toLowerCase();
+    const list = q
+      ? S.verbs.filter(v => (v.g && v.g.toLowerCase().includes(q)) || (v.p && v.p.includes(q)))
+      : S.verbs;
+
+    const box = GD.$("verb-list"), slice = list.slice(0, 50);
+    if (!slice.length) { box.innerHTML = `<div class="empty">فعلی یافت نشد</div>`; return; }
+
+    let html = "";
+    for (const w of slice) {
+      html += `<div class="result-item" data-conj="${esc(w.g)}"><div class="g">${esc(w.g)}</div><div class="p">${esc(w.p)} · ${esc((w.f || "").split("–")[0] || "")}</div></div>`;
+    }
+    box.innerHTML = html;
+  };
+
+  // ==================================================================
+  // گرامر
+  // ==================================================================
+  // فهرست درس‌ها؛ دسته‌بندی بر اساس سطح
+  GD.renderGrammar = function () {
+    const S = GD.state, esc = GD.esc;
+    const box = GD.$("grammar-list");
+    let html = "";
+    for (const level of ["A1", "A2", "B1"]) {
+      const items = S.grammar.filter(g => g.level === level);
+      if (!items.length) continue;
+      html += `<h3 style="margin:14px 0 6px;color:var(--accent)">${level}</h3>`;
+      for (const g of items) {
+        html += `<div class="grammar-item" data-gram="${g.id}"><div><div style="font-weight:600">${esc(g.title_fa || g.title)}</div><div style="font-size:.78rem;color:var(--muted);direction:ltr;text-align:right">${esc(g.title)}</div></div><span class="level">${g.level}</span></div>`;
+      }
+    }
+    box.innerHTML = html || `<div class="empty">درسی یافت نشد</div>`;
+  };
+
+  // نمایش یک درس در مودال (توضیح + مثال‌ها + دکمه تقویت با AI)
+  GD.showGrammar = function (id) {
+    const esc = GD.esc;
+    const g = GD.state.grammar.find(x => x.id === id);
+    if (!g) return;
+
+    let h = `<div style="color:var(--muted);margin-bottom:10px;direction:ltr;text-align:left;font-size:.88rem">${esc(g.title)}</div>`;
+    if (g.explain) for (const p of g.explain) h += `<p style="margin-bottom:9px;line-height:1.65">${esc(p)}</p>`;
+    if (g.examples && g.examples.length) {
+      h += `<h3 style="margin:14px 0 6px;color:var(--accent)">مثال‌ها</h3>`;
+      for (const ex of g.examples) {
+        h += `<div class="example" style="margin-bottom:6px"><div class="de">${esc(ex.de || "")}</div><div class="fa">${esc(ex.fa || "")}</div></div>`;
+      }
+    }
+    h += `<button class="btn ai" style="width:100%;margin-top:14px" data-expand-gram="${g.id}">✨ تقویت این درس با هوش مصنوعی</button>`;
+    GD.openModal(g.title_fa || g.title, h);
+  };
+
+  // ==================================================================
+  // هوش مصنوعی
+  // ==================================================================
+  // خواندن تنظیمات API (کلید، آدرس پایه، مدل)
+  // اگر آدرس پایه خالی باشد، از روی نام مدل حدس زده می‌شود:
+  //   llama/groq → Groq   |   دارای «/» → OpenRouter   |   در غیر این صورت → OpenAI
+  GD.getApiConfig = function () {
+    const S = GD.state;
+    const key = S.settings.apiKey || GD.$("api-key").value.trim();
+    let base = (S.settings.apiBase || GD.$("api-base").value.trim() || "").replace(/\/$/, "");
+    const model = S.settings.apiModel || GD.$("api-model").value;
+    if (!base) {
+      if (model.includes("llama") || model.includes("groq")) base = "https://api.groq.com/openai/v1";
+      else if (model.includes("/")) base = "https://openrouter.ai/api/v1";
+      else base = "https://api.openai.com/v1";
+    }
+    return { key, base, model };
+  };
+
+  // ارسال درخواست به API سازگار با OpenAI و دریافت پاسخ JSON
+  GD.callAI = async function (system, user) {
+    const { key, base, model } = GD.getApiConfig();
+    if (!key) throw new Error("ابتدا در تنظیمات، کلید API را وارد و ذخیره کنید.");
+
+    const res = await fetch(base + "/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key },
+      body: JSON.stringify({
+        model,
+        temperature: 0.3,
+        response_format: { type: "json_object" }, // خروجی فقط JSON
+        messages: [
+          { role: "system", content: system },
+          { role: "user", content: user }
+        ]
+      })
+    });
+
+    if (!res.ok) {
+      const t = await res.text();
+      throw new Error("خطای API (" + res.status + "): " + t.slice(0, 200));
+    }
+    const data = await res.json();
+    const content = data.choices?.[0]?.message?.content || "";
+    return JSON.parse(content);
+  };
+
+  // ساخت اطلاعات کامل یک واژه آلمانی (IPA، ترجمه، مثال، صرف فعل و ...)
+  GD.generateWord = async function (germanWord) {
+    const system = `You are a German language expert for Persian speakers (B1 level). 
+  Return ONLY valid JSON with these exact keys (use empty string if not applicable):
+  {
+    "g": "German word with article if noun",
+    "i": "IPA pronunciation",
+    "p": "Persian translation",
+    "ed": "German example sentence",
+    "ef": "Persian translation of example",
+    "c": "chapter in German one of: Arbeit,Wohnen,Gesundheit,Reisen,Alltag,Lernen,Gefühle,Gesellschaft,Natur,Essen,Freizeit",
+    "f": "for verbs only: infinitive – präteritum – perfekt form, else empty",
+    "pt": "Präteritum example sentence",
+    "ptf": "Persian of pt",
+    "pf": "Perfekt example sentence",
+    "pff": "Persian of pf",
+    "kp": "full Präsens conjugation: ich ...; du ...; er/sie/es ...; wir ...; ihr ...; sie/Sie ...",
+    "kpt": "full Präteritum conjugation same format",
+    "kpf": "full Perfekt conjugation",
+    "kpq": "full Plusquamperfekt",
+    "kfu": "full Futur",
+    "kptf": "Persian short forms for Präteritum (ich...; du...; ...)",
+    "kpff": "Persian for Perfekt",
+    "kpqf": "Persian for Plusquamperfekt",
+    "kfuf": "Persian for Futur"
+  }
+  Be accurate. For non-verbs leave verb fields empty.`;
+    return await GD.callAI(system, `Generate complete entry for: ${germanWord}`);
+  };
+
+  // تقویت یک درس گرامر: افزودن توضیح و مثال جدید
+  GD.expandGrammar = async function (lesson) {
+    const system = `You are a German grammar teacher for Persian speakers. 
+  Return ONLY JSON: {"explain": ["new explanation point 1", "..."], "examples": [{"de":"...","fa":"..."}, ...]}
+  Add 2-3 clear extra explanation points and 4-5 practical example pairs (German + Persian). Keep level ${lesson.level}.`;
+    const user = `Lesson title: ${lesson.title} / ${lesson.title_fa}
+  Current explain: ${JSON.stringify(lesson.explain || [])}
+  Current examples: ${JSON.stringify(lesson.examples || [])}
+  Please strengthen and expand.`;
+    return await GD.callAI(system, user);
+  };
+
+  // نمایش پیام وضعیت در تب هوش مصنوعی (isError = true → قرمز)
+  GD.showAiStatus = function (msg, isError) {
+    const el = GD.$("ai-status");
+    el.textContent = msg;
+    el.classList.remove("hidden");
+    el.classList.toggle("error", !!isError);
+  };
+
+  // نمایش لیست واژه‌های شخصی
+  GD.renderCustomList = function () {
+    const esc = GD.esc, S = GD.state;
+    const box = GD.$("custom-words-list");
+    if (!S.customWords.length) {
+      box.innerHTML = `<span class="hint">هنوز کلمه‌ای اضافه نکرده‌اید.</span>`;
+      return;
+    }
+    let html = "";
+    for (const w of S.customWords) {
+      html += `<div class="result-item" data-word="${esc(w.g)}"><div class="g">${esc(w.g)} <span class="tag ai-tag">AI</span></div><div class="p">${esc(w.p)}</div></div>`;
+    }
+    box.innerHTML = html;
+  };
+
+  // افزودن واژه به لیست شخصی (بدون تکرار) و ذخیره
+  GD.addCustomWord = function (w) {
+    const S = GD.state;
+    w._custom = true;
+    S.customWords = S.customWords.filter(x => x.g !== w.g); // حذف تکراری
+    S.customWords.unshift(w);
+    GD.saveCustom();
+    GD.mergeCustom();
+    GD.renderCustomList();
+  };
+
+  // کنترل‌کننده دکمه «تولید با هوش مصنوعی»
+  GD.handleGenerate = async function (word) {
+    word = (word || "").trim();
+    if (!word) { GD.showAiStatus("کلمه را وارد کنید", true); return; }
+
+    const btn = GD.$("btn-ai-generate");
+    btn.disabled = true;
+    GD.showAiStatus("در حال تولید با هوش مصنوعی...");
+    GD.$("ai-result").classList.add("hidden");
+
+    try {
+      const w = await GD.generateWord(word);
+      if (!w.g) throw new Error("پاسخ نامعتبر از هوش مصنوعی");
+      GD.addCustomWord(w);
+      GD.$("ai-result").innerHTML = GD.renderCard(w, true) +
+        `<button class="btn success" style="width:100%;margin-top:12px" onclick="document.getElementById('ai-result').classList.add('hidden')">ذخیره شد ✓</button>`;
+      GD.$("ai-result").classList.remove("hidden");
+      GD.showAiStatus("با موفقیت اضافه شد و در لیست شخصی ذخیره گردید.");
+    } catch (e) {
+      GD.showAiStatus(e.message || String(e), true);
+    } finally {
+      btn.disabled = false;
+    }
+  };
+
+  // ==================================================================
+  // تب‌ها و رویدادها
+  // ==================================================================
+  // تعویض تب فعال
+  GD.switchTab = function (tab) {
+    document.querySelectorAll("#main-nav button")
+      .forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+    for (const t of ["daily", "search", "verbs", "grammar", "ai", "settings"]) {
+      const el = GD.$("tab-" + t);
+      if (el) el.classList.toggle("hidden", t !== tab);
+    }
+    // رندر تنبل (lazy) محتوای تب‌ها هنگام ورود
+    if (tab === "verbs") GD.renderVerbList();
+    if (tab === "grammar") GD.renderGrammar();
+    if (tab === "ai") GD.renderCustomList();
+  };
+
+  // مقداردهی اولیه UI پس از بارگذاری داده‌ها
+  GD.initApp = function () {
+    const S = GD.state, $ = GD.$;
+
+    // پر کردن لیست فصل‌ها (از روی داده‌ها)
+    const chapters = [...new Set(S.words.map(w => w.c).filter(Boolean))].sort();
+    const sel = $("filter-chapter");
+    sel.innerHTML = `<option value="">همه</option>`;
+    for (const c of chapters) {
+      const o = document.createElement("option");
+      o.value = c; o.textContent = c;
+      sel.appendChild(o);
+    }
+
+    // اعمال تنظیمات ذخیره‌شده روی فرم
+    $("per-day").value = S.settings.perDay;
+    $("only-verbs").checked = S.settings.onlyVerbs;
+    $("filter-chapter").value = S.settings.chapter || "";
+    $("api-key").value = S.settings.apiKey || "";
+    $("api-base").value = S.settings.apiBase || "";
+    // مهاجرت مدل‌های حذف‌شده به مدل جایگزین
+    const MODEL_MIGRATE = { "google/gemini-2.0-flash-001": "google/gemini-3.8-flash" };
+    if (MODEL_MIGRATE[S.settings.apiModel]) { S.settings.apiModel = MODEL_MIGRATE[S.settings.apiModel]; GD.saveSettings(); }
+
+    // اگر مدل ذخیره‌شده در لیست نبود، در فیلد «مدل دلخواه» نمایش داده می‌شود
+    const modelSel = $("api-model"), m = S.settings.apiModel || "gpt-4o-mini";
+    const inList = [...modelSel.options].some(o => o.value === m);
+    modelSel.value = inList ? m : "gpt-4o-mini";
+    $("api-model-custom").value = inList ? "" : m;
+
+    GD.buildDailyList();
+    GD.renderCustomList();
+  };
+
+  // ثبت همه‌ی رویدادهای رابط کاربری
+  GD.bindEvents = function () {
+    const S = GD.state, $ = GD.$;
+
+    // --- ناوبری تب‌ها ---
+    $("main-nav").addEventListener("click", e => {
+      const btn = e.target.closest("button");
+      if (btn) GD.switchTab(btn.dataset.tab);
+    });
+
+    // --- تب امروز: قبلی / بعدی / تلفظ / یاد گرفتم ---
+    $("btn-next").onclick = () => { if (S.dailyIndex < S.dailyList.length - 1) { S.dailyIndex++; GD.showDailyCard(); } };
+    $("btn-prev").onclick = () => { if (S.dailyIndex > 0) { S.dailyIndex--; GD.showDailyCard(); } };
+    $("btn-speak").onclick = () => { if (S.dailyList[S.dailyIndex]) GD.speak(S.dailyList[S.dailyIndex].g); };
+    $("btn-known").onclick = () => {
+      if (!S.dailyList[S.dailyIndex]) return;
+      S.settings.known[S.dailyList[S.dailyIndex].g] = 1;
+      GD.saveSettings();
+      if (S.dailyIndex < S.dailyList.length - 1) { S.dailyIndex++; GD.showDailyCard(); }
+      else alert("آفرین! واژه‌های امروز تمام شد.");
+    };
+
+    // --- جستجو (با debounce ۱۸۰ میلی‌ثانیه) ---
+    $("search-input").addEventListener("input", e => {
+      clearTimeout(S.searchTimer);
+      S.searchTimer = setTimeout(() => GD.doSearch(e.target.value), 180);
+    });
+    $("verb-search").addEventListener("input", e => {
+      clearTimeout(S.verbTimer);
+      S.verbTimer = setTimeout(() => GD.renderVerbList(e.target.value), 180);
+    });
+
+    // --- کلیک‌های محتوای اصلی (event delegation) ---
+    $("content").addEventListener("click", e => {
+      // صرف کامل فعل
+      const conj = e.target.closest("[data-conj]");
+      if (conj) { GD.showFullConj(conj.dataset.conj); return; }
+      // جزئیات واژه
+      const word = e.target.closest("[data-word]");
+      if (word) { GD.showWordDetail(word.dataset.word); return; }
+      // درس گرامر
+      const gram = e.target.closest("[data-gram]");
+      if (gram) { GD.showGrammar(gram.dataset.gram); return; }
+      // تقویت درس گرامر با AI
+      const expand = e.target.closest("[data-expand-gram]");
+      if (expand) {
+        const id = expand.dataset.expandGram;
+        const lesson = S.grammar.find(x => x.id === id);
+        if (!lesson) return;
+        expand.disabled = true;
+        expand.textContent = "در حال تقویت...";
+        GD.expandGrammar(lesson).then(data => {
+          if (data.explain) lesson.explain = (lesson.explain || []).concat(data.explain);
+          if (data.examples) lesson.examples = (lesson.examples || []).concat(data.examples);
+          try { localStorage.setItem(GD.KEYS.GRAMMAR, JSON.stringify(S.grammar)); } catch (_) {}
+          GD.showGrammar(id);
+        }).catch(err => alert(err.message || err))
+          .finally(() => { expand.disabled = false; expand.textContent = "✨ تقویت این درس با هوش مصنوعی"; });
+      }
+    });
+
+    // --- مودال ---
+    $("modal-close").onclick = GD.closeModal;
+    $("modal").addEventListener("click", e => { if (e.target.id === "modal") GD.closeModal(); });
+
+    // --- تنظیمات ---
+    $("per-day").onchange = e => {
+      S.settings.perDay = Math.max(1, Math.min(20, +e.target.value || 5));
+      GD.saveSettings(); GD.buildDailyList();
+    };
+    $("only-verbs").onchange = e => { S.settings.onlyVerbs = e.target.checked; GD.saveSettings(); GD.buildDailyList(); };
+    $("filter-chapter").onchange = e => { S.settings.chapter = e.target.value; GD.saveSettings(); GD.buildDailyList(); };
+    $("btn-reset").onclick = () => {
+      if (confirm("روز شمار از اول شروع شود؟")) {
+        S.settings.startDate = new Date().toISOString().slice(0, 10);
+        S.settings.known = {};
+        GD.saveSettings(); GD.buildDailyList();
+      }
+    };
+    $("btn-save-api").onclick = () => {
+      S.settings.apiKey = $("api-key").value.trim();
+      S.settings.apiBase = $("api-base").value.trim();
+      // مدل دلخواه (در صورت پر بودن) بر لیست اولویت دارد
+      S.settings.apiModel = $("api-model-custom").value.trim() || $("api-model").value;
+      GD.saveSettings();
+      alert("تنظیمات هوش مصنوعی ذخیره شد");
+    };
+
+    // --- هوش مصنوعی ---
+    $("btn-ai-generate").onclick = () => GD.handleGenerate($("ai-word-input").value);
+    $("btn-search-ai").onclick = () => {
+      GD.switchTab("ai");
+      $("ai-word-input").value = S.lastSearchQ;
+      GD.handleGenerate(S.lastSearchQ);
+    };
+  };
+
+  // ==================================================================
+  // نقطه شروع
+  // ==================================================================
+  // ثبت Service Worker برای کار آفلاین (PWA)
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
+
+  // ترتیب راه‌اندازی:
+  // ۱) ثبت رویدادها  ۲) خواندن تنظیمات  ۳) خواندن واژه‌های شخصی  ۴) بارگذاری داده‌ها (که در پایان initApp را صدا می‌زند)
+  GD.bindEvents();
+  GD.loadSettings();
+  GD.loadCustom();
+  GD.loadData();
+})();
+  </script>
+</body>
+</html>
