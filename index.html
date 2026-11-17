@@ -59,6 +59,9 @@ nav button.active{color:var(--accent);border-bottom-color:var(--accent);font-wei
 .word-main{font-size:1.55rem;font-weight:700;text-align:center;direction:ltr;margin-bottom:4px}
 .ipa{font-size:.9rem;color:var(--accent);text-align:center;direction:ltr;margin-bottom:8px;font-family:ui-monospace,monospace}
 .persian{font-size:1.15rem;text-align:center;margin-bottom:12px}
+.plural{font-size:.95rem;text-align:center;direction:ltr;margin:-2px 0 8px;color:var(--text,#e5e7eb)}
+.plural .lbl{color:var(--muted);font-size:.72rem;margin-right:6px}
+.plural .none{color:var(--muted);font-size:.8rem}
 .example{background:#0f172a;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.88rem}
 .example .de{direction:ltr;text-align:left;color:#cbd5e1;margin-bottom:4px}
 .example .fa{color:var(--muted)}
@@ -262,7 +265,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
   // کلیدهای ذخیره‌سازی در localStorage
   GD.KEYS = {
     SETTINGS: "gd_v3",        // تنظیمات کاربر
-    WORDS:    "gd_words_v3",  // کش لیست واژگان
+    WORDS:    "gd_words_v5",  // کش لیست واژگان
     GRAMMAR:  "gd_gram_v3",   // کش درس‌های گرامر
     CUSTOM:   "gd_custom_v3"  // واژه‌های ساخته‌شده با هوش مصنوعی
   };
@@ -435,7 +438,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     if (lines.length < 2) return [];
     const delim = lines[0].includes(";") ? ";" : ",";
     const headers = lines[0].split(delim).map(h => h.trim().replace(/^\uFEFF/, ""));
-    const map = {german:"g",ipa:"i",persian:"p",example_de:"ed",example_fa:"ef",chapter:"c",formen:"f",praeteritum:"pt",praeteritum_fa:"ptf",perfekt:"pf",perfekt_fa:"pff",plusquamperfekt:"pq",plusquamperfekt_fa:"pqf",futur:"fu",futur_fa:"fuf",konj_praesens:"kp",konj_praeteritum:"kpt",konj_perfekt:"kpf",konj_plusquamperfekt:"kpq",konj_futur:"kfu",konj_praeteritum_fa:"kptf",konj_perfekt_fa:"kpff",konj_plusquamperfekt_fa:"kpqf",konj_futur_fa:"kfuf"};
+    const map = {german:"g",ipa:"i",persian:"p",example_de:"ed",example_fa:"ef",chapter:"c",plural:"pl",formen:"f",praeteritum:"pt",praeteritum_fa:"ptf",perfekt:"pf",perfekt_fa:"pff",plusquamperfekt:"pq",plusquamperfekt_fa:"pqf",futur:"fu",futur_fa:"fuf",konj_praesens:"kp",konj_praeteritum:"kpt",konj_perfekt:"kpf",konj_plusquamperfekt:"kpq",konj_futur:"kfu",konj_praeteritum_fa:"kptf",konj_perfekt_fa:"kpff",konj_plusquamperfekt_fa:"kpqf",konj_futur_fa:"kfuf"};
     const out = [];
     for (let i = 1; i < lines.length; i++) {
       const cols = GD.splitCSV(lines[i], delim);
@@ -495,12 +498,25 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
   // ==================================================================
   // کارت واژه و مودال
   // ==================================================================
+  // نمایش «جمع» اسم (Plural)
+  // w.pl: شکل جمع بدون حرف تعریف (مثلاً "Stellen")؛ "-" = جمع ندارد؛ "Pl." = فقط جمع به کار می‌رود
+  // برای غیر اسم‌ها (فعل، صفت و ...) فیلد pl وجود ندارد و چیزی نمایش داده نمی‌شود
+  GD.pluralHTML = function (w) {
+    if (!w.pl) return "";
+    const esc = GD.esc;
+    let body;
+    if (w.pl === "-") body = '<span class="none">جمع ندارد (kein Plural)</span>';
+    else if (w.pl === "Pl.") body = '<span class="none">فقط به‌صورت جمع (nur Plural)</span>';
+    else body = "<b>die " + esc(w.pl) + "</b>";
+    return '<div class="plural"><span class="lbl">جمع · Plural</span>' + body + "</div>";
+  };
+
   // ساخت HTML کارت یک واژه
   // showTenses = true  → زمان‌های Präteritum/Perfekt و دکمه صرف کامل (برای افعال) نمایش داده می‌شود
   GD.renderCard = function (w, showTenses) {
     const esc = GD.esc;
     let h = `<div class="chapter">${esc(w.c || "عمومی")}${w._custom ? ' <span class="tag ai-tag">AI</span>' : ""}</div>
-      <div class="word-main">${esc(w.g)}</div><div class="ipa">${esc(w.i || "")}</div><div class="persian">${esc(w.p || "")}</div>`;
+      <div class="word-main">${esc(w.g)}</div>${GD.pluralHTML(w)}<div class="ipa">${esc(w.i || "")}</div><div class="persian">${esc(w.p || "")}</div>`;
 
     // جمله مثال
     if (w.ed) h += `<div class="example"><div class="de">${esc(w.ed)}</div><div class="fa">${esc(w.ef || "")}</div></div>`;
@@ -616,6 +632,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     for (let i = 0; i < S.words.length && results.length < 35; i++) {
       const w = S.words[i];
       if ((w.g && w.g.toLowerCase().includes(qLow)) ||   // کلمه آلمانی
+          (w.pl && w.pl.length > 2 && w.pl.toLowerCase().includes(qLow)) ||   // شکل جمع
           (w.p && w.p.includes(q)) ||                    // ترجمه فارسی
           (w.ed && w.ed.toLowerCase().includes(qLow)))   // جمله مثال
         results.push(w);
@@ -752,6 +769,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     "ed": "German example sentence",
     "ef": "Persian translation of example",
     "c": "chapter in German one of: Arbeit,Wohnen,Gesundheit,Reisen,Alltag,Lernen,Gefühle,Gesellschaft,Natur,Essen,Freizeit",
+    "pl": "for nouns only: plural form WITHOUT article (e.g. Stellen); use - if the noun has no plural; empty for non-nouns",
     "f": "for verbs only: infinitive – präteritum – perfekt form, else empty",
     "pt": "Präteritum example sentence",
     "ptf": "Persian of pt",

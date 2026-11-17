@@ -10,7 +10,7 @@
  */
 
 // با هر تغییر در فایل‌ها، شماره نسخه را زیاد کنید تا کش قدیمی پاک شود
-const CACHE = "gd-v5";
+const CACHE = "gd-v7";
 
 // فایل‌هایی که هنگام نصب کش می‌شوند
 const ASSETS = ["./", "./index.html", "./words.min.json", "./grammar.json", "./manifest.json", "./icon.svg"];
