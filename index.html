@@ -3,6 +3,7 @@
   German Daily – واژگان روزانه آلمانی (PWA)
   ------------------------------------------------------------
   تماس با توسعه‌دهنده / Contact
+    نام   : Mohsen Najafi
     ایمیل : mohsen.najafi.najafi@gmail.com
     تلفن  : 00989177662400
   ------------------------------------------------------------
@@ -126,6 +127,33 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
 .about a{color:var(--accent);text-decoration:none;direction:ltr;unicode-bidi:embed}
 .about div{margin-top:4px}
 
+/* ===== جمع اسم با مثال، لایتنر، تب متن (نسخهٔ ۴) ===== */
+.btn.danger{background:#dc2626}
+.example.pl-ex{border-right:3px solid #fbbf24}
+.example .lbl2{color:#fbbf24;font-size:.7rem;margin-bottom:3px}
+.leitner-boxes{display:flex;gap:6px;margin:12px 0}
+.lbox{flex:1;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:8px 2px;text-align:center}
+.lbox b{display:block;font-size:1.15rem;color:var(--accent)}
+.lbox small{color:var(--muted);font-size:.62rem;line-height:1.3;display:block}
+.due-bar{font-size:.85rem;color:var(--muted);text-align:center;margin-top:10px}
+.due-bar b{color:var(--accent)}
+.tr-input{width:100%;min-height:130px;background:#0f172a;border:1px solid #475569;color:#fff;padding:11px 14px;border-radius:11px;font-size:1rem;outline:none;resize:vertical;font-family:inherit;direction:ltr;text-align:left;line-height:1.6}
+.tr-input:focus{border-color:var(--primary)}
+.tr-h{font-size:.9rem;color:var(--accent);margin-bottom:8px}
+.tr-text{direction:ltr;text-align:left;font-size:1.05rem;line-height:2.1;word-break:break-word}
+.tk{border-radius:5px;padding:1px 2px;cursor:pointer}
+.tk.tk-known{border-bottom:1px dotted #64748b}
+.tk-verb{background:rgba(56,189,248,.22);color:#7dd3fc;font-weight:700}
+.tk-verb2{background:rgba(56,189,248,.08);color:#7dd3fc;border-bottom:1px dashed #38bdf8}
+.tk-pl{background:rgba(251,191,36,.20);color:#fcd34d}
+.tk-gr{box-shadow:inset 0 -3px 0 #a78bfa}
+.tk.sel{outline:2px solid #f472b6}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:.74rem}
+.legend .tk{cursor:default}
+.tr-fa{direction:rtl;text-align:right;line-height:1.9;font-size:1.02rem;margin-bottom:10px}
+.tr-de{direction:ltr;text-align:left;line-height:1.8;font-size:1rem;margin-bottom:10px}
+.tr-gloss{direction:ltr;text-align:left;font-size:.8rem;color:var(--muted);margin-bottom:10px;line-height:1.7}
+
   </style>
 </head>
 <body>
@@ -136,6 +164,8 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     </header>
     <nav id="main-nav">
       <button class="active" data-tab="daily">امروز</button>
+      <button data-tab="leitner">لایتنر</button>
+      <button data-tab="text">متن</button>
       <button data-tab="search">جستجو</button>
       <button data-tab="verbs">افعال</button>
       <button data-tab="grammar">گرامر</button>
@@ -152,8 +182,32 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
           <button class="btn secondary" id="btn-next">بعدی</button>
         </div>
         <div class="btn-row" style="margin-top:8px">
-          <button class="btn success" id="btn-known">یاد گرفتم ✓</button>
+          <button class="btn success" id="btn-known">یاد گرفتم ✓ (افزودن به لایتنر)</button>
         </div>
+        <div id="daily-leitner" class="due-bar"></div>
+      </div>
+
+      <div id="tab-leitner" class="hidden">
+        <div id="leitner-box"></div>
+      </div>
+
+      <div id="tab-text" class="hidden">
+        <div class="card">
+          <div class="settings-row" style="padding-top:0">
+            <span>جهت ترجمه</span>
+            <select id="tr-dir"><option value="de|fa">آلمانی ← فارسی</option><option value="fa|de">فارسی ← آلمانی</option></select>
+          </div>
+          <textarea id="tr-input" class="tr-input" placeholder="متن آلمانی را بنویسید یا Paste کنید…" spellcheck="false"></textarea>
+          <div class="btn-row">
+            <button class="btn" id="btn-tr-go">ترجمه و تحلیل</button>
+            <button class="btn secondary" id="btn-tr-paste" style="flex:none;min-width:70px">Paste</button>
+            <button class="btn secondary" id="btn-tr-speak" style="flex:none;min-width:56px">🔊</button>
+            <button class="btn secondary" id="btn-tr-clear" style="flex:none;min-width:56px">پاک</button>
+          </div>
+          <div id="tr-status" class="status hidden"></div>
+          <div id="tr-net" class="hint"></div>
+        </div>
+        <div id="tr-out"></div>
       </div>
 
       <div id="tab-search" class="hidden">
@@ -227,6 +281,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
           <!-- اطلاعات تماس با توسعه‌دهنده -->
           <div class="about">
             <div>تماس با توسعه‌دهنده</div>
+            <div>Mohsen Najafi</div>
             <div>✉️ <a href="mailto:mohsen.najafi.najafi@gmail.com">mohsen.najafi.najafi@gmail.com</a></div>
             <div>📞 <a href="tel:+989177662400">00989177662400</a></div>
           </div>
@@ -258,6 +313,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
 
   // اطلاعات توسعه‌دهنده
   GD.AUTHOR = {
+    name: "Mohsen Najafi",
     email: "mohsen.najafi.najafi@gmail.com",
     phone: "00989177662400"
   };
@@ -265,7 +321,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
   // کلیدهای ذخیره‌سازی در localStorage
   GD.KEYS = {
     SETTINGS: "gd_v3",        // تنظیمات کاربر
-    WORDS:    "gd_words_v5",  // کش لیست واژگان
+    WORDS:    "gd_words_v6",  // کش لیست واژگان (v6: ۱۶۴۶ واژه + مثال جمع)
     GRAMMAR:  "gd_gram_v3",   // کش درس‌های گرامر
     CUSTOM:   "gd_custom_v3"  // واژه‌های ساخته‌شده با هوش مصنوعی
   };
@@ -290,6 +346,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
       onlyVerbs: false,                                   // فقط افعال
       chapter: "",                                        // فیلتر فصل
       known: {},                                          // واژه‌های یادگرفته‌شده
+      leitner: {},                                        // لایتنر: {واژه: {b: جعبه ۱..۵, d: تاریخ مرور بعدی}}
       apiKey: "",                                         // کلید API
       apiBase: "",                                        // آدرس پایه API (اختیاری)
       apiModel: "gpt-4o-mini"                             // مدل هوش مصنوعی
@@ -299,7 +356,8 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     dailyList: [],    // لیست واژه‌های امروز
     searchTimer: null, // تایمر debounce جستجو
     verbTimer: null,   // تایمر debounce جستجوی فعل
-    lastSearchQ: ""    // آخرین عبارت جستجو شده
+    lastSearchQ: "",   // آخرین عبارت جستجو شده
+    rev: { active: false, list: [], idx: 0, shown: false, ok: 0, no: 0, miss: {}, summary: "", note: "" } // نوبت مرور لایتنر
   };
 
   // ==================================================================
@@ -438,7 +496,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     if (lines.length < 2) return [];
     const delim = lines[0].includes(";") ? ";" : ",";
     const headers = lines[0].split(delim).map(h => h.trim().replace(/^\uFEFF/, ""));
-    const map = {german:"g",ipa:"i",persian:"p",example_de:"ed",example_fa:"ef",chapter:"c",plural:"pl",formen:"f",praeteritum:"pt",praeteritum_fa:"ptf",perfekt:"pf",perfekt_fa:"pff",plusquamperfekt:"pq",plusquamperfekt_fa:"pqf",futur:"fu",futur_fa:"fuf",konj_praesens:"kp",konj_praeteritum:"kpt",konj_perfekt:"kpf",konj_plusquamperfekt:"kpq",konj_futur:"kfu",konj_praeteritum_fa:"kptf",konj_perfekt_fa:"kpff",konj_plusquamperfekt_fa:"kpqf",konj_futur_fa:"kfuf"};
+    const map = {german:"g",ipa:"i",persian:"p",example_de:"ed",example_fa:"ef",chapter:"c",plural:"pl",plural_de:"pld",plural_fa:"plf",formen:"f",praeteritum:"pt",praeteritum_fa:"ptf",perfekt:"pf",perfekt_fa:"pff",plusquamperfekt:"pq",plusquamperfekt_fa:"pqf",futur:"fu",futur_fa:"fuf",konj_praesens:"kp",konj_praeteritum:"kpt",konj_perfekt:"kpf",konj_plusquamperfekt:"kpq",konj_futur:"kfu",konj_praeteritum_fa:"kptf",konj_perfekt_fa:"kpff",konj_plusquamperfekt_fa:"kpqf",konj_futur_fa:"kfuf"};
     const out = [];
     for (let i = 1; i < lines.length; i++) {
       const cols = GD.splitCSV(lines[i], delim);
@@ -520,6 +578,8 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
 
     // جمله مثال
     if (w.ed) h += `<div class="example"><div class="de">${esc(w.ed)}</div><div class="fa">${esc(w.ef || "")}</div></div>`;
+    // مثال جمع (فقط اسم‌هایی که جمع دارند)
+    if (w.pld) h += `<div class="example pl-ex"><div class="lbl2">جمع · مثال</div><div class="de">${esc(w.pld)}</div><div class="fa">${esc(w.plf || "")}</div></div>`;
 
     // اطلاعات ویژه افعال
     if (showTenses && w.f) {
@@ -612,6 +672,7 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     if (!S.dailyList.length) { el.innerHTML = `<div class="empty">واژه‌ای یافت نشد</div>`; return; }
     el.innerHTML = GD.renderCard(S.dailyList[S.dailyIndex], true);
     GD.updateProgress();
+    if (GD.updateDailyLeitner) GD.updateDailyLeitner();
   };
 
   // ==================================================================
@@ -861,13 +922,839 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
   };
 
   // ==================================================================
+  // لایتنر (مرور فاصله‌دار) — واژه‌ها در ۵ جعبه؛ هر جعبه فاصلهٔ مرور مخصوص خودش را دارد
+  // ==================================================================
+  GD.LEITNER_DAYS = [1, 2, 4, 8, 16];   // فاصلهٔ مرور (روز) برای جعبهٔ ۱ تا ۵
+
+  // تاریخ محلی به‌صورت YYYY-MM-DD
+  GD.dateStr = function (d) {
+    d = d || new Date();
+    const p = n => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  };
+  // تاریخ n روز بعد
+  GD.addDays = function (n) {
+    const d = new Date();
+    d.setHours(12, 0, 0, 0);
+    d.setDate(d.getDate() + n);
+    return GD.dateStr(d);
+  };
+
+  // افزودن واژه به جعبهٔ ۱ (اگر قبلاً نبوده)؛ مرور از فردا
+  GD.leitnerAdd = function (g) {
+    const L = GD.state.settings.leitner;
+    if (L[g]) return false;
+    L[g] = { b: 1, d: GD.addDays(1) };
+    GD.saveSettings();
+    return true;
+  };
+
+  // واژه‌هایی که امروز (یا زودتر) باید مرور شوند؛ ابتدا جعبه‌های پایین‌تر
+  GD.leitnerDue = function () {
+    const S = GD.state, L = S.settings.leitner, today = GD.dateStr();
+    const byG = new Map(S.words.map(w => [w.g, w]));
+    return Object.keys(L)
+      .filter(g => L[g].d <= today && byG.has(g))
+      .map(g => byG.get(g))
+      .sort((a, b) => (L[a.g].b - L[b.g].b) || (GD.hash(a.g) - GD.hash(b.g)));
+  };
+
+  // نوار «لایتنر امروز» زیر کارت واژهٔ روزانه
+  GD.updateDailyLeitner = function () {
+    const el = GD.$("daily-leitner");
+    if (!el) return;
+    const n = GD.leitnerDue().length;
+    el.innerHTML = n
+      ? `📦 لایتنر امروز: <b>${n}</b> کارت برای مرور <button class="btn secondary" style="flex:none;min-width:0;padding:6px 14px;margin-right:8px" data-goto="leitner">مرور</button>`
+      : `📦 لایتنر امروز: کارتی برای مرور نیست`;
+  };
+
+  // صفحهٔ لایتنر: خلاصهٔ جعبه‌ها یا کارت مرور
+  GD.renderLeitner = function () {
+    const S = GD.state, L = S.settings.leitner, box = GD.$("leitner-box");
+    const r = S.rev;
+    if (r.active) { GD.renderReviewCard(); return; }
+
+    const counts = [0, 0, 0, 0, 0];
+    for (const g in L) counts[Math.min(5, Math.max(1, L[g].b)) - 1]++;
+    const total = counts.reduce((a, b) => a + b, 0);
+    const due = GD.leitnerDue().length;
+
+    let h = `<div class="card"><h3 style="margin-bottom:6px">📦 لایتنر روزانه</h3>
+      <p class="hint">واژه‌ای که «یاد گرفتم» را بزنی وارد جعبهٔ ۱ می‌شود. اگر موقع مرور درست جواب بدهی به جعبهٔ بعدی می‌رود و دیرتر برمی‌گردد؛ اگر نه، به جعبهٔ ۱ برمی‌گردد.</p>
+      <div class="leitner-boxes">`;
+    counts.forEach((c, i) => {
+      h += `<div class="lbox"><b>${c}</b><small>جعبه ${i + 1}<br>هر ${GD.LEITNER_DAYS[i]} روز</small></div>`;
+    });
+    h += `</div>
+      <div class="due-bar" style="margin-bottom:10px">همه: <b>${total}</b> کارت · امروز آمادهٔ مرور: <b>${due}</b></div>
+      <div class="btn-row">
+        <button class="btn${due ? "" : " secondary"}" data-rev="start" ${due ? "" : "disabled"}>شروع مرور امروز (${due})</button>
+      </div>
+      <div class="btn-row" style="margin-top:8px">
+        <button class="btn secondary" data-rev="addtoday">➕ افزودن واژه‌های امروز به لایتنر</button>
+      </div></div>`;
+    if (S.rev.summary) {
+      h += `<div class="card"><div class="empty" style="padding:14px">✅ مرور تمام شد<br><small>${S.rev.summary}</small></div></div>`;
+    }
+    if (S.rev.note) {
+      h += `<div class="card"><div class="hint" style="text-align:center">${S.rev.note}</div></div>`;
+    }
+    box.innerHTML = h;
+  };
+
+  // شروع یک نوبت مرور
+  GD.startReview = function () {
+    const S = GD.state;
+    const list = GD.leitnerDue().slice(0, 40);
+    if (!list.length) return;
+    S.rev = { active: true, list, idx: 0, shown: false, ok: 0, no: 0, miss: {}, summary: "" };
+    GD.renderReviewCard();
+  };
+
+  // نمایش کارت مرور: پشت = کلمه + جمع + جملهٔ مثال آلمانی؛ بعد از «نمایش پاسخ» ترجمه و مثال جمع هم می‌آید
+  GD.renderReviewCard = function () {
+    const S = GD.state, r = S.rev, esc = GD.esc, box = GD.$("leitner-box");
+    const w = r.list[r.idx];
+    if (!w) {
+      r.active = false;
+      r.summary = `درست: ${r.ok} · نادرست: ${r.no}`;
+      GD.renderLeitner();
+      GD.updateDailyLeitner();
+      return;
+    }
+    const L = S.settings.leitner[w.g] || { b: 1 };
+    const pct = (r.idx / r.list.length) * 100;
+    let h = `<div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+      <div class="card">
+        <div class="chapter">جعبه ${L.b} · ${r.idx + 1}/${r.list.length}</div>
+        <div class="word-main">${esc(w.g)}</div>${GD.pluralHTML(w)}`;
+    if (w.ed) h += `<div class="example"><div class="de">${esc(w.ed)}</div>${r.shown ? `<div class="fa">${esc(w.ef || "")}</div>` : ""}</div>`;
+    if (r.shown) {
+      h += `<div class="ipa" style="margin-top:12px">${esc(w.i || "")}</div><div class="persian">${esc(w.p || "")}</div>`;
+      if (w.pld) h += `<div class="example pl-ex"><div class="lbl2">جمع · مثال</div><div class="de">${esc(w.pld)}</div><div class="fa">${esc(w.plf || "")}</div></div>`;
+      if (w.f) h += `<div style="margin-top:10px;font-size:.82rem;color:var(--accent);direction:ltr;text-align:left">${esc(w.f)}</div>`;
+    }
+    h += `</div><div class="btn-row">`;
+    if (!r.shown) {
+      h += `<button class="btn" data-rev="show">نمایش پاسخ</button><button class="btn secondary" data-rev="speak" style="flex:none;min-width:70px">🔊</button>`;
+    } else {
+      h += `<button class="btn danger" data-rev="no">❌ نمی‌دانستم</button><button class="btn success" data-rev="yes">✅ می‌دانستم</button><button class="btn secondary" data-rev="speak" style="flex:none;min-width:70px">🔊</button>`;
+    }
+    h += `</div><div class="btn-row" style="margin-top:8px"><button class="btn secondary" data-rev="stop">پایان مرور</button></div>`;
+    box.innerHTML = h;
+  };
+
+  // پاسخ کاربر: بله = جعبهٔ بعد؛ خیر = برگشت به جعبهٔ ۱ (و یک‌بار دیگر در همین نوبت)
+  GD.reviewAnswer = function (ok) {
+    const S = GD.state, r = S.rev, w = r.list[r.idx];
+    if (!w) return;
+    const e = S.settings.leitner[w.g] || (S.settings.leitner[w.g] = { b: 1, d: GD.addDays(1) });
+    if (ok) {
+      if (e.b >= 5) e.d = GD.addDays(32);
+      else { e.b++; e.d = GD.addDays(GD.LEITNER_DAYS[e.b - 1]); }
+      r.ok++;
+    } else {
+      e.b = 1; e.d = GD.addDays(1);
+      r.no++;
+      if (!r.miss[w.g]) { r.miss[w.g] = 1; r.list.push(w); }   // یک بار دیگر آخر نوبت
+    }
+    GD.saveSettings();
+    r.idx++; r.shown = false;
+    GD.renderReviewCard();
+  };
+
+  // ==================================================================
+  // تحلیل متن آلمانی (فعل‌ها، جمع اسم‌ها، گرامر) — همان منطق نسخهٔ دسکتاپ
+  // ==================================================================
+  const SET = s => new Set(s.split(" "));
+  const TOKEN_RE = /[\p{L}]+(?:-[\p{L}]+)*|\d+(?:[.,:]\d+)*|[.!?;:,]/gu;
+  const PERSON_RE = /^(ich|du|er\/sie\/es|wir|ihr|sie\/Sie)\s+/;
+  const NOUN_RE = /^(der|die|das)\s+(.+?)(\s*\(Pl\.\))?$/;
+  const REFLEXIV = SET("mich dich sich uns euch");
+  const PREPS = SET("auf an über für mit von um bei in zu aus nach vor gegen bis unter");
+  const SEP_OK = SET("ab an auf aus bei ein fest fort her hin los mit nach vor weg zu zurück zusammen um teil statt vorbei weiter wieder hoch auswendig spazieren");
+  const SUBJ = SET("ich du er sie es wir ihr man");
+  const MODALS = SET("können müssen wollen sollen dürfen mögen");
+  const AUX = SET("sein haben werden");
+  const BUILTIN_FORMS = new Map();
+  [["sein", "wäre wärst wären wärt", "Konjunktiv II"], ["haben", "hätte hättest hätten hättet", "Konjunktiv II"],
+   ["werden", "würde würdest würden würdet", "Konjunktiv II"], ["können", "könnte könntest könnten könntet", "Konjunktiv II"],
+   ["müssen", "müsste müsstest müssten müsstet", "Konjunktiv II"], ["dürfen", "dürfte dürftest dürften dürftet", "Konjunktiv II"],
+   ["mögen", "möchte möchtest möchten möchtet", "Möchte-Form"], ["werden", "wurde wurdest wurden wurdet", "Präteritum"],
+   ["werden", "worden", "Partizip II"]].forEach(([inf, forms, label]) => forms.split(" ").forEach(f => BUILTIN_FORMS.set(f, [inf, label])));
+  const LABEL_FA = { "Präsens": "حال", "Präteritum": "گذشتهٔ ساده", "Partizip II": "اسم مفعول (Partizip II)", "Infinitiv": "مصدر",
+                     "Konjunktiv II": "Konjunktiv II", "Möchte-Form": "möchte (خواستن مؤدبانه)" };
+  const HABEN_P = SET("habe hast hat haben habt"), SEIN_P = SET("bin bist ist sind seid");
+  const WERDEN_P = SET("werde wirst wird werden werdet");
+  const WERDEN_ALL = new Set([...WERDEN_P, "wurde", "wurdest", "wurden", "wurdet"]);
+  const PLUSQ_AUX = SET("hatte hattest hatten hattet war warst waren wart");
+  const PRAET_AUX_MOD = new Set([...PLUSQ_AUX, ...SET("konnte konntest konnten konntet musste musstest mussten musstet wollte wolltest wollten wolltet sollte solltest sollten solltet durfte durftest durften durftet mochte mochtest mochten mochtet")]);
+  const ARTIKEL = SET("der die das den dem des ein eine einen einem einer eines");
+  const WQ = SET("wer was wo wann warum wie wohin woher wieso weshalb wem wen wessen welche welcher welches welchen wieviel");
+  const REL = SET("der die das den dem dessen deren denen");
+  const NEG = SET("nicht kein keine keinen keinem keiner keines nie niemals nichts niemand");
+  const AKK = SET("einen keinen meinen deinen seinen unseren euren ihren mich dich ihn");
+  const DAT = SET("dem einem keinem meinem deinem seinem unserem ihrem mir dir ihm ihnen");
+  const DAT_PREP = SET("mit bei nach von aus seit gegenüber");
+  const WECHSEL = SET("an auf hinter in neben über unter vor zwischen");
+  const CONTR = SET("im ins ans aufs übers");
+  const CONJ = SET("und aber oder denn deshalb sondern deswegen");
+  const GEN = SET("des eines keines meines deines seines unseres ihres dessen wegen trotz statt anstatt außerhalb innerhalb");
+  const SUBCONJ = SET("obwohl wenn ob bevor nachdem sobald solange falls seitdem sodass");
+  const WEEKDAYS = SET("montag dienstag mittwoch donnerstag freitag samstag sonntag");
+  const DAYPARTS = SET("morgen abend nachmittag vormittag mittag nacht wochenende");
+  const MONTHS = SET("januar februar märz april mai juni juli august september oktober november dezember frühling sommer herbst winter");
+  const TIME_UNITS = SET("tag tagen woche wochen monat monaten jahr jahren stunde stunden minute minuten");
+  const TIME_ADV = SET("heute morgen gestern jetzt immer oft manchmal abends morgens später bald früh spät täglich");
+  const PLACE_ADV = SET("hier dort da draußen drinnen überall zuhause");
+  const MANNER_ADV = SET("gern gerne schnell langsam zusammen allein laut leise lieber");
+  const POSS_RE = /^(mein|dein|unser|euer|eur)(e|en|em|er|es)?$/;
+  const POSS2_RE = /^(sein|ihr)(e|en|em|er|es)?$/;
+  const PART_RE = /^(?:(?:ab|an|auf|aus|bei|ein|mit|nach|vor|weg|zu|zurück|zusammen|um|fest|statt|teil)ge[a-zäöüß]{2,}|ge[a-zäöüß]{3,}|(?:be|ver|er|ent|zer|emp|miss)[a-zäöüß]{3,})(?:t|en)$/;
+  const NOT_VERBS = SET("gegen gerade genau gerne bereits besten verschieden entweder genug");
+  const AFTER_SUBJ_STOP = SET("auch nicht nur dann noch immer schon sehr gern gerne oft bald jetzt heute gestern morgen hier dort also wieder doch mal bitte eben etwas selbst sonst weiter leider kaum wirklich ganz mehr viel viele alle beide nie oben unten drei gleich meine deine seine ihre unsere eure keine einige wohl ebenfalls natürlich zuerst");
+  const DET_FORMS = SET("den einen keinen meinen deinen seinen unseren euren ihren einem einer");
+  const COMP_SKIP = SET("aber oder wieder immer über unter weiter leider sicher jeder");
+
+  const splitForms = s => (s || "").split(";").map(x => x.trim()).filter(Boolean);
+  const stripPerson = p => p.replace(PERSON_RE, "").replace(/\.\.\./g, " ").split(/\s+/).filter(t => t && !REFLEXIV.has(t.toLowerCase()));
+  const hasAny = (a, b) => { for (const x of a) if (b.has(x)) return true; return false; };
+  const push = (map, k, v) => { if (!map.has(k)) map.set(k, []); map.get(k).push(v); };
+
+  GD.Analyzer = class {
+    constructor(words) {
+      this.forms = new Map();     // شکل فعل → [[برچسب زمان، مدخل]]
+      this.sep = new Map();       // شکل صرف‌شده → [[پیشوند جداشدنی، مدخل]]
+      this.nounsSg = new Map();   // مفرد → مدخل
+      this.nounsPl = new Map();   // جمع → مدخل
+      this.lex = new Map();       // هر لغت → [مدخل‌ها]
+      this.byInf = new Map();
+      this.meta = new Map();      // مدخل → {inf, refl, prep}
+      for (const w of words) {
+        const g = (w.g || "").trim();
+        const m = NOUN_RE.exec(g);
+        if (m) {
+          const key = m[2].trim().toLowerCase();
+          if (m[3]) { if (!this.nounsPl.has(key)) this.nounsPl.set(key, w); }
+          else {
+            if (!this.nounsSg.has(key)) this.nounsSg.set(key, w);
+            const pl = (w.pl || "").trim();
+            if (pl && pl !== "-" && pl !== "Pl." && pl.toLowerCase() !== key && !this.nounsPl.has(pl.toLowerCase())) this.nounsPl.set(pl.toLowerCase(), w);
+          }
+          push(this.lex, key, w);
+        } else if (w.kp) this.addVerb(w);
+        else if (!g.includes(" ")) push(this.lex, g.toLowerCase(), w);
+      }
+      for (const [form, [inf, label]] of BUILTIN_FORMS) push(this.forms, form, [label, this.byInf.get(inf) || null]);
+      this.nounKeys = new Set([...this.nounsSg.keys(), ...this.nounsPl.keys()]);
+    }
+
+    addVerb(w) {
+      const g = w.g.trim();
+      const core = g.split(/\s+/).filter(t => t !== "sich");
+      const prep = core.length > 1 && PREPS.has(core[core.length - 1].toLowerCase()) ? core[core.length - 1].toLowerCase() : null;
+      const phrase = core.length > 1 && prep === null ? core[0].toLowerCase() : null;
+      const fut = stripPerson(splitForms(w.kfu)[0] || "");
+      const inf = fut.length ? fut[fut.length - 1].toLowerCase() : core[0].toLowerCase();
+      this.meta.set(w, { inf, refl: g.startsWith("sich "), prep });
+      if (!this.byInf.has(inf)) this.byInf.set(inf, w);
+      push(this.lex, inf, w);
+      push(this.forms, inf, ["Infinitiv", w]);
+      const headWords = new Set(core.slice(1).map(t => t.toLowerCase()));
+      for (const [label, key] of [["Präsens", "kp"], ["Präteritum", "kpt"]]) {
+        for (const p of splitForms(w[key])) {
+          const toks = stripPerson(p);
+          if (!toks.length) continue;
+          const fin = toks[0].toLowerCase();
+          push(this.forms, fin, [label, w]);
+          const extras = toks.slice(1).filter(e => /^\p{L}+$/u.test(e) && !headWords.has(e.toLowerCase())).map(e => e.toLowerCase());
+          if (extras.length && (SEP_OK.has(extras[0]) || extras[0] === phrase)) push(this.sep, fin, [extras[0], w]);
+        }
+      }
+      for (const key of ["kpf", "kpq"]) {
+        for (const p of splitForms(w[key])) {
+          const toks = stripPerson(p);
+          if (toks.length && toks[toks.length - 1].toLowerCase() !== inf) push(this.forms, toks[toks.length - 1].toLowerCase(), ["Partizip II", w]);
+        }
+      }
+    }
+
+    analyze(text, lessons) {
+      const toks = [];
+      for (const m of text.matchAll(TOKEN_RE)) {
+        const w = m[0], c = w[0];
+        toks.push({ i: toks.length, s: m.index, e: m.index + w.length, w, l: w.toLowerCase(),
+                    word: /[\p{L}\p{N}]/u.test(c), alpha: /\p{L}/u.test(c), cap: c !== c.toLowerCase() && c === c.toUpperCase() });
+      }
+      const sents = [], ends = [];
+      let cur = [];
+      for (const t of toks) {
+        if (t.word) cur.push(t.i);
+        else if (".!?".includes(t.w)) { sents.push(cur); ends.push(t.w); cur = []; }
+      }
+      if (cur.length) { sents.push(cur); ends.push(""); }
+
+      // ---------- فعل‌ها ----------
+      const V = {};
+      for (const idxs of sents) {
+        idxs.forEach((i, j) => {
+          const t = toks[i];
+          const cands = t.alpha ? this.forms.get(t.l) : null;
+          if (!cands || (t.cap && j !== 0)) return;
+          const nxt = j + 1 < idxs.length ? toks[idxs[j + 1]] : null;
+          if (t.l === "sein" && nxt && nxt.alpha && (nxt.cap || ARTIKEL.has(nxt.l))) return;
+          if (j === 0 && t.cap && this.nounKeys.has(t.l) && !(nxt && SUBJ.has(nxt.l))) return;
+          const pairs = [], labels = new Set();
+          for (const [lab, e] of cands) {
+            if (!pairs.some(([a, b]) => a === lab && b === e)) pairs.push([lab, e]);
+            labels.add(lab);
+          }
+          const roles = new Set();
+          if (labels.has("Infinitiv")) roles.add("inf");
+          if (labels.has("Partizip II")) roles.add("part");
+          for (const x of ["Präsens", "Präteritum", "Konjunktiv II", "Möchte-Form"]) if (labels.has(x)) roles.add("fin");
+          V[i] = { tier: 1, labels, pairs, roles };
+        });
+      }
+      // فعل‌های احتمالی (خارج از لیست لغات)
+      for (const idxs of sents) {
+        idxs.forEach((i, j) => {
+          const t = toks[i];
+          if (i in V || !t.alpha || t.cap || t.l.length < 5 || NOT_VERBS.has(t.l)) return;
+          const prev = j ? toks[idxs[j - 1]] : null;
+          if (prev && SUBJ.has(prev.l) && !AFTER_SUBJ_STOP.has(t.l) && !this.lex.has(t.l) && /(e|st|t|en)$/.test(t.l)
+              && !(ARTIKEL.has(t.l) || REFLEXIV.has(t.l) || DAT.has(t.l) || AKK.has(t.l) || POSS_RE.test(t.l) || POSS2_RE.test(t.l))) {
+            V[i] = { tier: 2, labels: new Set(["فعل احتمالی"]), pairs: [], roles: new Set(["fin"]) };
+          } else if (PART_RE.test(t.l)) {
+            V[i] = { tier: 2, labels: new Set(["فعل احتمالی"]), pairs: [], roles: new Set(t.l.endsWith("t") ? ["part"] : ["part", "inf"]) };
+          } else if (prev && t.l.endsWith("en") && !DET_FORMS.has(t.l) && (prev.l === "zu" || (prev.i in V &&
+                     V[prev.i].pairs.some(([, e]) => e && (MODALS.has((this.meta.get(e) || {}).inf) || (this.meta.get(e) || {}).inf === "werden"))))) {
+            V[i] = { tier: 2, labels: new Set(["فعل احتمالی"]), pairs: [], roles: new Set(["inf"]) };
+          }
+        });
+      }
+      // ---------- جمع اسم‌ها ----------
+      const P = {};
+      for (const t of toks) {
+        if (t.alpha && t.cap && !(t.i in V)) {
+          let e = this.nounsPl.get(t.l), kind = "Plural";
+          if (!e && t.l.endsWith("n") && this.nounsPl.has(t.l.slice(0, -1))) { e = this.nounsPl.get(t.l.slice(0, -1)); kind = "Dativ-Plural"; }
+          if (e) P[t.i] = [e, kind];
+        }
+      }
+      const res = { tokens: toks, sents, verbs: V, plurals: P };
+      res.grammar = this.grammar(res, ends, lessons);
+      return res;
+    }
+
+    grammar(res, ends, lessons) {
+      const { tokens: toks, sents, verbs: V, plurals: P } = res;
+      const hits = {};
+      const hit = (lid, idxs, note = true) => {
+        const h = hits[lid] || (hits[lid] = { tokens: new Set(), notes: [] });
+        idxs.forEach(i => h.tokens.add(i));
+        const txt = [...idxs].sort((a, b) => a - b).map(i => toks[i].w).join(" … ");
+        if (note && txt && !h.notes.includes(txt) && h.notes.length < 3) h.notes.push(txt);
+      };
+      const meta = e => (e && this.meta.get(e)) || {};
+
+      sents.forEach((idxs, k) => {
+        if (!idxs.length) return;
+        const n = idxs.length, end = ends[k];
+        const L = idxs.map(i => toks[i].l);
+        const roles = j => (V[idxs[j]] ? V[idxs[j]].roles : new Set());
+        const isPart = j => roles(j).has("part");
+        const infOf = j => { const v = V[idxs[j]]; return new Set(v ? v.pairs.filter(([, e]) => e).map(([, e]) => meta(e).inf) : []); };
+        const isFinite_ = j => {
+          const v = V[idxs[j]];
+          if (!v || !v.roles.has("fin")) return false;
+          if (!v.roles.has("inf")) return true;
+          const prev = idxs[j] ? toks[idxs[j] - 1] : null;
+          return j <= 1 || (j > 0 && SUBJ.has(L[j - 1])) || (j + 1 < n && SUBJ.has(L[j + 1])) || (prev !== null && prev.w === ",");
+        };
+        const AUXMOD = new Set([...AUX, ...MODALS]);
+
+        for (let j = 0; j < n; j++) if (HABEN_P.has(L[j]) || SEIN_P.has(L[j])) hit("A1-01", [idxs[j]]);
+        for (let j = 0; j < n; j++) {
+          const v = V[idxs[j]];
+          if (v && v.tier === 1 && v.labels.has("Präsens") && isFinite_(j) && !hasAny(infOf(j), AUXMOD)) hit("A1-02", [idxs[j]]);
+        }
+        for (let j = 0; j < n; j++) if (ARTIKEL.has(L[j]) && j + 1 < n) hit("A1-03", [idxs[j], idxs[j + 1]]);
+        for (let j = 0; j < n; j++) if (idxs[j] in P) hit("A1-04", [idxs[j]]);
+        for (let j = 0; j < n; j++) if (NEG.has(L[j])) hit("A1-05", [idxs[j]]);
+        if (end === "?" || WQ.has(L[0])) hit("A1-06", [idxs[0]]);
+        const reflHere = idxs.some(i => i in V && V[i].pairs.some(([, e]) => meta(e).refl));
+        for (let j = 0; j < n; j++) if (AKK.has(L[j]) && !((L[j] === "mich" || L[j] === "dich") && reflHere)) hit("A1-07", [idxs[j]]);
+        for (let j = 0; j < n; j++) {
+          const v = V[idxs[j]];
+          if (v && v.tier === 1 && ((v.labels.has("Präsens") && hasAny(infOf(j), MODALS)) || v.labels.has("Möchte-Form"))) hit("A1-08", [idxs[j]]);
+        }
+        for (let j = 0; j < n; j++) {
+          if (idxs[j] in V && roles(j).has("fin")) {
+            for (const [particle] of (this.sep.get(L[j]) || [])) {
+              for (let j2 = j + 1; j2 < n; j2++) if (L[j2] === particle) { hit("A1-09", [idxs[j], idxs[j2]]); break; }
+            }
+          }
+        }
+        for (let j = 0; j < n; j++) {
+          if (POSS_RE.test(L[j]) && j + 1 < n) hit("A1-10", [idxs[j], idxs[j + 1]]);
+          else if (POSS2_RE.test(L[j]) && j + 1 < n && toks[idxs[j + 1]].cap && !(j > 0 && (idxs[j - 1] in V)) && !(idxs[j] in V)) hit("A1-10", [idxs[j], idxs[j + 1]]);
+        }
+        for (let j = 0; j < n; j++) {
+          if (DAT.has(L[j]) || DAT_PREP.has(L[j]) || (L[j] === "zu" && !(j + 1 < n && (roles(j + 1).has("inf") || L[j + 1].endsWith("en")) && !toks[idxs[j + 1]].cap))) hit("A2-01", [idxs[j]]);
+        }
+        const particles = new Set();
+        for (let x = 0; x < n; x++) if (idxs[x] in V) for (const [p] of (this.sep.get(L[x]) || [])) particles.add(p);
+        for (let j = 0; j < n; j++) {
+          if (CONTR.has(L[j]) || (WECHSEL.has(L[j]) && !particles.has(L[j]) && j + 1 < n && (ARTIKEL.has(L[j + 1]) || toks[idxs[j + 1]].cap || POSS_RE.test(L[j + 1])))) {
+            hit("A2-02", [idxs[j]].concat(j + 1 < n && WECHSEL.has(L[j]) ? [idxs[j + 1]] : []));
+          }
+        }
+        const usedPraet = new Set();
+        for (let j = 0; j < n; j++) {
+          const laterPart = [], laterInf = [];
+          for (let x = j + 1; x < n; x++) { if (isPart(x)) laterPart.push(x); if (roles(x).has("inf")) laterInf.push(x); }
+          if ((HABEN_P.has(L[j]) || SEIN_P.has(L[j])) && laterPart.length) hit("A2-03", [idxs[j], idxs[laterPart[laterPart.length - 1]]]);
+          if (WERDEN_ALL.has(L[j]) && laterPart.length) hit("B1-04", [idxs[j], idxs[laterPart[laterPart.length - 1]]]);
+          else if (WERDEN_P.has(L[j]) && laterInf.length) hit("B1-03", [idxs[j], idxs[laterInf[laterInf.length - 1]]]);
+          if (PLUSQ_AUX.has(L[j]) && laterPart.length) { hit("B1-02", [idxs[j], idxs[laterPart[laterPart.length - 1]]]); usedPraet.add(j); }
+        }
+        for (let j = 0; j < n; j++) if (PRAET_AUX_MOD.has(L[j]) && !usedPraet.has(j)) hit("A2-04", [idxs[j]]);
+        for (let j = 0; j < n; j++) {
+          const v = V[idxs[j]];
+          if (v && v.tier === 1 && v.labels.has("Präteritum") && !v.labels.has("Präsens") && !hasAny(infOf(j), AUXMOD)) hit("B1-01", [idxs[j]]);
+        }
+        for (let j = 0; j < n; j++) if (L[j] === "weil" || L[j] === "dass" || L[j] === "daß") hit("A2-05", [idxs[j]]);
+        for (let j = 0; j < n; j++) if (CONJ.has(L[j])) hit("A2-06", [idxs[j]]);
+        for (let j = 0; j < n; j++) {
+          const v = V[idxs[j]];
+          if (v && v.tier === 1 && v.pairs.some(([, e]) => meta(e).refl)) {
+            const refl = []; for (let x = 0; x < n; x++) if (REFLEXIV.has(L[x])) refl.push(x);
+            hit("A2-07", [idxs[j]].concat(refl.length ? [idxs[refl[0]]] : []));
+          }
+        }
+        const compAls = new Set();
+        for (let j = 0; j < n; j++) {
+          if (L[j].length >= 4 && L[j].endsWith("er") && !COMP_SKIP.has(L[j])) {
+            for (let j2 = j + 1; j2 < Math.min(n, j + 5); j2++) if (L[j2] === "als") { hit("A2-08", [idxs[j], idxs[j2]]); compAls.add(j2); break; }
+          }
+          if (L[j] === "am" && j + 1 < n && (L[j + 1].endsWith("sten") || L[j + 1].endsWith("esten"))) hit("A2-08", [idxs[j], idxs[j + 1]]);
+        }
+        for (let j = 0; j < n - 2; j++) {
+          const a = toks[idxs[j + 1]];
+          if ((ARTIKEL.has(L[j]) || POSS_RE.test(L[j])) && a.alpha && !a.cap && a.l.length > 3 && /(e|en|er|em|es)$/.test(a.l) && !(idxs[j + 1] in V) && toks[idxs[j + 2]].cap) hit("A2-09", [idxs[j], idxs[j + 1], idxs[j + 2]]);
+        }
+        if (V[idxs[0]] && end !== "?" && (end === "!" || (n > 1 && ["sie", "doch", "bitte", "mal"].includes(L[1]))) && (roles(0).has("fin") || roles(0).has("inf"))) hit("A2-10", [idxs[0]]);
+        for (let j = 0; j < n - 1; j++) {
+          const nxt = L[j + 1], w1 = toks[idxs[j + 1]].w;
+          if ((L[j] === "um" && /\d/.test(w1[0])) || (L[j] === "am" && (WEEKDAYS.has(nxt) || DAYPARTS.has(nxt) || /\d/.test(w1[0]))) ||
+              (L[j] === "im" && MONTHS.has(nxt)) || ((L[j] === "vor" || L[j] === "nach") && L.slice(j + 1, j + 3).some(x => TIME_UNITS.has(x)))) hit("A2-11", [idxs[j], idxs[j + 1]]);
+        }
+        for (let j = 0; j < n; j++) if (L[j] === "seit" || L[j] === "bis") hit("A2-11", [idxs[j]]);
+        for (let j = 0; j < n; j++) {
+          const v = V[idxs[j]];
+          if (v && v.labels.has("Konjunktiv II") && BUILTIN_FORMS.has(L[j])) hit("B1-05", [idxs[j]]);
+        }
+        for (let j = 0; j < n; j++) {
+          if (L[j] === "zu" && j + 1 < n && !toks[idxs[j + 1]].cap && !DET_FORMS.has(L[j + 1]) && (roles(j + 1).has("inf") || (L[j + 1].endsWith("en") && L[j + 1].length >= 5))) hit("B1-07", [idxs[j], idxs[j + 1]]);
+          if (L[j] === "um" && L.slice(j + 1).includes("zu")) hit("B1-07", [idxs[j], idxs[j + 1 + L.slice(j + 1).indexOf("zu")]]);
+          if (L[j] === "damit") hit("B1-07", [idxs[j]]);
+        }
+        for (let j = 0; j < n; j++) {
+          if (SUBCONJ.has(L[j]) || (L[j] === "als" && !compAls.has(j)) || (L[j] === "während" && !(j + 1 < n && ARTIKEL.has(L[j + 1])))) hit("B1-08", [idxs[j]]);
+        }
+        for (let j = 0; j < n; j++) if (GEN.has(L[j]) || (L[j] === "während" && j + 1 < n && ARTIKEL.has(L[j + 1]))) hit("B1-09", [idxs[j]]);
+        for (let j = 0; j < n; j++) {
+          const v = V[idxs[j]];
+          if (v && v.tier === 1) {
+            for (const [, e] of v.pairs) {
+              const pr = meta(e).prep;
+              if (pr) { for (let j2 = 0; j2 < n; j2++) if (j2 !== j && L[j2] === pr && Math.abs(j2 - j) <= 7) { hit("B1-10", [idxs[j], idxs[j2]]); break; } }
+            }
+          }
+        }
+        const tj = [], pj = [], mj = [];
+        for (let j = 0; j < n; j++) {
+          if (TIME_ADV.has(L[j]) && !(L[j] === "morgen" && toks[idxs[j]].cap)) tj.push(j);
+          if (PLACE_ADV.has(L[j]) || (L[j] === "hause" && j > 0 && (L[j - 1] === "zu" || L[j - 1] === "nach"))) pj.push(j);
+          if (MANNER_ADV.has(L[j])) mj.push(j);
+        }
+        if (tj.length && pj.length && tj[0] < pj[0]) hit("B1-12", [idxs[tj[0]]].concat(mj.slice(0, 1).map(x => idxs[x]), [idxs[pj[0]]]));
+      });
+
+      for (let i = 0; i < toks.length - 2; i++) {
+        if (toks[i].w !== ",") continue;
+        const a = toks[i + 1], b = toks[i + 2];
+        if (a.alpha && b.alpha) {
+          if (REL.has(a.l) && b.w[0] === b.w[0].toLowerCase() && b.w[0] !== b.w[0].toUpperCase() && b.l !== "und" && b.l !== "oder") hit("B1-06", [a.i, b.i]);
+          if (a.l === "ob" || WQ.has(a.l)) hit("B1-11", [a.i]);
+        }
+      }
+      return lessons.filter(l => hits[l.id]).map(l => ({
+        id: l.id, level: l.level, title: l.title, title_fa: l.title_fa,
+        tokens: [...hits[l.id].tokens].sort((a, b) => a - b), notes: hits[l.id].notes
+      }));
+    }
+
+    // متن راهنما برای یک توکن (هنگام کلیک)
+    describe(res, i) {
+      const t = res.tokens[i];
+      if (!t.alpha) return "";
+      const lines = [], v = res.verbs[i];
+      if (v && v.tier === 1) {
+        for (const [lab, e] of v.pairs) if (e) lines.push(`فعل · ${t.w}: ${lab} (${LABEL_FA[lab] || ""}) از «${(this.meta.get(e) || {}).inf || ""}» — ${e.p}`);
+      } else if (v) lines.push(`فعل احتمالی · ${t.w} (در لیست لغات نیست؛ شکل کلمه شبیه فعل است)`);
+      if (res.plurals[i]) {
+        const [e, kind] = res.plurals[i];
+        lines.push(`اسم · ${t.w}: جمع (${kind}) از ${e.g} — ${e.p}`);
+      } else {
+        let es = this.lex.get(t.l) || [];
+        if (t.cap && this.nounsSg.has(t.l)) es = [this.nounsSg.get(t.l)];
+        for (const e of es.slice(0, 2)) {
+          if (v && e.kp) continue;
+          const pl = (e.pl || "").trim();
+          let extra = "";
+          if (pl && pl !== "-" && pl !== "Pl.") extra = ` · Plural: die ${pl}`;
+          else if (pl === "-") extra = " · (kein Plural)";
+          lines.push(`${e.g}  ${e.i || ""} — ${e.p}${extra}`);
+        }
+      }
+      return lines.length ? lines.join("\n") : "«" + t.w + "» در لیست لغات برنامه نیست.";
+    }
+
+    // معنی کلمه‌به‌کلمه (وقتی ترجمهٔ جمله‌ای در دسترس نیست)
+    gloss(text) {
+      const seen = new Set(), out = [];
+      for (const m of text.matchAll(TOKEN_RE)) {
+        const w = m[0], l = w.toLowerCase();
+        if (!/^\p{L}/u.test(w) || seen.has(l)) continue;
+        let es = this.lex.get(l) || (this.nounsPl.has(l) ? [this.nounsPl.get(l)] : null);
+        if (es && es.length > 1) {   // حرف بزرگ → اسم؛ حرف کوچک → غیراسم (مثلاً essen = خوردن، Essen = غذا)
+          const cap = w[0] !== w[0].toLowerCase();
+          const f = es.filter(e => NOUN_RE.test(e.g) === cap);
+          if (f.length) es = f;
+        }
+        if (es && es.length) { seen.add(l); out.push(`${w} = ${es[0].p}`); }
+      }
+      return out;
+    }
+  };
+
+  // ==================================================================
+  // ترجمه: کش مرورگر → آنلاین (Google / MyMemory / AI) → مترجم روی دستگاه → معنی کلمه‌ها
+  // ==================================================================
+  GD.TR = {
+    KEY: "gd_trcache_v1", MAX: 600, cache: null,
+    load() { if (this.cache) return; try { this.cache = JSON.parse(localStorage.getItem(this.KEY) || "{}"); } catch (_) { this.cache = {}; } },
+    get(k) { this.load(); const v = this.cache[k]; return v ? v.t : null; },
+    set(k, t) {
+      this.load();
+      this.cache[k] = { t, ts: Date.now() };
+      const keys = Object.keys(this.cache);
+      if (keys.length > this.MAX) keys.sort((a, b) => this.cache[a].ts - this.cache[b].ts).slice(0, keys.length - this.MAX).forEach(x => delete this.cache[x]);
+      try { localStorage.setItem(this.KEY, JSON.stringify(this.cache)); } catch (_) {}
+    },
+    size() { this.load(); return Object.keys(this.cache).length; }
+  };
+
+  GD.fetchJSON = async function (url, ms) {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), ms || 8000);
+    try {
+      const r = await fetch(url, { signal: ctl.signal });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return await r.json();
+    } finally { clearTimeout(timer); }
+  };
+  GD.trGoogle = async function (q, sl, tl) {
+    const d = await GD.fetchJSON("https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=" + sl + "&tl=" + tl + "&q=" + encodeURIComponent(q));
+    return d[0].map(p => (p && p[0]) || "").join("");
+  };
+  GD.trMyMemory = async function (q, sl, tl) {
+    if (q.length > 480) throw new Error("too long");
+    const d = await GD.fetchJSON("https://api.mymemory.translated.net/get?q=" + encodeURIComponent(q) + "&langpair=" + sl + "|" + tl);
+    if (String(d.responseStatus) !== "200") throw new Error("MyMemory");
+    const ta = document.createElement("textarea");
+    ta.innerHTML = d.responseData.translatedText;       // رمزگشایی موجودیت‌های HTML
+    return ta.value;
+  };
+  // اگر کلید API تنظیم شده باشد، به‌عنوان راه سوم
+  GD.trAI = async function (q, sl, tl) {
+    const { key, base, model } = GD.getApiConfig();
+    if (!key) throw new Error("no key");
+    const names = { de: "German", fa: "Persian (Farsi)" };
+    const res = await fetch(base + "/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key },
+      body: JSON.stringify({ model, temperature: 0.2, messages: [
+        { role: "system", content: `Translate the user's text from ${names[sl]} to ${names[tl]}. Return ONLY the translation, nothing else.` },
+        { role: "user", content: q }] })
+    });
+    if (!res.ok) throw new Error("AI " + res.status);
+    const data = await res.json();
+    return (data.choices?.[0]?.message?.content || "").trim();
+  };
+  // مترجم داخلی مرورگر (Chrome) — فقط اگر مدل زبان از قبل روی دستگاه باشد
+  // (برخی مرورگرها availability را معلق می‌گذارند؛ پس همه‌چیز با timeout و بعد از اولین شکست غیرفعال می‌شود)
+  GD.withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
+  GD.trDevice = async function (q, sl, tl) {
+    if (!("Translator" in self) || GD._devBad) throw new Error("no device translator");
+    const opts = { sourceLanguage: sl, targetLanguage: tl };
+    try {
+      if ((await GD.withTimeout(self.Translator.availability(opts), 2500)) !== "available") throw new Error("not ready");
+      GD._dev = GD._dev || {};
+      const k = sl + tl;
+      const tr = GD._dev[k] || (GD._dev[k] = await GD.withTimeout(self.Translator.create(opts), 5000));
+      return await GD.withTimeout(tr.translate(q), 8000);
+    } catch (e) { GD._devBad = true; throw e; }
+  };
+
+  // ترجمهٔ یک جمله؛ خروجی: {text, src}  (src: cache | online | ai | device)
+  GD.translateChunk = async function (q, sl, tl) {
+    const key = sl + "|" + tl + "|" + q;
+    const hitC = GD.TR.get(key);
+    if (hitC) return { text: hitC, src: "cache" };
+    if (navigator.onLine !== false) {
+      for (const [src, fn] of [["online", GD.trGoogle], ["online", GD.trMyMemory], ["ai", GD.trAI]]) {
+        try {
+          const t = (await fn(q, sl, tl) || "").trim();
+          if (t) { GD.TR.set(key, t); return { text: t, src }; }
+        } catch (_) {}
+      }
+    }
+    try {
+      const t = ((await GD.trDevice(q, sl, tl)) || "").trim();
+      if (t) { GD.TR.set(key, t); return { text: t, src: "device" }; }
+    } catch (_) {}
+    throw new Error("unavailable");
+  };
+
+  // شکستن متن به سطرها و جمله‌ها (حداکثر ~۴۵۰ نویسه برای هر جمله)
+  GD.splitSentences = function (text) {
+    const lines = text.split(/\r?\n/), out = [];
+    for (const line of lines) {
+      const parts = [];
+      if (line.trim()) {
+        for (const m of line.matchAll(/[^.!?]+[.!?]*\s*/g)) {
+          let s = m[0].trim();
+          while (s.length > 450) {
+            let cut = s.lastIndexOf(" ", 450); if (cut < 50) cut = 450;
+            parts.push(s.slice(0, cut).trim()); s = s.slice(cut).trim();
+          }
+          if (s) parts.push(s);
+        }
+      }
+      out.push(parts);
+    }
+    return out;
+  };
+
+  // ==================================================================
+  // تب «متن»: ترجمه + هایلایت فعل‌ها + لینک گرامر
+  // ==================================================================
+  GD.getAnalyzer = function () {
+    const S = GD.state;
+    if (!GD._an || GD._anN !== S.words.length || GD._anC !== S.customWords.length) {
+      GD._an = new GD.Analyzer(S.words);
+      GD._anN = S.words.length; GD._anC = S.customWords.length;
+    }
+    return GD._an;
+  };
+
+  GD.trStatus = function (msg, isErr) {
+    const el = GD.$("tr-status");
+    el.textContent = msg;
+    el.classList.remove("hidden");
+    el.classList.toggle("error", !!isErr);
+  };
+
+  GD.runText = async function () {
+    const btn0 = GD.$("btn-tr-go");
+    try { await GD.runText2(); }
+    catch (e) { GD.trStatus("خطا: " + (e.message || e), true); }
+    finally { btn0.disabled = false; GD.updateNet(); }
+  };
+  GD.runText2 = async function () {
+    const S = GD.state, esc = GD.esc;
+    const text = GD.$("tr-input").value.replace(/\s+$/g, "");
+    const dir = GD.$("tr-dir").value.split("|"), sl = dir[0], tl = dir[1];
+    const out = GD.$("tr-out");
+    if (!text.trim()) { GD.trStatus("متن را وارد کنید", true); return; }
+    if (text.length > 4000) { GD.trStatus("متن حداکثر ۴۰۰۰ نویسه می‌تواند باشد", true); return; }
+    const btn = GD.$("btn-tr-go");
+    btn.disabled = true;
+    GD.trStatus("در حال تحلیل…");
+
+    // ۱) تحلیل محلی (بدون اینترنت): فقط برای متن آلمانی
+    let res = null, an = null, html = "";
+    if (sl === "de") {
+      an = GD.getAnalyzer();
+      res = an.analyze(text, S.grammar);
+      GD._res = res; GD._text = text;
+      html += GD.renderAnalysis(res, text, an);
+    } else {
+      GD._res = null;
+    }
+    html += `<div class="card" id="tr-trans-card"><h3 class="tr-h">ترجمه</h3><div id="tr-trans"><div class="loader">در حال ترجمه</div></div></div>`;
+    if (res) html += GD.renderLists(res, an);
+    out.innerHTML = html;
+
+    // ۲) ترجمه، جمله‌به‌جمله
+    const lines = GD.splitSentences(text);
+    const jobs = [];
+    lines.forEach((parts, li) => parts.forEach((s, pi) => jobs.push({ li, pi, s })));
+    if (jobs.length > 60) { GD.trStatus("متن بیش از ۶۰ جمله است؛ کوتاه‌ترش کنید", true); btn.disabled = false; return; }
+    const result = {}, srcCount = { cache: 0, online: 0, ai: 0, device: 0, fail: 0 };
+    let next = 0, done = 0;
+    const worker = async () => {
+      while (next < jobs.length) {
+        const j = jobs[next++];
+        try {
+          const r = await GD.translateChunk(j.s, sl, tl);
+          result[j.li + ":" + j.pi] = { t: r.text };
+          srcCount[r.src]++;
+        } catch (_) {
+          result[j.li + ":" + j.pi] = { t: null };
+          srcCount.fail++;
+        }
+        done++;
+        GD.trStatus(`ترجمه ${done}/${jobs.length}…`);
+      }
+    };
+    await Promise.all([worker(), worker(), worker()]);
+
+    // ۳) نمایش ترجمه؛ برای جمله‌های ترجمه‌نشده، معنی کلمه‌ها از لغت‌نامهٔ داخلی
+    let th = "";
+    lines.forEach((parts, li) => {
+      if (!parts.length) return;
+      const tr = [], gl = [];
+      parts.forEach((s, pi) => {
+        const r = result[li + ":" + pi];
+        if (r && r.t) tr.push(r.t);
+        else if (an) { const g = an.gloss(s); if (g.length) gl.push(g.join(" · ")); }
+      });
+      if (tr.length) th += `<div class="${tl === "fa" ? "tr-fa" : "tr-de"}">${esc(tr.join(" "))}</div>`;
+      if (gl.length) th += `<div class="tr-gloss">🔤 ${esc(gl.join(" | "))}</div>`;
+    });
+    GD.$("tr-trans").innerHTML = th || `<div class="empty" style="padding:14px">ترجمه‌ای در دسترس نیست</div>`;
+
+    const okN = srcCount.cache + srcCount.online + srcCount.ai + srcCount.device;
+    let msg;
+    if (srcCount.fail === 0) {
+      msg = srcCount.cache === okN ? "✅ ترجمه از حافظهٔ ذخیره‌شدهٔ مرورگر (کش) انجام شد"
+          : srcCount.cache ? `✅ ترجمه کامل شد (${srcCount.cache} جمله از کش، بقیه آنلاین)` : "✅ ترجمه کامل شد (آنلاین) و برای استفادهٔ آفلاین ذخیره شد";
+      GD.trStatus(msg);
+    } else if (okN === 0) {
+      GD.trStatus((navigator.onLine === false ? "📴 اینترنت قطع است" : "⚠️ سرویس ترجمه در دسترس نیست") +
+        " و این جمله‌ها قبلاً ذخیره نشده‌اند؛ فقط تحلیل و معنی کلمه‌ها نمایش داده شد.", true);
+    } else {
+      GD.trStatus(`📴 ${okN} جمله ترجمه شد (از کش/آنلاین)؛ ${srcCount.fail} جمله بدون اینترنت و ذخیره‌نشده بود → معنی کلمه‌ها نمایش داده شد.`, true);
+    }
+    btn.disabled = false;
+  };
+
+  // متن آلمانی با هایلایت: فعل (آبی) · جمع اسم (زرد) · شاهد گرامر (خط‌زیر بنفش)
+  GD.renderAnalysis = function (res, text, an) {
+    const esc = GD.esc, toks = res.tokens;
+    const gr = new Map();
+    for (const g of res.grammar) for (const i of g.tokens) { if (!gr.has(i)) gr.set(i, []); gr.get(i).push(g.id); }
+    let h = `<div class="card"><h3 class="tr-h">متن آلمانی (روی کلمه‌ها بزنید)</h3>
+      <div class="legend"><span class="tk tk-verb">فعل</span><span class="tk tk-verb2">فعل احتمالی</span><span class="tk tk-pl">جمع اسم</span><span class="tk tk-gr">شاهد گرامر</span></div>
+      <div class="tr-text" id="tr-text">`;
+    let pos = 0;
+    const nl = s => esc(s).replace(/\n/g, "<br>");
+    for (const t of toks) {
+      h += nl(text.slice(pos, t.s));
+      const cls = [];
+      if (res.verbs[t.i]) cls.push(res.verbs[t.i].tier === 1 ? "tk-verb" : "tk-verb2");
+      if (res.plurals[t.i]) cls.push("tk-pl");
+      if (gr.has(t.i)) cls.push("tk-gr");
+      if (!cls.length && t.alpha && (an.lex.has(t.l) || an.nounsPl.has(t.l))) cls.push("tk-known");
+      h += t.alpha ? `<span class="tk ${cls.join(" ")}" data-tok="${t.i}">${esc(t.w)}</span>` : esc(t.w);
+      pos = t.e;
+    }
+    h += nl(text.slice(pos)) + `</div></div>
+      <div class="card hidden" id="tr-info"></div>`;
+    return h;
+  };
+
+  // فهرست فعل‌ها، جمع‌ها و درس‌های گرامرِ پیداشده (همه لینک‌اند)
+  GD.renderLists = function (res, an) {
+    const esc = GD.esc;
+    let h = "";
+    // فعل‌ها (گروه‌بندی بر اساس مدخل)
+    const byE = new Map(), maybe = [];
+    for (const i in res.verbs) {
+      const v = res.verbs[i], t = res.tokens[i];
+      if (v.tier === 1) {
+        for (const [lab, e] of v.pairs) if (e) {
+          if (!byE.has(e)) byE.set(e, new Set());
+          byE.get(e).add(t.w + " (" + lab + ")");
+        }
+      } else maybe.push(t.w);
+    }
+    h += `<div class="card"><h3 class="tr-h">فعل‌های متن</h3>`;
+    if (byE.size) {
+      for (const [e, forms] of byE) {
+        h += `<div class="result-item" ${e.kp ? `data-conj="${esc(e.g)}"` : `data-word="${esc(e.g)}"`}><div class="g">${esc(e.g)} <span class="tag">فعل</span></div><div class="p">${esc(e.p)} · ${esc([...forms].join("، "))}</div></div>`;
+      }
+    } else h += `<div class="hint">فعلی از لیست لغات در متن پیدا نشد.</div>`;
+    if (maybe.length) h += `<div class="hint" style="margin-top:8px">فعل‌های احتمالی (در لیست نیستند): ${esc([...new Set(maybe)].join("، "))}</div>`;
+    h += `</div>`;
+    // جمع اسم‌ها
+    const pls = [];
+    for (const i in res.plurals) pls.push([res.tokens[i].w, res.plurals[i][0]]);
+    if (pls.length) {
+      h += `<div class="card"><h3 class="tr-h">اسم‌های جمع</h3>`;
+      for (const [w, e] of pls) h += `<div class="result-item" data-word="${esc(e.g)}"><div class="g">${esc(w)} ← ${esc(e.g)}</div><div class="p">${esc(e.p)}</div></div>`;
+      h += `</div>`;
+    }
+    // گرامر
+    h += `<div class="card"><h3 class="tr-h">گرامرهای این متن</h3>`;
+    if (res.grammar.length) {
+      for (const g of res.grammar) {
+        h += `<div class="grammar-item" data-gram="${esc(g.id)}"><div><div style="font-weight:600">${esc(g.title_fa || g.title)}</div><div style="font-size:.76rem;color:var(--muted);direction:ltr;text-align:right">${esc(g.notes.join("  |  "))}</div></div><span class="level">${esc(g.level)}</span></div>`;
+      }
+    } else h += `<div class="hint">قاعدهٔ گرامری مشخصی تشخیص داده نشد.</div>`;
+    h += `</div>`;
+    return h;
+  };
+
+  // کلیک روی یک کلمه: معنی + دکمه‌های صرف فعل / جزئیات واژه / درس‌های گرامر مربوط
+  GD.showTokenInfo = function (i) {
+    const res = GD._res; if (!res) return;
+    const an = GD.getAnalyzer(), esc = GD.esc, t = res.tokens[i];
+    document.querySelectorAll("#tr-text .tk.sel").forEach(x => x.classList.remove("sel"));
+    const sp = document.querySelector(`#tr-text [data-tok="${i}"]`);
+    if (sp) sp.classList.add("sel");
+    let h = `<div style="font-weight:700;direction:ltr;text-align:left;margin-bottom:6px">${esc(t.w)}</div><div style="white-space:pre-line;font-size:.9rem;line-height:1.7">${esc(an.describe(res, i))}</div><div class="btn-row">`;
+    const seen = new Set();
+    const v = res.verbs[i];
+    if (v) for (const [, e] of v.pairs) if (e && !seen.has(e)) {
+      seen.add(e);
+      h += e.kp ? `<button class="btn secondary" data-conj="${esc(e.g)}">صرف کامل: ${esc(e.g)}</button>` : `<button class="btn secondary" data-word="${esc(e.g)}">جزئیات: ${esc(e.g)}</button>`;
+    }
+    const pe = res.plurals[i];
+    if (pe && !seen.has(pe[0])) { seen.add(pe[0]); h += `<button class="btn secondary" data-word="${esc(pe[0].g)}">جزئیات: ${esc(pe[0].g)}</button>`; }
+    if (!v && !pe) {
+      const es = (an.nounsSg.has(t.l) && t.cap) ? [an.nounsSg.get(t.l)] : (an.lex.get(t.l) || []);
+      for (const e of es.slice(0, 2)) if (!seen.has(e)) { seen.add(e); h += `<button class="btn secondary" data-word="${esc(e.g)}">جزئیات: ${esc(e.g)}</button>`; }
+    }
+    for (const g of res.grammar) if (g.tokens.includes(i)) h += `<button class="btn ai" data-gram="${esc(g.id)}">📖 ${esc(g.title_fa || g.title)}</button>`;
+    h += `</div>`;
+    const box = GD.$("tr-info");
+    box.innerHTML = h;
+    box.classList.remove("hidden");
+  };
+
+  // ==================================================================
   // تب‌ها و رویدادها
   // ==================================================================
   // تعویض تب فعال
   GD.switchTab = function (tab) {
     document.querySelectorAll("#main-nav button")
       .forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
-    for (const t of ["daily", "search", "verbs", "grammar", "ai", "settings"]) {
+    for (const t of ["daily", "leitner", "text", "search", "verbs", "grammar", "ai", "settings"]) {
       const el = GD.$("tab-" + t);
       if (el) el.classList.toggle("hidden", t !== tab);
     }
@@ -875,6 +1762,19 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     if (tab === "verbs") GD.renderVerbList();
     if (tab === "grammar") GD.renderGrammar();
     if (tab === "ai") GD.renderCustomList();
+    if (tab === "leitner") GD.renderLeitner();
+    if (tab === "text") GD.updateNet();
+    if (tab === "daily") GD.updateDailyLeitner();
+  };
+
+  // وضعیت اینترنت و تعداد جمله‌های ذخیره‌شده برای ترجمهٔ آفلاین
+  GD.updateNet = function () {
+    const el = GD.$("tr-net");
+    if (!el) return;
+    const n = GD.TR.size();
+    el.textContent = navigator.onLine === false
+      ? `📴 آفلاین — فقط تحلیل، جمله‌های ترجمه‌شدهٔ قبلی (${n} جمله در کش) و معنی کلمه‌ها`
+      : `🟢 آنلاین — ترجمه‌ها برای استفادهٔ آفلاین ذخیره می‌شوند (الان ${n} جمله در کش)`;
   };
 
   // مقداردهی اولیه UI پس از بارگذاری داده‌ها
@@ -928,7 +1828,9 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
     $("btn-known").onclick = () => {
       if (!S.dailyList[S.dailyIndex]) return;
       S.settings.known[S.dailyList[S.dailyIndex].g] = 1;
+      GD.leitnerAdd(S.dailyList[S.dailyIndex].g);      // وارد لایتنر (جعبه ۱، مرور از فردا)
       GD.saveSettings();
+      GD.updateDailyLeitner();
       if (S.dailyIndex < S.dailyList.length - 1) { S.dailyIndex++; GD.showDailyCard(); }
       else alert("آفرین! واژه‌های امروز تمام شد.");
     };
@@ -971,6 +1873,49 @@ select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff
           .finally(() => { expand.disabled = false; expand.textContent = "✨ تقویت این درس با هوش مصنوعی"; });
       }
     });
+
+    // --- لایتنر، تب متن ---
+    $("content").addEventListener("click", e => {
+      const rv = e.target.closest("[data-rev]");
+      if (rv) {
+        const a = rv.dataset.rev, r = S.rev;
+        if (a === "start") GD.startReview();
+        else if (a === "show") { r.shown = true; GD.renderReviewCard(); }
+        else if (a === "yes") GD.reviewAnswer(true);
+        else if (a === "no") GD.reviewAnswer(false);
+        else if (a === "speak") { const w = r.list[r.idx]; if (w) GD.speak(w.g); }
+        else if (a === "stop") {
+          r.active = false;
+          r.summary = (r.ok + r.no) ? `درست: ${r.ok} · نادرست: ${r.no}` : "";
+          GD.renderLeitner(); GD.updateDailyLeitner();
+        } else if (a === "addtoday") {
+          let n = 0;
+          for (const w of S.dailyList) if (GD.leitnerAdd(w.g)) n++;
+          r.summary = ""; r.note = n ? `${n} واژهٔ امروز به جعبهٔ ۱ اضافه شد (مرور از فردا)` : "واژه‌های امروز قبلاً در لایتنر هستند";
+          GD.renderLeitner(); GD.updateDailyLeitner();
+        }
+        return;
+      }
+      const go = e.target.closest("[data-goto]");
+      if (go) { GD.switchTab(go.dataset.goto); return; }
+      const tk = e.target.closest("[data-tok]");
+      if (tk) GD.showTokenInfo(+tk.dataset.tok);
+    });
+    $("btn-tr-go").onclick = () => GD.runText();
+    $("btn-tr-clear").onclick = () => { $("tr-input").value = ""; $("tr-out").innerHTML = ""; $("tr-status").classList.add("hidden"); GD._res = null; };
+    $("btn-tr-speak").onclick = () => { const t = $("tr-input").value.trim(); if (t) GD.speak(t.slice(0, 400)); };
+    $("btn-tr-paste").onclick = () => {
+      if (!navigator.clipboard || !navigator.clipboard.readText) { alert("مرورگر اجازهٔ Paste خودکار نمی‌دهد؛ متن را دستی جایگذاری کنید."); return; }
+      navigator.clipboard.readText().then(t => { $("tr-input").value = t; }).catch(() => alert("دسترسی به کلیپ‌بورد داده نشد."));
+    };
+    $("tr-dir").onchange = e => {
+      const fa = e.target.value === "fa|de";
+      const ta = $("tr-input");
+      ta.style.direction = fa ? "rtl" : "ltr"; ta.style.textAlign = fa ? "right" : "left";
+      ta.placeholder = fa ? "متن فارسی را بنویسید…" : "متن آلمانی را بنویسید یا Paste کنید…";
+    };
+    window.addEventListener("online", GD.updateNet);
+    window.addEventListener("offline", GD.updateNet);
 
     // --- مودال ---
     $("modal-close").onclick = GD.closeModal;
