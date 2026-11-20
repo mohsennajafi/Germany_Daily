@@ -1,1972 +1,349 @@
 <!DOCTYPE html>
 <!--
-  German Daily – واژگان روزانه آلمانی (PWA)
-  ------------------------------------------------------------
-  تماس با توسعه‌دهنده / Contact
-    نام   : Mohsen Najafi
-    ایمیل : mohsen.najafi.najafi@gmail.com
-    تلفن  : 00989177662400
-  ------------------------------------------------------------
-  فایل‌های پروژه (همه کنار هم، بدون پوشه):
-    index.html        ← HTML + CSS + JavaScript (یکپارچه)
-    words.min.json    ← واژگان
-    grammar.json      ← درس‌های گرامر
-    sw.js             ← Service Worker (کار آفلاین)
-    manifest.json     ← تنظیمات PWA
-    icon.svg          ← آیکن
+  German Daily – صفحهٔ معرفی و نصب
+  Mohsen Najafi · mohsen.najafi.najafi@gmail.com · 00989177662400
+  (این فایل از tools/landing.template.html ساخته می‌شود: python3 tools/build_landing.py)
 -->
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>German Daily – یادگیری روزانهٔ آلمانی (A1 تا B2)</title>
+  <meta name="description" content="۲۱۴۶ واژه با جمع و مثال، گرامر A1 تا B2 با آزمون، لایتنر، ترجمه و تحلیل متن آلمانی، و کار کامل آفلاین. رایگان، بدون ثبت‌نام." />
   <meta name="theme-color" content="#1e3a8a" />
+  <meta name="color-scheme" content="dark" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="German Daily – یادگیری روزانهٔ آلمانی" />
+  <meta property="og:description" content="لغت، گرامر، لایتنر و مترجم متن آلمانی؛ نصب‌شدنی و آفلاین. رایگان." />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="author" content="mohsen.najafi.najafi@gmail.com" />
-  <title>German Daily</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon.svg" type="image/svg+xml" />
-    <style>
-/**
- * German Daily – استایل‌ها (CSS)
- * ------------------------------------------------------------
- * تماس با توسعه‌دهنده / Contact
- *   ایمیل  : mohsen.najafi.najafi@gmail.com
- *   تلفن   : 00989177662400
- * ------------------------------------------------------------
- */
-
-/* ===== متغیرهای رنگ و پایه ===== */
-:root{--bg:#0f172a;--card:#1e293b;--primary:#3b82f6;--accent:#38bdf8;--text:#f1f5f9;--muted:#94a3b8;--success:#22c55e;--danger:#ef4444;--radius:14px}
-
-/* ===== ریست و چیدمان کلی صفحه ===== */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{height:100%}
-body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--text);min-height:100%;line-height:1.45;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
-.app{max-width:520px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:calc(56px + env(safe-area-inset-bottom))}
-
-/* ===== هدر و نوار تب‌ها ===== */
-header{background:linear-gradient(135deg,#1e3a8a,#1e40af);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.25)}
-header h1{font-size:1.1rem;font-weight:700}
-.badge{background:rgba(255,255,255,.15);padding:3px 10px;border-radius:20px;font-size:.72rem}
-nav{display:flex;background:var(--card);border-bottom:1px solid #334155;overflow-x:auto;scrollbar-width:none}
-nav::-webkit-scrollbar{display:none}
-nav button{flex:1;min-width:60px;background:none;border:none;color:var(--muted);padding:11px 5px;font-size:.76rem;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
-nav button.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
-
-/* ===== کارت واژه (تب «امروز») ===== */
-.content{flex:1;padding:14px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:12px;border:1px solid #334155}
-.word-main{font-size:1.55rem;font-weight:700;text-align:center;direction:ltr;margin-bottom:4px}
-.ipa{font-size:.9rem;color:var(--accent);text-align:center;direction:ltr;margin-bottom:8px;font-family:ui-monospace,monospace}
-.persian{font-size:1.15rem;text-align:center;margin-bottom:12px}
-.plural{font-size:.95rem;text-align:center;direction:ltr;margin:-2px 0 8px;color:var(--text,#e5e7eb)}
-.plural .lbl{color:var(--muted);font-size:.72rem;margin-right:6px}
-.plural .none{color:var(--muted);font-size:.8rem}
-.example{background:#0f172a;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:.88rem}
-.example .de{direction:ltr;text-align:left;color:#cbd5e1;margin-bottom:4px}
-.example .fa{color:var(--muted)}
-.chapter{display:inline-block;background:#1e3a8a;color:#93c5fd;font-size:.68rem;padding:2px 9px;border-radius:20px;margin-bottom:10px}
-
-/* ===== دکمه‌ها ===== */
-.btn-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.btn{flex:1;min-width:90px;background:var(--primary);color:#fff;border:none;padding:11px 12px;border-radius:11px;font-size:.88rem;font-weight:600;cursor:pointer}
-.btn:active{opacity:.85;transform:scale(.98)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
+  <meta name="apple-mobile-web-app-title" content="German Daily" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/favicon.ico" sizes="any" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <script>
+    // اگر برنامه نصب‌شده است (standalone)، مستقیم برنامه را باز کن
+    if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) {
+      location.replace("./app.html" + location.search);
+    }
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"German Daily","applicationCategory":"EducationalApplication","operatingSystem":"Android, iOS, Windows, macOS, Linux","inLanguage":"fa","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Person","name":"Mohsen Najafi","email":"mohsen.najafi.najafi@gmail.com"}}
+  </script>
+  <style>
+:root{--bg:#0f172a;--card:#1e293b;--card2:#162033;--primary:#2563eb;--accent:#38bdf8;--text:#f1f5f9;--muted:#94a3b8;--ok:#22c55e;--line:#334155;--radius:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;min-height:100vh;padding-bottom:env(safe-area-inset-bottom)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+header.top{position:sticky;top:0;z-index:20;background:rgba(15,23,42,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:58px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem;text-decoration:none;color:var(--text)}
+.brand img{width:34px;height:34px;border-radius:9px}
+nav.links{display:flex;gap:16px;font-size:.9rem}
+nav.links a{color:var(--muted);text-decoration:none}
+nav.links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 22px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;background:var(--primary);color:#fff;transition:filter .15s,transform .15s}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:scale(.98)}
 .btn.secondary{background:#334155}
-.btn.success{background:var(--success)}
-.btn.ai{background:linear-gradient(135deg,#7c3aed,#2563eb)}
-
-/* ===== جستجو و لیست نتایج ===== */
-.search-box{margin-bottom:12px}
-.search-box input,.ai-input{width:100%;background:var(--card);border:1px solid #475569;color:#fff;padding:11px 14px;border-radius:11px;font-size:1rem;outline:none}
-.search-box input:focus,.ai-input:focus{border-color:var(--primary)}
-.result-item{background:var(--card);border-radius:11px;padding:12px 14px;margin-bottom:8px;border:1px solid #334155;cursor:pointer}
-.result-item:active{background:#273549}
-.result-item .g{font-weight:700;direction:ltr;text-align:right}
-.result-item .p{color:var(--muted);font-size:.86rem}
-.tag{display:inline-block;background:#1e3a8a;color:#93c5fd;font-size:.65rem;padding:1px 7px;border-radius:7px;margin-right:4px}
-.tag.ai-tag{background:#5b21b6;color:#e9d5ff}
-
-/* ===== لیست گرامر ===== */
-.grammar-item{background:var(--card);border-radius:11px;padding:12px 14px;border:1px solid #334155;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.grammar-item:active{background:#273549}
-.level{font-size:.68rem;background:#1e3a8a;color:#93c5fd;padding:2px 8px;border-radius:10px;flex-shrink:0}
-
-/* ===== ابزارهای کمکی: پنهان‌سازی، نوار پیشرفت، حالت خالی ===== */
-.hidden{display:none!important}
-.progress{height:3px;background:#334155;border-radius:2px;margin-bottom:12px;overflow:hidden}
-.progress-bar{height:100%;background:var(--accent);width:0%;transition:width .25s ease}
-.empty{text-align:center;color:var(--muted);padding:36px 16px}
-
-/* ===== تنظیمات ===== */
-.settings-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #334155;gap:10px}
-select,input[type=number]{background:#0f172a;border:1px solid #475569;color:#fff;padding:7px 10px;border-radius:8px;font-size:.88rem}
-
-/* ===== پنجره مودال (جزئیات واژه / صرف فعل / گرامر) ===== */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:flex-end;justify-content:center;overscroll-behavior:contain}
-.modal-content{background:var(--card);width:100%;max-width:520px;max-height:88vh;border-radius:18px 18px 0 0;padding:18px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:sticky;top:0;background:var(--card);z-index:2;padding-bottom:8px}
-.close-btn{background:#334155;border:none;color:#fff;width:34px;height:34px;border-radius:50%;font-size:1.15rem;cursor:pointer;flex-shrink:0}
-
-/* ===== لودر ===== */
-.loader{text-align:center;padding:40px;color:var(--muted)}
-.loader::after{content:"";display:inline-block;width:22px;height:22px;border:2px solid #475569;border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* ===== جدول صرف فعل و بخش هوش مصنوعی ===== */
-.conj-block{direction:ltr;text-align:left;font-size:.84rem;background:#0f172a;padding:10px 12px;border-radius:10px;white-space:pre-line;margin-bottom:6px}
-.ai-box{background:#1e1b4b;border:1px solid #4c1d95;border-radius:12px;padding:14px;margin-top:12px}
-.ai-box h3{font-size:.9rem;color:#c4b5fd;margin-bottom:8px}
-.hint{font-size:.78rem;color:var(--muted);margin-top:6px;line-height:1.5}
-.status{font-size:.82rem;padding:8px 0;color:var(--accent)}
-.error{color:var(--danger)}
-
-/* ===== بخش «درباره / تماس» در تنظیمات ===== */
-.about{margin-top:16px;padding-top:12px;border-top:1px solid #334155;text-align:center;font-size:.8rem;color:var(--muted)}
-.about a{color:var(--accent);text-decoration:none;direction:ltr;unicode-bidi:embed}
-.about div{margin-top:4px}
-
-/* ===== جمع اسم با مثال، لایتنر، تب متن (نسخهٔ ۴) ===== */
-.btn.danger{background:#dc2626}
-.example.pl-ex{border-right:3px solid #fbbf24}
-.example .lbl2{color:#fbbf24;font-size:.7rem;margin-bottom:3px}
-.leitner-boxes{display:flex;gap:6px;margin:12px 0}
-.lbox{flex:1;background:#0f172a;border:1px solid #334155;border-radius:10px;padding:8px 2px;text-align:center}
-.lbox b{display:block;font-size:1.15rem;color:var(--accent)}
-.lbox small{color:var(--muted);font-size:.62rem;line-height:1.3;display:block}
-.due-bar{font-size:.85rem;color:var(--muted);text-align:center;margin-top:10px}
-.due-bar b{color:var(--accent)}
-.tr-input{width:100%;min-height:130px;background:#0f172a;border:1px solid #475569;color:#fff;padding:11px 14px;border-radius:11px;font-size:1rem;outline:none;resize:vertical;font-family:inherit;direction:ltr;text-align:left;line-height:1.6}
-.tr-input:focus{border-color:var(--primary)}
-.tr-h{font-size:.9rem;color:var(--accent);margin-bottom:8px}
-.tr-text{direction:ltr;text-align:left;font-size:1.05rem;line-height:2.1;word-break:break-word}
-.tk{border-radius:5px;padding:1px 2px;cursor:pointer}
-.tk.tk-known{border-bottom:1px dotted #64748b}
-.tk-verb{background:rgba(56,189,248,.22);color:#7dd3fc;font-weight:700}
-.tk-verb2{background:rgba(56,189,248,.08);color:#7dd3fc;border-bottom:1px dashed #38bdf8}
-.tk-pl{background:rgba(251,191,36,.20);color:#fcd34d}
-.tk-gr{box-shadow:inset 0 -3px 0 #a78bfa}
-.tk.sel{outline:2px solid #f472b6}
-.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:.74rem}
-.legend .tk{cursor:default}
-.tr-fa{direction:rtl;text-align:right;line-height:1.9;font-size:1.02rem;margin-bottom:10px}
-.tr-de{direction:ltr;text-align:left;line-height:1.8;font-size:1rem;margin-bottom:10px}
-.tr-gloss{direction:ltr;text-align:left;font-size:.8rem;color:var(--muted);margin-bottom:10px;line-height:1.7}
-
+.btn.ok{background:#15803d}
+.btn.small{padding:8px 16px;font-size:.9rem}
+.hero{padding:44px 0 28px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:30px;align-items:center}
+.hero h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.35;margin-bottom:12px}
+.hero h1 span{background:linear-gradient(90deg,#38bdf8,#818cf8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:#cbd5e1;font-size:1.08rem;margin-bottom:22px;max-width:34em}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.badge{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 12px;font-size:.8rem;color:#cbd5e1}
+.phones{display:flex;gap:14px;justify-content:center;align-items:flex-end;max-width:100%}
+.phone{border-radius:24px;border:6px solid #0b1220;box-shadow:0 18px 50px rgba(0,0,0,.55);overflow:hidden;background:#000;width:min(178px,27vw);flex:0 1 auto;min-width:0}
+.phone img{display:block;width:100%;height:auto}
+.phone.mid{width:min(200px,31vw);transform:translateY(-14px)}
+section{padding:34px 0}
+section h2{font-size:1.5rem;margin-bottom:6px}
+section .sub{color:var(--muted);margin-bottom:20px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.feat .ic{font-size:1.7rem;margin-bottom:6px}
+.feat h3{font-size:1.02rem;margin-bottom:4px}
+.feat p{color:var(--muted);font-size:.9rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 6px}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:1.7rem;color:var(--accent)}
+.stat span{color:var(--muted);font-size:.85rem}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 18px;font:inherit;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--primary);border-color:var(--primary);font-weight:700}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.panel[hidden]{display:none}
+.panel ol{padding-right:22px;display:grid;gap:10px}
+.panel li::marker{color:var(--accent);font-weight:700}
+.panel .note{margin-top:14px;padding:10px 14px;background:#0f172a;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:.9rem}
+kbd{background:#0f172a;border:1px solid var(--line);border-radius:6px;padding:1px 8px;font-size:.85em;direction:ltr;display:inline-block}
+.install-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
+.qrbox{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.qrcanvas{background:#fff;padding:14px;border-radius:14px;line-height:0}
+.qrcanvas canvas{width:210px;height:210px;image-rendering:pixelated}
+.qrbox input{width:100%;background:#0f172a;border:1px solid #475569;color:#fff;border-radius:10px;padding:10px 12px;font:inherit;direction:ltr;text-align:left;margin:8px 0 12px}
+.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:8px}
+.faq summary{cursor:pointer;font-weight:700}
+.faq p{color:#cbd5e1;margin-top:8px;font-size:.95rem}
+footer{border-top:1px solid var(--line);margin-top:30px;padding:26px 0 40px;color:var(--muted);font-size:.9rem}
+footer .row{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+.status-pill{display:inline-block;font-size:.8rem;padding:3px 10px;border-radius:999px;background:#0f172a;border:1px solid var(--line);color:var(--muted)}
+.status-pill.on{color:#86efac;border-color:#166534}
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;text-align:center}.hero p.lead{margin-inline:auto}.cta,.badges{justify-content:center}
+  .grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}
+  .qrbox{grid-template-columns:1fr;justify-items:center;text-align:center}.qrbox input{text-align:left}
+  nav.links{display:none}
+}
+@media (max-width:520px){.grid{grid-template-columns:1fr}.phone{border-width:4px;border-radius:16px}.phones{gap:8px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <h1>🇩🇪 German Daily</h1>
-      <div class="badge" id="day-info">—</div>
-    </header>
-    <nav id="main-nav">
-      <button class="active" data-tab="daily">امروز</button>
-      <button data-tab="leitner">لایتنر</button>
-      <button data-tab="text">متن</button>
-      <button data-tab="search">جستجو</button>
-      <button data-tab="verbs">افعال</button>
-      <button data-tab="grammar">گرامر</button>
-      <button data-tab="ai">هوش مصنوعی</button>
-      <button data-tab="settings">تنظیمات</button>
-    </nav>
-    <div class="content" id="content">
-      <div id="tab-daily">
-        <div class="progress"><div class="progress-bar" id="progress-bar"></div></div>
-        <div id="daily-card" class="card"><div class="loader">بارگذاری</div></div>
-        <div class="btn-row">
-          <button class="btn secondary" id="btn-prev">قبلی</button>
-          <button class="btn" id="btn-speak">🔊 تلفظ</button>
-          <button class="btn secondary" id="btn-next">بعدی</button>
-        </div>
-        <div class="btn-row" style="margin-top:8px">
-          <button class="btn success" id="btn-known">یاد گرفتم ✓ (افزودن به لایتنر)</button>
-        </div>
-        <div id="daily-leitner" class="due-bar"></div>
-      </div>
+  <header class="top">
+    <div class="wrap">
+      <a class="brand" href="./"><img src="icons/icon-192.png" alt="" width="34" height="34" /> German Daily</a>
+      <nav class="links" aria-label="بخش‌ها">
+        <a href="#features">امکانات</a><a href="#install">نصب</a><a href="#qr">QR</a><a href="#faq">پرسش‌ها</a>
+      </nav>
+      <a class="btn small" href="./app.html">باز کردن برنامه</a>
+    </div>
+  </header>
 
-      <div id="tab-leitner" class="hidden">
-        <div id="leitner-box"></div>
-      </div>
-
-      <div id="tab-text" class="hidden">
-        <div class="card">
-          <div class="settings-row" style="padding-top:0">
-            <span>جهت ترجمه</span>
-            <select id="tr-dir"><option value="de|fa">آلمانی ← فارسی</option><option value="fa|de">فارسی ← آلمانی</option></select>
+  <main>
+    <div class="wrap">
+      <!-- ===== معرفی ===== -->
+      <div class="hero">
+        <div>
+          <h1>آلمانی را <span>هر روز، کم‌کم و ماندگار</span> یاد بگیرید</h1>
+          <p class="lead">۲۱۴۶ واژه با تلفظ، جمع و مثال، گرامر A1 تا B2 با آزمون کوتاه، مرور لایتنر، و مترجمی که فعل‌ها و گرامر متن شما را هایلایت می‌کند. روی گوشی نصب می‌شود و بدون اینترنت هم کار می‌کند.</p>
+          <div class="cta">
+            <a class="btn" href="./app.html">شروع یادگیری ←</a>
+            <button class="btn secondary" id="btn-install-hero" type="button" hidden>📲 نصب برنامه</button>
+            <a class="btn secondary" href="#install" id="link-install">راهنمای نصب</a>
           </div>
-          <textarea id="tr-input" class="tr-input" placeholder="متن آلمانی را بنویسید یا Paste کنید…" spellcheck="false"></textarea>
-          <div class="btn-row">
-            <button class="btn" id="btn-tr-go">ترجمه و تحلیل</button>
-            <button class="btn secondary" id="btn-tr-paste" style="flex:none;min-width:70px">Paste</button>
-            <button class="btn secondary" id="btn-tr-speak" style="flex:none;min-width:56px">🔊</button>
-            <button class="btn secondary" id="btn-tr-clear" style="flex:none;min-width:56px">پاک</button>
-          </div>
-          <div id="tr-status" class="status hidden"></div>
-          <div id="tr-net" class="hint"></div>
+          <div class="badges"><span class="badge">رایگان</span><span class="badge">بدون ثبت‌نام</span><span class="badge">آفلاین</span><span class="badge">اندروید · iOS · کامپیوتر</span></div>
         </div>
-        <div id="tr-out"></div>
-      </div>
-
-      <div id="tab-search" class="hidden">
-        <div class="search-box"><input type="search" id="search-input" placeholder="جستجو (آلمانی یا فارسی)..." enterkeyhint="search" /></div>
-        <div id="search-results"></div>
-        <div id="search-ai-hint" class="hidden">
-          <div class="ai-box">
-            <h3>کلمه در لیست نیست</h3>
-            <p class="hint">می‌توانید از هوش مصنوعی بخواهید آن را کامل کند و به لیست شخصی‌تان اضافه کند.</p>
-            <button class="btn ai" id="btn-search-ai" style="width:100%;margin-top:10px">✨ از هوش مصنوعی بپرس</button>
-          </div>
+        <div class="phones" aria-label="تصویر برنامه">
+          <div class="phone"><img src="screenshots/leitner-narrow.png" width="1080" height="1920" alt="مرور لایتنر" decoding="async" /></div>
+          <div class="phone mid"><img src="screenshots/home-narrow.png" width="1080" height="1920" alt="کارت واژهٔ روزانه با جمع و مثال" decoding="async" /></div>
+          <div class="phone"><img src="screenshots/text-narrow.png" width="1080" height="1920" alt="ترجمه و تحلیل متن" decoding="async" /></div>
         </div>
       </div>
 
-      <div id="tab-verbs" class="hidden">
-        <div class="search-box"><input type="search" id="verb-search" placeholder="جستجوی فعل..." enterkeyhint="search" /></div>
-        <div id="verb-list"></div>
+      <div class="stats" aria-label="آمار">
+        <div class="stat"><b>۲۱۴۶</b><span>واژه با مثال</span></div>
+        <div class="stat"><b>۴۹</b><span>درس گرامر (A1–B2)</span></div>
+        <div class="stat"><b>۵</b><span>جعبهٔ لایتنر</span></div>
+        <div class="stat"><b>۰</b><span>ثبت‌نام و هزینه</span></div>
       </div>
 
-      <div id="tab-grammar" class="hidden">
-        <div id="grammar-list"></div>
-      </div>
-
-      <div id="tab-ai" class="hidden">
-        <div class="card">
-          <h3 style="margin-bottom:10px">اضافه کردن کلمه با هوش مصنوعی</h3>
-          <input class="ai-input" id="ai-word-input" placeholder="کلمه آلمانی را بنویسید (مثلاً: die Verantwortung)" />
-          <button class="btn ai" id="btn-ai-generate" style="width:100%;margin-top:12px">✨ تولید با هوش مصنوعی</button>
-          <div id="ai-status" class="status hidden"></div>
-          <div id="ai-result" class="hidden" style="margin-top:14px"></div>
+      <!-- ===== امکانات ===== -->
+      <section id="features">
+        <h2>چه چیزهایی دارد؟</h2>
+        <p class="sub">هر چیزی که برای یادگیری روزانه لازم است، در یک برنامهٔ سبک.</p>
+        <div class="grid">
+          <div class="feat"><div class="ic">📚</div><h3>واژهٔ روزانه</h3><p>هر روز چند واژهٔ تازه با تلفظ (IPA)، معنی فارسی، جمع اسم و جملهٔ مثال آلمانی/فارسی.</p></div>
+          <div class="feat"><div class="ic">🧩</div><h3>صرف کامل افعال</h3><p>Präsens، Präteritum، Perfekt، Plusquamperfekt، Futur و Konjunktiv برای ۲۲۰+ فعل.</p></div>
+          <div class="feat"><div class="ic">📖</div><h3>گرامر A1 تا B2</h3><p>۴۹ درس به فارسی با مثال و آزمون کوتاه؛ شامل Konjunktiv I، مجهول مودال، Funktionsverbgefüge و…</p></div>
+          <div class="feat"><div class="ic">📦</div><h3>لایتنر</h3><p>مرور فاصله‌دار در ۵ جعبه؛ هر روز فقط کارت‌هایی که وقتشان رسیده را با مثال مرور می‌کنید.</p></div>
+          <div class="feat"><div class="ic">✍️</div><h3>مترجم و تحلیل متن</h3><p>متن آلمانی را بدهید؛ ترجمه می‌گیرید و فعل‌ها، جمع‌ها و گرامر متن هایلایت می‌شود و به درس مربوط لینک دارد.</p></div>
+          <div class="feat"><div class="ic">📴</div><h3>کار آفلاین</h3><p>بعد از نصب، همهٔ واژه‌ها و درس‌ها بدون اینترنت در دسترس‌اند؛ ترجمه‌های قبلی هم ذخیره می‌ماند.</p></div>
+          <div class="feat"><div class="ic">🔊</div><h3>تلفظ</h3><p>با یک لمس، تلفظ آلمانی کلمه و جمله را بشنوید.</p></div>
+          <div class="feat"><div class="ic">✨</div><h3>افزودن با هوش مصنوعی (اختیاری)</h3><p>کلمهٔ جدید را با کلید API خودتان کامل کنید و به لیست شخصی‌تان بیفزایید.</p></div>
+          <div class="feat"><div class="ic">🔒</div><h3>حریم خصوصی</h3><p>پیشرفت شما فقط روی دستگاه خودتان می‌ماند؛ حساب کاربری و ردیابی وجود ندارد.</p></div>
         </div>
-        <div class="card" style="margin-top:12px">
-          <h3 style="margin-bottom:8px">کلمات اضافه‌شده توسط شما</h3>
-          <div id="custom-words-list" class="hint">هنوز کلمه‌ای اضافه نکرده‌اید.</div>
-        </div>
-      </div>
+      </section>
 
-      <div id="tab-settings" class="hidden">
-        <div class="card">
-          <div class="settings-row">
-            <span>تعداد واژه در روز</span>
-            <input type="number" id="per-day" min="1" max="20" value="5" style="width:64px" />
+      <!-- ===== نصب ===== -->
+      <section id="install" aria-labelledby="install-h">
+        <h2 id="install-h">نصب روی گوشی و کامپیوتر</h2>
+        <p class="sub">برنامه یک PWA است: بدون فروشگاه، با چند لمس نصب می‌شود و مثل یک برنامهٔ معمولی در منوی گوشی می‌نشیند.</p>
+        <div class="install-row">
+          <button class="btn ok" id="btn-install" type="button" hidden>📲 نصب با یک کلیک</button>
+          <span class="status-pill" id="install-status">در حال بررسی…</span>
+        </div>
+        <div class="tabs" role="tablist" aria-label="سیستم‌عامل">
+          <button class="tab" role="tab" id="t-android" aria-controls="p-android" aria-selected="false">اندروید</button>
+          <button class="tab" role="tab" id="t-ios" aria-controls="p-ios" aria-selected="false">آیفون / آیپد</button>
+          <button class="tab" role="tab" id="t-desktop" aria-controls="p-desktop" aria-selected="false">کامپیوتر</button>
+        </div>
+        <div class="panel" id="p-android" role="tabpanel" aria-labelledby="t-android" hidden>
+          <ol>
+            <li>صفحه را در <b>Chrome</b> (یا Edge / Samsung Internet) باز کنید.</li>
+            <li>اگر دکمهٔ «نصب با یک کلیک» بالا دیده شد، آن را بزنید و تأیید کنید.</li>
+            <li>در غیر این صورت منوی مرورگر <kbd>⋮</kbd> را بزنید و <b>Install app</b> (نصب برنامه) یا <b>Add to Home screen</b> را انتخاب کنید.</li>
+            <li>آیکن «German Daily» به صفحهٔ اصلی و لیست برنامه‌ها اضافه می‌شود؛ از آنجا مثل هر برنامه‌ای باز کنید.</li>
+          </ol>
+          <div class="note">در Firefox اندروید: منو ⋮ ← <b>Install</b>. نکته: اگر گزینه دیده نشد، صفحه را یک بار کامل بارگذاری و چند ثانیه صبر کنید تا فایل‌های آفلاین دانلود شوند.</div>
+        </div>
+        <div class="panel" id="p-ios" role="tabpanel" aria-labelledby="t-ios" hidden>
+          <ol>
+            <li>این صفحه را در <b>Safari</b> باز کنید (در iOS 16.4 به بعد Chrome/Edge هم از منوی اشتراک‌گذاری پشتیبانی می‌کنند).</li>
+            <li>دکمهٔ <b>اشتراک‌گذاری</b> <kbd>⬆️</kbd> (مربع با فلش) را بزنید.</li>
+            <li>پایین بروید و <b>Add to Home Screen</b> (افزودن به صفحهٔ اصلی) را انتخاب کنید.</li>
+            <li>روی <b>Add</b> بزنید. آیکن برنامه به صفحهٔ اصلی اضافه می‌شود و تمام‌صفحه و بدون نوار آدرس باز می‌شود.</li>
+          </ol>
+          <div class="note">iOS دکمهٔ «نصب خودکار» ندارد؛ فقط از همین مسیر دستی نصب می‌شود. حافظهٔ برنامه روی iPhone جدا از Safari است، پس پس از نصب با «شروع یادگیری» دوباره از ابتدا شروع می‌شود.</div>
+        </div>
+        <div class="panel" id="p-desktop" role="tabpanel" aria-labelledby="t-desktop" hidden>
+          <ol>
+            <li>در <b>Chrome</b> یا <b>Edge</b>، آیکن نصب <kbd>⊕</kbd> را در انتهای نوار آدرس بزنید.</li>
+            <li>یا از منو: <b>Install German Daily</b> (Chrome: ⋮ ← «Cast, save and share» ← «Install page as app»؛ Edge: ⋯ ← «Apps» ← «Install this site as an app»).</li>
+            <li>در Safari مک (macOS Sonoma به بعد): منوی <b>File</b> ← <b>Add to Dock</b>.</li>
+          </ol>
+          <div class="note">برنامه در پنجرهٔ جداگانه و با آیکن خودش در Start / Launchpad / Dock نشان داده می‌شود.</div>
+        </div>
+      </section>
+
+      <!-- ===== QR ===== -->
+      <section id="qr" aria-labelledby="qr-h">
+        <h2 id="qr-h">اسکن با گوشی (QR Code)</h2>
+        <p class="sub">دوربین گوشی را روی کد بگیرید تا همین صفحه باز شود؛ سپس مراحل نصب بالا را دنبال کنید.</p>
+        <div class="qrbox">
+          <div class="qrcanvas"><canvas id="qr-canvas" width="300" height="300" role="img" aria-label="QR Code لینک برنامه"></canvas></div>
+          <div>
+            <label for="qr-url" style="font-weight:700">آدرسی که در QR قرار می‌گیرد</label>
+            <input id="qr-url" type="url" inputmode="url" spellcheck="false" autocomplete="off" />
+            <div class="cta" style="margin:0">
+              <button class="btn" id="qr-download" type="button">⬇️ دانلود QR (PNG)</button>
+              <button class="btn secondary" id="qr-copy" type="button">کپی لینک</button>
+              <button class="btn secondary" id="qr-share" type="button" hidden>اشتراک‌گذاری</button>
+            </div>
+            <p style="color:var(--muted);font-size:.85rem;margin-top:12px" id="qr-note"></p>
           </div>
-          <div class="settings-row">
-            <span>فقط افعال</span>
-            <input type="checkbox" id="only-verbs" />
-          </div>
-          <div class="settings-row">
-            <span>فصل</span>
-            <select id="filter-chapter"><option value="">همه</option></select>
-          </div>
-          <hr style="border:none;border-top:1px solid #334155;margin:14px 0" />
-          <h3 style="font-size:.95rem;margin-bottom:8px">تنظیمات هوش مصنوعی</h3>
-          <p class="hint" style="margin-bottom:8px">کلید API خود را وارد کنید (OpenAI، Groq، OpenRouter یا سازگار با OpenAI). فقط روی دستگاه شما ذخیره می‌شود.</p>
-          <input class="ai-input" id="api-key" type="password" placeholder="sk-... یا gsk-..." style="margin-bottom:8px" />
-          <input class="ai-input" id="api-base" placeholder="Base URL (اختیاری)" style="margin-bottom:8px" />
-          <select id="api-model" style="width:100%;margin-bottom:8px">
-            <option value="gpt-4o-mini">gpt-4o-mini (OpenAI)</option>
-            <option value="gpt-4o">gpt-4o</option>
-            <option value="llama-3.3-70b-versatile">llama-3.3-70b (Groq)</option>
-            <option value="llama-3.1-8b-instant">llama-3.1-8b (Groq سریع)</option>
-            <option value="google/gemini-3.8-flash">gemini-3.8-flash (OpenRouter)</option>
-          </select>
-          <!-- مدل دلخواه: اگر پر شود، به‌جای لیست بالا استفاده می‌شود (مثلاً google/gemini-3.7-flash) -->
-          <input class="ai-input" id="api-model-custom" placeholder="مدل دلخواه (اختیاری) مثلاً google/gemini-3.7-flash" style="margin-bottom:8px;direction:ltr" />
-          <button class="btn secondary" id="btn-save-api" style="width:100%">ذخیره تنظیمات AI</button>
-          <div style="margin-top:18px">
-            <button class="btn" id="btn-reset" style="width:100%">شروع مجدد (روز ۱)</button>
-          </div>
-          <p style="margin-top:14px;font-size:.78rem;color:var(--muted);text-align:center">نسخه هوشمند • داده و کلید API فقط روی دستگاه شماست</p>
-          <!-- اطلاعات تماس با توسعه‌دهنده -->
-          <div class="about">
-            <div>تماس با توسعه‌دهنده</div>
-            <div>Mohsen Najafi</div>
-            <div>✉️ <a href="mailto:mohsen.najafi.najafi@gmail.com">mohsen.najafi.najafi@gmail.com</a></div>
-            <div>📞 <a href="tel:+989177662400">00989177662400</a></div>
-          </div>
+        </div>
+      </section>
+
+      <!-- ===== پرسش‌ها ===== -->
+      <section id="faq" class="faq" aria-labelledby="faq-h">
+        <h2 id="faq-h" style="margin-bottom:14px">پرسش‌های پرتکرار</h2>
+        <details><summary>آیا واقعاً رایگان است؟</summary><p>بله؛ تبلیغ، حساب کاربری و پرداخت ندارد. فقط اگر بخواهید از هوش مصنوعی استفاده کنید، هزینهٔ کلید API خودتان را سرویس‌دهنده می‌گیرد (اختیاری).</p></details>
+        <details><summary>بدون اینترنت چه چیزی کار می‌کند؟</summary><p>واژه‌ها، صرف افعال، گرامر، لایتنر و تحلیل متن (هایلایت فعل و گرامر) کاملاً آفلاین‌اند. ترجمهٔ جمله‌هایی که قبلاً ترجمه کرده‌اید از حافظهٔ مرورگر خوانده می‌شود؛ برای جملهٔ تازهٔ آفلاین فقط معنی کلمه‌ها از لغت‌نامهٔ داخلی نشان داده می‌شود.</p></details>
+        <details><summary>اطلاعات من کجا ذخیره می‌شود؟</summary><p>فقط روی همین دستگاه (حافظهٔ مرورگر). با «حذف همهٔ داده‌ها» در تنظیمات برنامه، همه‌چیز پاک می‌شود. هنگام ترجمه، جمله‌های شما برای سرویس ترجمه (Google یا MyMemory) فرستاده می‌شود.</p></details>
+        <details><summary>چطور به‌روزرسانی می‌شود؟</summary><p>برنامه خودش نسخهٔ جدید را بررسی می‌کند و وقتی آماده بود پیامی با دکمهٔ «به‌روزرسانی» نشان می‌دهد؛ پیشرفت شما پاک نمی‌شود.</p></details>
+        <details><summary>حذف برنامه؟</summary><p>مثل هر برنامه‌ای: نگه داشتن آیکن ← Uninstall / Remove (اندروید)، یا نگه داشتن آیکن ← Remove App (iOS).</p></details>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="row">
+        <div>
+          <b style="color:var(--text)">German Daily</b> · نسخهٔ ۵<br />
+          ساخته‌شده توسط <b style="color:var(--text)">Mohsen Najafi</b>
+        </div>
+        <div>
+          ✉️ <a href="mailto:mohsen.najafi.najafi@gmail.com">mohsen.najafi.najafi@gmail.com</a><br />
+          📞 <a href="tel:+989177662400" dir="ltr">00989177662400</a>
         </div>
       </div>
     </div>
-  </div>
+  </footer>
 
-  <div id="modal" class="modal hidden">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 id="modal-title" style="font-size:1.05rem"></h2>
-        <button class="close-btn" id="modal-close">×</button>
-      </div>
-      <div id="modal-body"></div>
-    </div>
-  </div>
-
-
+  <script>
+/*! qrcode-generator 2.0.4 (c) Kazuhiko Arase, MIT License — https://github.com/kazuhikoarase/qrcode-generator */
+var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(o*r,n*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});
+  </script>
   <script>
 (function () {
   "use strict";
+  const $ = id => document.getElementById(id);
 
-  // ==================================================================
-  // تنظیمات پایه و وضعیت مشترک
-  // ==================================================================
-  // فضای نام اصلی برنامه؛ همه ماژول‌ها توابعشان را روی این آبجکت قرار می‌دهند
-  window.GD = window.GD || {};
-
-  // اطلاعات توسعه‌دهنده
-  GD.AUTHOR = {
-    name: "Mohsen Najafi",
-    email: "mohsen.najafi.najafi@gmail.com",
-    phone: "00989177662400"
-  };
-
-  // کلیدهای ذخیره‌سازی در localStorage
-  GD.KEYS = {
-    SETTINGS: "gd_v3",        // تنظیمات کاربر
-    WORDS:    "gd_words_v6",  // کش لیست واژگان (v6: ۱۶۴۶ واژه + مثال جمع)
-    GRAMMAR:  "gd_gram_v3",   // کش درس‌های گرامر
-    CUSTOM:   "gd_custom_v3"  // واژه‌های ساخته‌شده با هوش مصنوعی
-  };
-
-  // مسیر فایل‌های داده
-  GD.PATHS = {
-    WORDS:     "words.min.json",
-    GRAMMAR:   "grammar.json",
-    WORDS_CSV: "words.csv"   // پشتیبان (در صورت نبودن JSON)
-  };
-
-  // وضعیت مشترک برنامه (همه ماژول‌ها از اینجا می‌خوانند و می‌نویسند)
-  GD.state = {
-    words: [],        // همه واژه‌ها (شامل واژه‌های شخصی)
-    verbs: [],        // فقط افعال
-    grammar: [],      // درس‌های گرامر
-    customWords: [],  // واژه‌های اضافه‌شده توسط کاربر/AI
-
-    settings: {
-      perDay: 5,                                          // تعداد واژه در روز
-      startDate: new Date().toISOString().slice(0, 10),   // تاریخ شروع (برای شمارش روز)
-      onlyVerbs: false,                                   // فقط افعال
-      chapter: "",                                        // فیلتر فصل
-      known: {},                                          // واژه‌های یادگرفته‌شده
-      leitner: {},                                        // لایتنر: {واژه: {b: جعبه ۱..۵, d: تاریخ مرور بعدی}}
-      apiKey: "",                                         // کلید API
-      apiBase: "",                                        // آدرس پایه API (اختیاری)
-      apiModel: "gpt-4o-mini"                             // مدل هوش مصنوعی
-    },
-
-    dailyIndex: 0,    // اندیس واژه فعلی در لیست امروز
-    dailyList: [],    // لیست واژه‌های امروز
-    searchTimer: null, // تایمر debounce جستجو
-    verbTimer: null,   // تایمر debounce جستجوی فعل
-    lastSearchQ: "",   // آخرین عبارت جستجو شده
-    rev: { active: false, list: [], idx: 0, shown: false, ok: 0, no: 0, miss: {}, summary: "", note: "" } // نوبت مرور لایتنر
-  };
-
-  // ==================================================================
-  // توابع کمکی
-  // ==================================================================
-  // میان‌بر برای document.getElementById
-  GD.$ = function (id) { return document.getElementById(id); };
-
-  // خنثی‌سازی کاراکترهای HTML (جلوگیری از XSS هنگام درج متن در innerHTML)
-  GD.esc = function (s) {
-    if (!s) return "";
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  };
-
-  // هش ساده‌ی رشته → عدد (برای مرتب‌سازی تصادفی ولی ثابتِ هر روز)
-  GD.hash = function (str) {
-    let h = 0;
-    for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
-    return h;
-  };
-
-  // ==================================================================
-  // ذخیره‌سازی (localStorage)
-  // ==================================================================
-  // بارگذاری تنظیمات کاربر و ادغام با مقادیر پیش‌فرض
-  GD.loadSettings = function () {
-    try {
-      const s = localStorage.getItem(GD.KEYS.SETTINGS);
-      if (s) Object.assign(GD.state.settings, JSON.parse(s));
-    } catch (_) {}
-  };
-
-  // ذخیره تنظیمات
-  GD.saveSettings = function () {
-    try { localStorage.setItem(GD.KEYS.SETTINGS, JSON.stringify(GD.state.settings)); } catch (_) {}
-  };
-
-  // بارگذاری واژه‌های شخصی (ساخته‌شده با AI)
-  GD.loadCustom = function () {
-    try {
-      const c = localStorage.getItem(GD.KEYS.CUSTOM);
-      if (c) GD.state.customWords = JSON.parse(c);
-    } catch (_) {}
-  };
-
-  // ذخیره واژه‌های شخصی
-  GD.saveCustom = function () {
-    try { localStorage.setItem(GD.KEYS.CUSTOM, JSON.stringify(GD.state.customWords)); } catch (_) {}
-  };
-
-  // ==================================================================
-  // بارگذاری داده‌ها
-  // ==================================================================
-  // بارگذاری اولیه داده‌ها
-  // 1) اگر کش localStorage موجود بود: فوراً از آن استفاده کن و در پس‌زمینه به‌روزرسانی کن
-  // 2) در غیر این صورت از فایل‌های JSON بخوان و کش کن
-  // 3) اگر JSON در دسترس نبود، از CSV پشتیبان استفاده کن
-  GD.loadData = async function () {
-    const S = GD.state;
-
-    // --- مرحله ۱: کش ---
-    try {
-      const cached = localStorage.getItem(GD.KEYS.WORDS);
-      const cachedG = localStorage.getItem(GD.KEYS.GRAMMAR);
-      if (cached && cachedG) {
-        S.words = JSON.parse(cached);
-        S.grammar = JSON.parse(cachedG);
-        GD.mergeCustom();
-        GD.initApp();
-        GD.refreshData(); // به‌روزرسانی بی‌صدا در پس‌زمینه
-        return;
-      }
-    } catch (_) {}
-
-    // --- مرحله ۲: شبکه (JSON) ---
-    try {
-      const [wRes, gRes] = await Promise.all([fetch(GD.PATHS.WORDS), fetch(GD.PATHS.GRAMMAR)]);
-      S.words = await wRes.json();
-      S.grammar = await gRes.json();
-      try {
-        localStorage.setItem(GD.KEYS.WORDS, JSON.stringify(S.words));
-        localStorage.setItem(GD.KEYS.GRAMMAR, JSON.stringify(S.grammar));
-      } catch (_) {}
-      GD.mergeCustom();
-      GD.initApp();
-    } catch (err) {
-      // --- مرحله ۳: CSV پشتیبان ---
-      try {
-        const [wRes, gRes] = await Promise.all([fetch(GD.PATHS.WORDS_CSV), fetch(GD.PATHS.GRAMMAR)]);
-        S.words = GD.parseCSV(await wRes.text());
-        S.grammar = await gRes.json();
-        GD.mergeCustom();
-        GD.initApp();
-      } catch (e2) {
-        GD.$("daily-card").innerHTML =
-          `<div class="empty">خطا در بارگذاری<br><small>${e2.message}</small></div>`;
-      }
-    }
-  };
-
-  // دریافت نسخه جدید داده‌ها در پس‌زمینه؛ فقط اگر تعداد واژه‌ها تغییر کرده باشد جایگزین می‌شود
-  GD.refreshData = async function () {
-    const S = GD.state;
-    try {
-      const [wRes, gRes] = await Promise.all([fetch(GD.PATHS.WORDS), fetch(GD.PATHS.GRAMMAR)]);
-      const newW = await wRes.json(), newG = await gRes.json();
-      if (newW.length !== S.words.length - S.customWords.length) {
-        S.words = newW;
-        S.grammar = newG;
-        GD.mergeCustom();
-        try {
-          localStorage.setItem(GD.KEYS.WORDS, JSON.stringify(newW));
-          localStorage.setItem(GD.KEYS.GRAMMAR, JSON.stringify(newG));
-        } catch (_) {}
-      }
-    } catch (_) {}
-  };
-
-  // ادغام واژه‌های شخصی در ابتدای لیست و ساخت لیست افعال
-  GD.mergeCustom = function () {
-    const S = GD.state;
-    // ابتدا واژه‌های شخصی قبلی را حذف می‌کنیم تا تکراری نشوند
-    S.words = S.words.filter(w => !w._custom);
-    for (const c of S.customWords) { c._custom = true; S.words.unshift(c); }
-    S.verbs = S.words.filter(w => w.f); // فیلد f فقط برای افعال پر است
-  };
-
-  // تبدیل متن CSV به آرایه‌ای از آبجکت‌های واژه
-  // ستون‌های CSV به کلیدهای کوتاه JSON نگاشت می‌شوند (german → g و ...)
-  GD.parseCSV = function (text) {
-    const lines = text.trim().split(/\r?\n/);
-    if (lines.length < 2) return [];
-    const delim = lines[0].includes(";") ? ";" : ",";
-    const headers = lines[0].split(delim).map(h => h.trim().replace(/^\uFEFF/, ""));
-    const map = {german:"g",ipa:"i",persian:"p",example_de:"ed",example_fa:"ef",chapter:"c",plural:"pl",plural_de:"pld",plural_fa:"plf",formen:"f",praeteritum:"pt",praeteritum_fa:"ptf",perfekt:"pf",perfekt_fa:"pff",plusquamperfekt:"pq",plusquamperfekt_fa:"pqf",futur:"fu",futur_fa:"fuf",konj_praesens:"kp",konj_praeteritum:"kpt",konj_perfekt:"kpf",konj_plusquamperfekt:"kpq",konj_futur:"kfu",konj_praeteritum_fa:"kptf",konj_perfekt_fa:"kpff",konj_plusquamperfekt_fa:"kpqf",konj_futur_fa:"kfuf"};
-    const out = [];
-    for (let i = 1; i < lines.length; i++) {
-      const cols = GD.splitCSV(lines[i], delim);
-      if (!cols[0]) continue;
-      const obj = {};
-      headers.forEach((h, idx) => {
-        const v = (cols[idx] || "").trim();
-        if (v && map[h]) obj[map[h]] = v;
-      });
-      if (obj.g) out.push(obj);
-    }
-    return out;
-  };
-
-  // جداکننده‌ی یک خط CSV با پشتیبانی از فیلدهای داخل کوتیشن
-  GD.splitCSV = function (line, delim) {
-    const r = [];
-    let cur = "", q = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c === '"') q = !q;
-      else if (c === delim && !q) { r.push(cur); cur = ""; }
-      else cur += c;
-    }
-    r.push(cur);
-    return r;
-  };
-
-  // ==================================================================
-  // تلفظ (TTS)
-  // ==================================================================
-  let voicesReady = false; // آیا لیست صداها بارگذاری شده است؟
-
-  // خواندن متن آلمانی با صدای de-DE (در صورت وجود)
-  GD.speak = function (text) {
-    if (!window.speechSynthesis) return;
-    speechSynthesis.cancel(); // قطع صدای قبلی
-
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "de-DE";
-    u.rate = 0.9; // کمی آهسته‌تر برای یادگیری
-
-    if (!voicesReady) {
-      const vs = speechSynthesis.getVoices();
-      if (vs.length) voicesReady = true;
-    }
-    // انتخاب اولین صدای آلمانی موجود
-    const de = speechSynthesis.getVoices().find(v => v.lang.startsWith("de"));
-    if (de) u.voice = de;
-
-    speechSynthesis.speak(u);
-  };
-
-  // برخی مرورگرها صداها را دیرتر بارگذاری می‌کنند
-  if (window.speechSynthesis) speechSynthesis.onvoiceschanged = () => { voicesReady = true; };
-
-  // ==================================================================
-  // کارت واژه و مودال
-  // ==================================================================
-  // نمایش «جمع» اسم (Plural)
-  // w.pl: شکل جمع بدون حرف تعریف (مثلاً "Stellen")؛ "-" = جمع ندارد؛ "Pl." = فقط جمع به کار می‌رود
-  // برای غیر اسم‌ها (فعل، صفت و ...) فیلد pl وجود ندارد و چیزی نمایش داده نمی‌شود
-  GD.pluralHTML = function (w) {
-    if (!w.pl) return "";
-    const esc = GD.esc;
-    let body;
-    if (w.pl === "-") body = '<span class="none">جمع ندارد (kein Plural)</span>';
-    else if (w.pl === "Pl.") body = '<span class="none">فقط به‌صورت جمع (nur Plural)</span>';
-    else body = "<b>die " + esc(w.pl) + "</b>";
-    return '<div class="plural"><span class="lbl">جمع · Plural</span>' + body + "</div>";
-  };
-
-  // ساخت HTML کارت یک واژه
-  // showTenses = true  → زمان‌های Präteritum/Perfekt و دکمه صرف کامل (برای افعال) نمایش داده می‌شود
-  GD.renderCard = function (w, showTenses) {
-    const esc = GD.esc;
-    let h = `<div class="chapter">${esc(w.c || "عمومی")}${w._custom ? ' <span class="tag ai-tag">AI</span>' : ""}</div>
-      <div class="word-main">${esc(w.g)}</div>${GD.pluralHTML(w)}<div class="ipa">${esc(w.i || "")}</div><div class="persian">${esc(w.p || "")}</div>`;
-
-    // جمله مثال
-    if (w.ed) h += `<div class="example"><div class="de">${esc(w.ed)}</div><div class="fa">${esc(w.ef || "")}</div></div>`;
-    // مثال جمع (فقط اسم‌هایی که جمع دارند)
-    if (w.pld) h += `<div class="example pl-ex"><div class="lbl2">جمع · مثال</div><div class="de">${esc(w.pld)}</div><div class="fa">${esc(w.plf || "")}</div></div>`;
-
-    // اطلاعات ویژه افعال
-    if (showTenses && w.f) {
-      h += `<div style="margin-top:12px;font-size:.82rem;color:var(--accent)">${esc(w.f)}</div>`;
-      if (w.pt) h += `<div class="example" style="margin-top:8px"><div style="color:var(--muted);font-size:.72rem;margin-bottom:3px">Präteritum</div><div class="de">${esc(w.pt)}</div><div class="fa">${esc(w.ptf || "")}</div></div>`;
-      if (w.pf) h += `<div class="example" style="margin-top:6px"><div style="color:var(--muted);font-size:.72rem;margin-bottom:3px">Perfekt</div><div class="de">${esc(w.pf)}</div><div class="fa">${esc(w.pff || "")}</div></div>`;
-    }
-
-    // دکمه صرف کامل فعل
-    if (w.f && w.kp) h += `<button class="btn secondary" style="width:100%;margin-top:12px" data-conj="${esc(w.g)}">صرف کامل فعل</button>`;
-    return h;
-  };
-
-  // نمایش صرف کامل یک فعل در مودال (Präsens تا Futur I)
-  GD.showFullConj = function (german) {
-    const esc = GD.esc;
-    const w = GD.state.words.find(x => x.g === german);
-    if (!w) return;
-
-    let h = `<div class="persian" style="margin-bottom:10px">${esc(w.p)}</div>`;
-    if (w.f) h += `<p style="color:var(--accent);margin-bottom:10px;direction:ltr;text-align:left;font-size:.9rem">${esc(w.f)}</p>`;
-
-    // [عنوان زمان، کلید آلمانی، کلید ترجمه فارسی]
-    [["Präsens", "kp"], ["Präteritum", "kpt", "kptf"], ["Perfekt", "kpf", "kpff"],
-     ["Plusquamperfekt", "kpq", "kpqf"], ["Futur I", "kfu", "kfuf"]].forEach(([title, key, faKey]) => {
-      if (!w[key]) return;
-      h += `<h3 style="margin:14px 0 6px;color:var(--accent);font-size:.9rem">${title}</h3><div class="conj-block">${esc(w[key])}</div>`;
-      if (faKey && w[faKey]) h += `<div style="font-size:.78rem;color:var(--muted);margin-bottom:8px;white-space:pre-line">${esc(w[faKey])}</div>`;
-    });
-    GD.openModal(w.g, h);
-  };
-
-  // نمایش جزئیات یک واژه در مودال
-  GD.showWordDetail = function (german) {
-    const w = GD.state.words.find(x => x.g === german);
-    if (!w) return;
-    GD.openModal(w.g, GD.renderCard(w, true));
-  };
-
-  // باز و بسته کردن مودال
-  GD.openModal = function (title, body) {
-    GD.$("modal-title").textContent = title;
-    GD.$("modal-body").innerHTML = body;
-    GD.$("modal").classList.remove("hidden");
-  };
-  GD.closeModal = function () { GD.$("modal").classList.add("hidden"); };
-
-  // ==================================================================
-  // لیست روزانه
-  // ==================================================================
-  // شماره روز از تاریخ شروع (حداقل ۱)
-  GD.getDayNumber = function () {
-    const start = new Date(GD.state.settings.startDate), today = new Date();
-    start.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-    return Math.max(1, Math.floor((today - start) / 864e5) + 1);
-  };
-
-  // ساخت لیست واژه‌های امروز
-  // واژه‌ها با یک seed ثابتِ هر روز مرتب می‌شوند تا ترتیب در طول روز تغییر نکند،
-  // سپس به‌اندازه perDay از موقعیت مربوط به روز جاری برداشته می‌شوند
-  GD.buildDailyList = function () {
-    const S = GD.state;
-    let pool = S.settings.onlyVerbs ? S.verbs : S.words;
-    if (S.settings.chapter) pool = pool.filter(w => w.c === S.settings.chapter);
-
-    const day = GD.getDayNumber(), seed = day * 7919;
-    const sorted = pool.slice().sort((a, b) => GD.hash(a.g + seed) - GD.hash(b.g + seed));
-    const start = ((day - 1) * S.settings.perDay) % Math.max(1, sorted.length);
-
-    S.dailyList = [];
-    for (let i = 0; i < S.settings.perDay && i < sorted.length; i++) {
-      S.dailyList.push(sorted[(start + i) % sorted.length]);
-    }
-    S.dailyIndex = 0;
-    GD.$("day-info").textContent = "روز " + day;
-    GD.showDailyCard();
-  };
-
-  // به‌روزرسانی نوار پیشرفت
-  GD.updateProgress = function () {
-    const S = GD.state;
-    const pct = S.dailyList.length ? ((S.dailyIndex + 1) / S.dailyList.length) * 100 : 0;
-    GD.$("progress-bar").style.width = pct + "%";
-  };
-
-  // نمایش کارت واژه فعلی
-  GD.showDailyCard = function () {
-    const S = GD.state, el = GD.$("daily-card");
-    if (!S.dailyList.length) { el.innerHTML = `<div class="empty">واژه‌ای یافت نشد</div>`; return; }
-    el.innerHTML = GD.renderCard(S.dailyList[S.dailyIndex], true);
-    GD.updateProgress();
-    if (GD.updateDailyLeitner) GD.updateDailyLeitner();
-  };
-
-  // ==================================================================
-  // جستجو
-  // ==================================================================
-  // جستجو در همه واژه‌ها (حداکثر ۳۵ نتیجه)
-  GD.doSearch = function (q) {
-    const S = GD.state, esc = GD.esc;
-    q = q.trim();
-    S.lastSearchQ = q;
-    const qLow = q.toLowerCase();
-    const box = GD.$("search-results"), hint = GD.$("search-ai-hint");
-
-    // ورودی خالی → پاک‌کردن نتایج
-    if (!q) { box.innerHTML = ""; hint.classList.add("hidden"); return; }
-
-    const results = [];
-    for (let i = 0; i < S.words.length && results.length < 35; i++) {
-      const w = S.words[i];
-      if ((w.g && w.g.toLowerCase().includes(qLow)) ||   // کلمه آلمانی
-          (w.pl && w.pl.length > 2 && w.pl.toLowerCase().includes(qLow)) ||   // شکل جمع
-          (w.p && w.p.includes(q)) ||                    // ترجمه فارسی
-          (w.ed && w.ed.toLowerCase().includes(qLow)))   // جمله مثال
-        results.push(w);
-    }
-
-    // نتیجه‌ای نبود → پیشنهاد ساخت با هوش مصنوعی
-    if (!results.length) {
-      box.innerHTML = `<div class="empty">نتیجه‌ای یافت نشد</div>`;
-      hint.classList.remove("hidden");
-      return;
-    }
-
-    hint.classList.add("hidden");
-    let html = "";
-    for (const w of results) {
-      html += `<div class="result-item" data-word="${esc(w.g)}"><div class="g">${esc(w.g)}${w.f ? ' <span class="tag">فعل</span>' : ""}${w._custom ? ' <span class="tag ai-tag">AI</span>' : ""}</div><div class="p">${esc(w.p)}</div></div>`;
-    }
-    box.innerHTML = html;
-  };
-
-  // ==================================================================
-  // افعال
-  // ==================================================================
-  // نمایش لیست افعال (حداکثر ۵۰ مورد)؛ filter اختیاری است
-  GD.renderVerbList = function (filter) {
-    const S = GD.state, esc = GD.esc;
-    const q = (filter || "").trim().toLowerCase();
-    const list = q
-      ? S.verbs.filter(v => (v.g && v.g.toLowerCase().includes(q)) || (v.p && v.p.includes(q)))
-      : S.verbs;
-
-    const box = GD.$("verb-list"), slice = list.slice(0, 50);
-    if (!slice.length) { box.innerHTML = `<div class="empty">فعلی یافت نشد</div>`; return; }
-
-    let html = "";
-    for (const w of slice) {
-      html += `<div class="result-item" data-conj="${esc(w.g)}"><div class="g">${esc(w.g)}</div><div class="p">${esc(w.p)} · ${esc((w.f || "").split("–")[0] || "")}</div></div>`;
-    }
-    box.innerHTML = html;
-  };
-
-  // ==================================================================
-  // گرامر
-  // ==================================================================
-  // فهرست درس‌ها؛ دسته‌بندی بر اساس سطح
-  GD.renderGrammar = function () {
-    const S = GD.state, esc = GD.esc;
-    const box = GD.$("grammar-list");
-    let html = "";
-    for (const level of ["A1", "A2", "B1"]) {
-      const items = S.grammar.filter(g => g.level === level);
-      if (!items.length) continue;
-      html += `<h3 style="margin:14px 0 6px;color:var(--accent)">${level}</h3>`;
-      for (const g of items) {
-        html += `<div class="grammar-item" data-gram="${g.id}"><div><div style="font-weight:600">${esc(g.title_fa || g.title)}</div><div style="font-size:.78rem;color:var(--muted);direction:ltr;text-align:right">${esc(g.title)}</div></div><span class="level">${g.level}</span></div>`;
-      }
-    }
-    box.innerHTML = html || `<div class="empty">درسی یافت نشد</div>`;
-  };
-
-  // نمایش یک درس در مودال (توضیح + مثال‌ها + دکمه تقویت با AI)
-  GD.showGrammar = function (id) {
-    const esc = GD.esc;
-    const g = GD.state.grammar.find(x => x.id === id);
-    if (!g) return;
-
-    let h = `<div style="color:var(--muted);margin-bottom:10px;direction:ltr;text-align:left;font-size:.88rem">${esc(g.title)}</div>`;
-    if (g.explain) for (const p of g.explain) h += `<p style="margin-bottom:9px;line-height:1.65">${esc(p)}</p>`;
-    if (g.examples && g.examples.length) {
-      h += `<h3 style="margin:14px 0 6px;color:var(--accent)">مثال‌ها</h3>`;
-      for (const ex of g.examples) {
-        h += `<div class="example" style="margin-bottom:6px"><div class="de">${esc(ex.de || "")}</div><div class="fa">${esc(ex.fa || "")}</div></div>`;
-      }
-    }
-    h += `<button class="btn ai" style="width:100%;margin-top:14px" data-expand-gram="${g.id}">✨ تقویت این درس با هوش مصنوعی</button>`;
-    GD.openModal(g.title_fa || g.title, h);
-  };
-
-  // ==================================================================
-  // هوش مصنوعی
-  // ==================================================================
-  // خواندن تنظیمات API (کلید، آدرس پایه، مدل)
-  // اگر آدرس پایه خالی باشد، از روی نام مدل حدس زده می‌شود:
-  //   llama/groq → Groq   |   دارای «/» → OpenRouter   |   در غیر این صورت → OpenAI
-  GD.getApiConfig = function () {
-    const S = GD.state;
-    const key = S.settings.apiKey || GD.$("api-key").value.trim();
-    let base = (S.settings.apiBase || GD.$("api-base").value.trim() || "").replace(/\/$/, "");
-    const model = S.settings.apiModel || GD.$("api-model").value;
-    if (!base) {
-      if (model.includes("llama") || model.includes("groq")) base = "https://api.groq.com/openai/v1";
-      else if (model.includes("/")) base = "https://openrouter.ai/api/v1";
-      else base = "https://api.openai.com/v1";
-    }
-    return { key, base, model };
-  };
-
-  // ارسال درخواست به API سازگار با OpenAI و دریافت پاسخ JSON
-  GD.callAI = async function (system, user) {
-    const { key, base, model } = GD.getApiConfig();
-    if (!key) throw new Error("ابتدا در تنظیمات، کلید API را وارد و ذخیره کنید.");
-
-    const res = await fetch(base + "/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key },
-      body: JSON.stringify({
-        model,
-        temperature: 0.3,
-        response_format: { type: "json_object" }, // خروجی فقط JSON
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: user }
-        ]
-      })
-    });
-
-    if (!res.ok) {
-      const t = await res.text();
-      throw new Error("خطای API (" + res.status + "): " + t.slice(0, 200));
-    }
-    const data = await res.json();
-    const content = data.choices?.[0]?.message?.content || "";
-    return JSON.parse(content);
-  };
-
-  // ساخت اطلاعات کامل یک واژه آلمانی (IPA، ترجمه، مثال، صرف فعل و ...)
-  GD.generateWord = async function (germanWord) {
-    const system = `You are a German language expert for Persian speakers (B1 level). 
-  Return ONLY valid JSON with these exact keys (use empty string if not applicable):
-  {
-    "g": "German word with article if noun",
-    "i": "IPA pronunciation",
-    "p": "Persian translation",
-    "ed": "German example sentence",
-    "ef": "Persian translation of example",
-    "c": "chapter in German one of: Arbeit,Wohnen,Gesundheit,Reisen,Alltag,Lernen,Gefühle,Gesellschaft,Natur,Essen,Freizeit",
-    "pl": "for nouns only: plural form WITHOUT article (e.g. Stellen); use - if the noun has no plural; empty for non-nouns",
-    "f": "for verbs only: infinitive – präteritum – perfekt form, else empty",
-    "pt": "Präteritum example sentence",
-    "ptf": "Persian of pt",
-    "pf": "Perfekt example sentence",
-    "pff": "Persian of pf",
-    "kp": "full Präsens conjugation: ich ...; du ...; er/sie/es ...; wir ...; ihr ...; sie/Sie ...",
-    "kpt": "full Präteritum conjugation same format",
-    "kpf": "full Perfekt conjugation",
-    "kpq": "full Plusquamperfekt",
-    "kfu": "full Futur",
-    "kptf": "Persian short forms for Präteritum (ich...; du...; ...)",
-    "kpff": "Persian for Perfekt",
-    "kpqf": "Persian for Plusquamperfekt",
-    "kfuf": "Persian for Futur"
+  // ---------- Service Worker (برای آفلاین و نصب) ----------
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
   }
-  Be accurate. For non-verbs leave verb fields empty.`;
-    return await GD.callAI(system, `Generate complete entry for: ${germanWord}`);
-  };
 
-  // تقویت یک درس گرامر: افزودن توضیح و مثال جدید
-  GD.expandGrammar = async function (lesson) {
-    const system = `You are a German grammar teacher for Persian speakers. 
-  Return ONLY JSON: {"explain": ["new explanation point 1", "..."], "examples": [{"de":"...","fa":"..."}, ...]}
-  Add 2-3 clear extra explanation points and 4-5 practical example pairs (German + Persian). Keep level ${lesson.level}.`;
-    const user = `Lesson title: ${lesson.title} / ${lesson.title_fa}
-  Current explain: ${JSON.stringify(lesson.explain || [])}
-  Current examples: ${JSON.stringify(lesson.examples || [])}
-  Please strengthen and expand.`;
-    return await GD.callAI(system, user);
-  };
+  // ---------- تب‌های راهنمای نصب ----------
+  const ua = navigator.userAgent;
+  const isIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const isAndroid = /android/i.test(ua);
+  const tabs = ["android", "ios", "desktop"];
+  function selectTab(name) {
+    tabs.forEach(t => {
+      $("t-" + t).setAttribute("aria-selected", String(t === name));
+      $("p-" + t).hidden = t !== name;
+    });
+  }
+  tabs.forEach(t => $("t-" + t).addEventListener("click", () => selectTab(t)));
+  selectTab(isIOS ? "ios" : isAndroid ? "android" : "desktop");
 
-  // نمایش پیام وضعیت در تب هوش مصنوعی (isError = true → قرمز)
-  GD.showAiStatus = function (msg, isError) {
-    const el = GD.$("ai-status");
-    el.textContent = msg;
-    el.classList.remove("hidden");
-    el.classList.toggle("error", !!isError);
-  };
+  // ---------- دکمهٔ نصب ----------
+  let deferred = null;
+  const pill = $("install-status");
+  function refreshInstall() {
+    const can = !!deferred;
+    $("btn-install").hidden = !can;
+    $("btn-install-hero").hidden = !can;
+    $("link-install").hidden = can;
+    pill.classList.toggle("on", can);
+    pill.textContent = can ? "این دستگاه از نصب یک‌کلیکی پشتیبانی می‌کند ✅"
+      : isIOS ? "در iPhone/iPad از مسیر «Add to Home Screen» نصب کنید"
+      : "از منوی مرورگر نصب کنید (مراحل پایین)";
+  }
+  window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferred = e; refreshInstall(); });
+  window.addEventListener("appinstalled", () => { deferred = null; pill.textContent = "نصب شد ✅"; $("btn-install").hidden = true; $("btn-install-hero").hidden = true; });
+  async function doInstall() { if (!deferred) return; deferred.prompt(); try { await deferred.userChoice; } catch (_) {} deferred = null; refreshInstall(); }
+  $("btn-install").addEventListener("click", doInstall);
+  $("btn-install-hero").addEventListener("click", doInstall);
+  refreshInstall();
 
-  // نمایش لیست واژه‌های شخصی
-  GD.renderCustomList = function () {
-    const esc = GD.esc, S = GD.state;
-    const box = GD.$("custom-words-list");
-    if (!S.customWords.length) {
-      box.innerHTML = `<span class="hint">هنوز کلمه‌ای اضافه نکرده‌اید.</span>`;
-      return;
-    }
-    let html = "";
-    for (const w of S.customWords) {
-      html += `<div class="result-item" data-word="${esc(w.g)}"><div class="g">${esc(w.g)} <span class="tag ai-tag">AI</span></div><div class="p">${esc(w.p)}</div></div>`;
-    }
-    box.innerHTML = html;
-  };
-
-  // افزودن واژه به لیست شخصی (بدون تکرار) و ذخیره
-  GD.addCustomWord = function (w) {
-    const S = GD.state;
-    w._custom = true;
-    S.customWords = S.customWords.filter(x => x.g !== w.g); // حذف تکراری
-    S.customWords.unshift(w);
-    GD.saveCustom();
-    GD.mergeCustom();
-    GD.renderCustomList();
-  };
-
-  // کنترل‌کننده دکمه «تولید با هوش مصنوعی»
-  GD.handleGenerate = async function (word) {
-    word = (word || "").trim();
-    if (!word) { GD.showAiStatus("کلمه را وارد کنید", true); return; }
-
-    const btn = GD.$("btn-ai-generate");
-    btn.disabled = true;
-    GD.showAiStatus("در حال تولید با هوش مصنوعی...");
-    GD.$("ai-result").classList.add("hidden");
-
-    try {
-      const w = await GD.generateWord(word);
-      if (!w.g) throw new Error("پاسخ نامعتبر از هوش مصنوعی");
-      GD.addCustomWord(w);
-      GD.$("ai-result").innerHTML = GD.renderCard(w, true) +
-        `<button class="btn success" style="width:100%;margin-top:12px" onclick="document.getElementById('ai-result').classList.add('hidden')">ذخیره شد ✓</button>`;
-      GD.$("ai-result").classList.remove("hidden");
-      GD.showAiStatus("با موفقیت اضافه شد و در لیست شخصی ذخیره گردید.");
-    } catch (e) {
-      GD.showAiStatus(e.message || String(e), true);
-    } finally {
-      btn.disabled = false;
-    }
-  };
-
-  // ==================================================================
-  // لایتنر (مرور فاصله‌دار) — واژه‌ها در ۵ جعبه؛ هر جعبه فاصلهٔ مرور مخصوص خودش را دارد
-  // ==================================================================
-  GD.LEITNER_DAYS = [1, 2, 4, 8, 16];   // فاصلهٔ مرور (روز) برای جعبهٔ ۱ تا ۵
-
-  // تاریخ محلی به‌صورت YYYY-MM-DD
-  GD.dateStr = function (d) {
-    d = d || new Date();
-    const p = n => String(n).padStart(2, "0");
-    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
-  };
-  // تاریخ n روز بعد
-  GD.addDays = function (n) {
-    const d = new Date();
-    d.setHours(12, 0, 0, 0);
-    d.setDate(d.getDate() + n);
-    return GD.dateStr(d);
-  };
-
-  // افزودن واژه به جعبهٔ ۱ (اگر قبلاً نبوده)؛ مرور از فردا
-  GD.leitnerAdd = function (g) {
-    const L = GD.state.settings.leitner;
-    if (L[g]) return false;
-    L[g] = { b: 1, d: GD.addDays(1) };
-    GD.saveSettings();
+  // ---------- QR Code ----------
+  const input = $("qr-url"), canvas = $("qr-canvas"), note = $("qr-note");
+  const pageUrl = location.href.split("#")[0].split("?")[0];
+  input.value = /^https?:/.test(pageUrl) ? pageUrl : "";
+  function drawQR(text) {
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (!text) return false;
+    let qr;
+    try { qr = qrcode(0, "M"); qr.addData(text); qr.make(); } catch (e) { return false; }
+    const n = qr.getModuleCount(), quiet = 2, size = canvas.width, cell = Math.floor(size / (n + quiet * 2));
+    const off = Math.floor((size - cell * n) / 2);
+    ctx.fillStyle = "#0f172a";
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) ctx.fillRect(off + c * cell, off + r * cell, cell, cell);
     return true;
-  };
-
-  // واژه‌هایی که امروز (یا زودتر) باید مرور شوند؛ ابتدا جعبه‌های پایین‌تر
-  GD.leitnerDue = function () {
-    const S = GD.state, L = S.settings.leitner, today = GD.dateStr();
-    const byG = new Map(S.words.map(w => [w.g, w]));
-    return Object.keys(L)
-      .filter(g => L[g].d <= today && byG.has(g))
-      .map(g => byG.get(g))
-      .sort((a, b) => (L[a.g].b - L[b.g].b) || (GD.hash(a.g) - GD.hash(b.g)));
-  };
-
-  // نوار «لایتنر امروز» زیر کارت واژهٔ روزانه
-  GD.updateDailyLeitner = function () {
-    const el = GD.$("daily-leitner");
-    if (!el) return;
-    const n = GD.leitnerDue().length;
-    el.innerHTML = n
-      ? `📦 لایتنر امروز: <b>${n}</b> کارت برای مرور <button class="btn secondary" style="flex:none;min-width:0;padding:6px 14px;margin-right:8px" data-goto="leitner">مرور</button>`
-      : `📦 لایتنر امروز: کارتی برای مرور نیست`;
-  };
-
-  // صفحهٔ لایتنر: خلاصهٔ جعبه‌ها یا کارت مرور
-  GD.renderLeitner = function () {
-    const S = GD.state, L = S.settings.leitner, box = GD.$("leitner-box");
-    const r = S.rev;
-    if (r.active) { GD.renderReviewCard(); return; }
-
-    const counts = [0, 0, 0, 0, 0];
-    for (const g in L) counts[Math.min(5, Math.max(1, L[g].b)) - 1]++;
-    const total = counts.reduce((a, b) => a + b, 0);
-    const due = GD.leitnerDue().length;
-
-    let h = `<div class="card"><h3 style="margin-bottom:6px">📦 لایتنر روزانه</h3>
-      <p class="hint">واژه‌ای که «یاد گرفتم» را بزنی وارد جعبهٔ ۱ می‌شود. اگر موقع مرور درست جواب بدهی به جعبهٔ بعدی می‌رود و دیرتر برمی‌گردد؛ اگر نه، به جعبهٔ ۱ برمی‌گردد.</p>
-      <div class="leitner-boxes">`;
-    counts.forEach((c, i) => {
-      h += `<div class="lbox"><b>${c}</b><small>جعبه ${i + 1}<br>هر ${GD.LEITNER_DAYS[i]} روز</small></div>`;
-    });
-    h += `</div>
-      <div class="due-bar" style="margin-bottom:10px">همه: <b>${total}</b> کارت · امروز آمادهٔ مرور: <b>${due}</b></div>
-      <div class="btn-row">
-        <button class="btn${due ? "" : " secondary"}" data-rev="start" ${due ? "" : "disabled"}>شروع مرور امروز (${due})</button>
-      </div>
-      <div class="btn-row" style="margin-top:8px">
-        <button class="btn secondary" data-rev="addtoday">➕ افزودن واژه‌های امروز به لایتنر</button>
-      </div></div>`;
-    if (S.rev.summary) {
-      h += `<div class="card"><div class="empty" style="padding:14px">✅ مرور تمام شد<br><small>${S.rev.summary}</small></div></div>`;
-    }
-    if (S.rev.note) {
-      h += `<div class="card"><div class="hint" style="text-align:center">${S.rev.note}</div></div>`;
-    }
-    box.innerHTML = h;
-  };
-
-  // شروع یک نوبت مرور
-  GD.startReview = function () {
-    const S = GD.state;
-    const list = GD.leitnerDue().slice(0, 40);
-    if (!list.length) return;
-    S.rev = { active: true, list, idx: 0, shown: false, ok: 0, no: 0, miss: {}, summary: "" };
-    GD.renderReviewCard();
-  };
-
-  // نمایش کارت مرور: پشت = کلمه + جمع + جملهٔ مثال آلمانی؛ بعد از «نمایش پاسخ» ترجمه و مثال جمع هم می‌آید
-  GD.renderReviewCard = function () {
-    const S = GD.state, r = S.rev, esc = GD.esc, box = GD.$("leitner-box");
-    const w = r.list[r.idx];
-    if (!w) {
-      r.active = false;
-      r.summary = `درست: ${r.ok} · نادرست: ${r.no}`;
-      GD.renderLeitner();
-      GD.updateDailyLeitner();
-      return;
-    }
-    const L = S.settings.leitner[w.g] || { b: 1 };
-    const pct = (r.idx / r.list.length) * 100;
-    let h = `<div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
-      <div class="card">
-        <div class="chapter">جعبه ${L.b} · ${r.idx + 1}/${r.list.length}</div>
-        <div class="word-main">${esc(w.g)}</div>${GD.pluralHTML(w)}`;
-    if (w.ed) h += `<div class="example"><div class="de">${esc(w.ed)}</div>${r.shown ? `<div class="fa">${esc(w.ef || "")}</div>` : ""}</div>`;
-    if (r.shown) {
-      h += `<div class="ipa" style="margin-top:12px">${esc(w.i || "")}</div><div class="persian">${esc(w.p || "")}</div>`;
-      if (w.pld) h += `<div class="example pl-ex"><div class="lbl2">جمع · مثال</div><div class="de">${esc(w.pld)}</div><div class="fa">${esc(w.plf || "")}</div></div>`;
-      if (w.f) h += `<div style="margin-top:10px;font-size:.82rem;color:var(--accent);direction:ltr;text-align:left">${esc(w.f)}</div>`;
-    }
-    h += `</div><div class="btn-row">`;
-    if (!r.shown) {
-      h += `<button class="btn" data-rev="show">نمایش پاسخ</button><button class="btn secondary" data-rev="speak" style="flex:none;min-width:70px">🔊</button>`;
-    } else {
-      h += `<button class="btn danger" data-rev="no">❌ نمی‌دانستم</button><button class="btn success" data-rev="yes">✅ می‌دانستم</button><button class="btn secondary" data-rev="speak" style="flex:none;min-width:70px">🔊</button>`;
-    }
-    h += `</div><div class="btn-row" style="margin-top:8px"><button class="btn secondary" data-rev="stop">پایان مرور</button></div>`;
-    box.innerHTML = h;
-  };
-
-  // پاسخ کاربر: بله = جعبهٔ بعد؛ خیر = برگشت به جعبهٔ ۱ (و یک‌بار دیگر در همین نوبت)
-  GD.reviewAnswer = function (ok) {
-    const S = GD.state, r = S.rev, w = r.list[r.idx];
-    if (!w) return;
-    const e = S.settings.leitner[w.g] || (S.settings.leitner[w.g] = { b: 1, d: GD.addDays(1) });
-    if (ok) {
-      if (e.b >= 5) e.d = GD.addDays(32);
-      else { e.b++; e.d = GD.addDays(GD.LEITNER_DAYS[e.b - 1]); }
-      r.ok++;
-    } else {
-      e.b = 1; e.d = GD.addDays(1);
-      r.no++;
-      if (!r.miss[w.g]) { r.miss[w.g] = 1; r.list.push(w); }   // یک بار دیگر آخر نوبت
-    }
-    GD.saveSettings();
-    r.idx++; r.shown = false;
-    GD.renderReviewCard();
-  };
-
-  // ==================================================================
-  // تحلیل متن آلمانی (فعل‌ها، جمع اسم‌ها، گرامر) — همان منطق نسخهٔ دسکتاپ
-  // ==================================================================
-  const SET = s => new Set(s.split(" "));
-  const TOKEN_RE = /[\p{L}]+(?:-[\p{L}]+)*|\d+(?:[.,:]\d+)*|[.!?;:,]/gu;
-  const PERSON_RE = /^(ich|du|er\/sie\/es|wir|ihr|sie\/Sie)\s+/;
-  const NOUN_RE = /^(der|die|das)\s+(.+?)(\s*\(Pl\.\))?$/;
-  const REFLEXIV = SET("mich dich sich uns euch");
-  const PREPS = SET("auf an über für mit von um bei in zu aus nach vor gegen bis unter");
-  const SEP_OK = SET("ab an auf aus bei ein fest fort her hin los mit nach vor weg zu zurück zusammen um teil statt vorbei weiter wieder hoch auswendig spazieren");
-  const SUBJ = SET("ich du er sie es wir ihr man");
-  const MODALS = SET("können müssen wollen sollen dürfen mögen");
-  const AUX = SET("sein haben werden");
-  const BUILTIN_FORMS = new Map();
-  [["sein", "wäre wärst wären wärt", "Konjunktiv II"], ["haben", "hätte hättest hätten hättet", "Konjunktiv II"],
-   ["werden", "würde würdest würden würdet", "Konjunktiv II"], ["können", "könnte könntest könnten könntet", "Konjunktiv II"],
-   ["müssen", "müsste müsstest müssten müsstet", "Konjunktiv II"], ["dürfen", "dürfte dürftest dürften dürftet", "Konjunktiv II"],
-   ["mögen", "möchte möchtest möchten möchtet", "Möchte-Form"], ["werden", "wurde wurdest wurden wurdet", "Präteritum"],
-   ["werden", "worden", "Partizip II"]].forEach(([inf, forms, label]) => forms.split(" ").forEach(f => BUILTIN_FORMS.set(f, [inf, label])));
-  const LABEL_FA = { "Präsens": "حال", "Präteritum": "گذشتهٔ ساده", "Partizip II": "اسم مفعول (Partizip II)", "Infinitiv": "مصدر",
-                     "Konjunktiv II": "Konjunktiv II", "Möchte-Form": "möchte (خواستن مؤدبانه)" };
-  const HABEN_P = SET("habe hast hat haben habt"), SEIN_P = SET("bin bist ist sind seid");
-  const WERDEN_P = SET("werde wirst wird werden werdet");
-  const WERDEN_ALL = new Set([...WERDEN_P, "wurde", "wurdest", "wurden", "wurdet"]);
-  const PLUSQ_AUX = SET("hatte hattest hatten hattet war warst waren wart");
-  const PRAET_AUX_MOD = new Set([...PLUSQ_AUX, ...SET("konnte konntest konnten konntet musste musstest mussten musstet wollte wolltest wollten wolltet sollte solltest sollten solltet durfte durftest durften durftet mochte mochtest mochten mochtet")]);
-  const ARTIKEL = SET("der die das den dem des ein eine einen einem einer eines");
-  const WQ = SET("wer was wo wann warum wie wohin woher wieso weshalb wem wen wessen welche welcher welches welchen wieviel");
-  const REL = SET("der die das den dem dessen deren denen");
-  const NEG = SET("nicht kein keine keinen keinem keiner keines nie niemals nichts niemand");
-  const AKK = SET("einen keinen meinen deinen seinen unseren euren ihren mich dich ihn");
-  const DAT = SET("dem einem keinem meinem deinem seinem unserem ihrem mir dir ihm ihnen");
-  const DAT_PREP = SET("mit bei nach von aus seit gegenüber");
-  const WECHSEL = SET("an auf hinter in neben über unter vor zwischen");
-  const CONTR = SET("im ins ans aufs übers");
-  const CONJ = SET("und aber oder denn deshalb sondern deswegen");
-  const GEN = SET("des eines keines meines deines seines unseres ihres dessen wegen trotz statt anstatt außerhalb innerhalb");
-  const SUBCONJ = SET("obwohl wenn ob bevor nachdem sobald solange falls seitdem sodass");
-  const WEEKDAYS = SET("montag dienstag mittwoch donnerstag freitag samstag sonntag");
-  const DAYPARTS = SET("morgen abend nachmittag vormittag mittag nacht wochenende");
-  const MONTHS = SET("januar februar märz april mai juni juli august september oktober november dezember frühling sommer herbst winter");
-  const TIME_UNITS = SET("tag tagen woche wochen monat monaten jahr jahren stunde stunden minute minuten");
-  const TIME_ADV = SET("heute morgen gestern jetzt immer oft manchmal abends morgens später bald früh spät täglich");
-  const PLACE_ADV = SET("hier dort da draußen drinnen überall zuhause");
-  const MANNER_ADV = SET("gern gerne schnell langsam zusammen allein laut leise lieber");
-  const POSS_RE = /^(mein|dein|unser|euer|eur)(e|en|em|er|es)?$/;
-  const POSS2_RE = /^(sein|ihr)(e|en|em|er|es)?$/;
-  const PART_RE = /^(?:(?:ab|an|auf|aus|bei|ein|mit|nach|vor|weg|zu|zurück|zusammen|um|fest|statt|teil)ge[a-zäöüß]{2,}|ge[a-zäöüß]{3,}|(?:be|ver|er|ent|zer|emp|miss)[a-zäöüß]{3,})(?:t|en)$/;
-  const NOT_VERBS = SET("gegen gerade genau gerne bereits besten verschieden entweder genug");
-  const AFTER_SUBJ_STOP = SET("auch nicht nur dann noch immer schon sehr gern gerne oft bald jetzt heute gestern morgen hier dort also wieder doch mal bitte eben etwas selbst sonst weiter leider kaum wirklich ganz mehr viel viele alle beide nie oben unten drei gleich meine deine seine ihre unsere eure keine einige wohl ebenfalls natürlich zuerst");
-  const DET_FORMS = SET("den einen keinen meinen deinen seinen unseren euren ihren einem einer");
-  const COMP_SKIP = SET("aber oder wieder immer über unter weiter leider sicher jeder");
-
-  const splitForms = s => (s || "").split(";").map(x => x.trim()).filter(Boolean);
-  const stripPerson = p => p.replace(PERSON_RE, "").replace(/\.\.\./g, " ").split(/\s+/).filter(t => t && !REFLEXIV.has(t.toLowerCase()));
-  const hasAny = (a, b) => { for (const x of a) if (b.has(x)) return true; return false; };
-  const push = (map, k, v) => { if (!map.has(k)) map.set(k, []); map.get(k).push(v); };
-
-  GD.Analyzer = class {
-    constructor(words) {
-      this.forms = new Map();     // شکل فعل → [[برچسب زمان، مدخل]]
-      this.sep = new Map();       // شکل صرف‌شده → [[پیشوند جداشدنی، مدخل]]
-      this.nounsSg = new Map();   // مفرد → مدخل
-      this.nounsPl = new Map();   // جمع → مدخل
-      this.lex = new Map();       // هر لغت → [مدخل‌ها]
-      this.byInf = new Map();
-      this.meta = new Map();      // مدخل → {inf, refl, prep}
-      for (const w of words) {
-        const g = (w.g || "").trim();
-        const m = NOUN_RE.exec(g);
-        if (m) {
-          const key = m[2].trim().toLowerCase();
-          if (m[3]) { if (!this.nounsPl.has(key)) this.nounsPl.set(key, w); }
-          else {
-            if (!this.nounsSg.has(key)) this.nounsSg.set(key, w);
-            const pl = (w.pl || "").trim();
-            if (pl && pl !== "-" && pl !== "Pl." && pl.toLowerCase() !== key && !this.nounsPl.has(pl.toLowerCase())) this.nounsPl.set(pl.toLowerCase(), w);
-          }
-          push(this.lex, key, w);
-        } else if (w.kp) this.addVerb(w);
-        else if (!g.includes(" ")) push(this.lex, g.toLowerCase(), w);
-      }
-      for (const [form, [inf, label]] of BUILTIN_FORMS) push(this.forms, form, [label, this.byInf.get(inf) || null]);
-      this.nounKeys = new Set([...this.nounsSg.keys(), ...this.nounsPl.keys()]);
-    }
-
-    addVerb(w) {
-      const g = w.g.trim();
-      const core = g.split(/\s+/).filter(t => t !== "sich");
-      const prep = core.length > 1 && PREPS.has(core[core.length - 1].toLowerCase()) ? core[core.length - 1].toLowerCase() : null;
-      const phrase = core.length > 1 && prep === null ? core[0].toLowerCase() : null;
-      const fut = stripPerson(splitForms(w.kfu)[0] || "");
-      const inf = fut.length ? fut[fut.length - 1].toLowerCase() : core[0].toLowerCase();
-      this.meta.set(w, { inf, refl: g.startsWith("sich "), prep });
-      if (!this.byInf.has(inf)) this.byInf.set(inf, w);
-      push(this.lex, inf, w);
-      push(this.forms, inf, ["Infinitiv", w]);
-      const headWords = new Set(core.slice(1).map(t => t.toLowerCase()));
-      for (const [label, key] of [["Präsens", "kp"], ["Präteritum", "kpt"]]) {
-        for (const p of splitForms(w[key])) {
-          const toks = stripPerson(p);
-          if (!toks.length) continue;
-          const fin = toks[0].toLowerCase();
-          push(this.forms, fin, [label, w]);
-          const extras = toks.slice(1).filter(e => /^\p{L}+$/u.test(e) && !headWords.has(e.toLowerCase())).map(e => e.toLowerCase());
-          if (extras.length && (SEP_OK.has(extras[0]) || extras[0] === phrase)) push(this.sep, fin, [extras[0], w]);
-        }
-      }
-      for (const key of ["kpf", "kpq"]) {
-        for (const p of splitForms(w[key])) {
-          const toks = stripPerson(p);
-          if (toks.length && toks[toks.length - 1].toLowerCase() !== inf) push(this.forms, toks[toks.length - 1].toLowerCase(), ["Partizip II", w]);
-        }
-      }
-    }
-
-    analyze(text, lessons) {
-      const toks = [];
-      for (const m of text.matchAll(TOKEN_RE)) {
-        const w = m[0], c = w[0];
-        toks.push({ i: toks.length, s: m.index, e: m.index + w.length, w, l: w.toLowerCase(),
-                    word: /[\p{L}\p{N}]/u.test(c), alpha: /\p{L}/u.test(c), cap: c !== c.toLowerCase() && c === c.toUpperCase() });
-      }
-      const sents = [], ends = [];
-      let cur = [];
-      for (const t of toks) {
-        if (t.word) cur.push(t.i);
-        else if (".!?".includes(t.w)) { sents.push(cur); ends.push(t.w); cur = []; }
-      }
-      if (cur.length) { sents.push(cur); ends.push(""); }
-
-      // ---------- فعل‌ها ----------
-      const V = {};
-      for (const idxs of sents) {
-        idxs.forEach((i, j) => {
-          const t = toks[i];
-          const cands = t.alpha ? this.forms.get(t.l) : null;
-          if (!cands || (t.cap && j !== 0)) return;
-          const nxt = j + 1 < idxs.length ? toks[idxs[j + 1]] : null;
-          if (t.l === "sein" && nxt && nxt.alpha && (nxt.cap || ARTIKEL.has(nxt.l))) return;
-          if (j === 0 && t.cap && this.nounKeys.has(t.l) && !(nxt && SUBJ.has(nxt.l))) return;
-          const pairs = [], labels = new Set();
-          for (const [lab, e] of cands) {
-            if (!pairs.some(([a, b]) => a === lab && b === e)) pairs.push([lab, e]);
-            labels.add(lab);
-          }
-          const roles = new Set();
-          if (labels.has("Infinitiv")) roles.add("inf");
-          if (labels.has("Partizip II")) roles.add("part");
-          for (const x of ["Präsens", "Präteritum", "Konjunktiv II", "Möchte-Form"]) if (labels.has(x)) roles.add("fin");
-          V[i] = { tier: 1, labels, pairs, roles };
-        });
-      }
-      // فعل‌های احتمالی (خارج از لیست لغات)
-      for (const idxs of sents) {
-        idxs.forEach((i, j) => {
-          const t = toks[i];
-          if (i in V || !t.alpha || t.cap || t.l.length < 5 || NOT_VERBS.has(t.l)) return;
-          const prev = j ? toks[idxs[j - 1]] : null;
-          if (prev && SUBJ.has(prev.l) && !AFTER_SUBJ_STOP.has(t.l) && !this.lex.has(t.l) && /(e|st|t|en)$/.test(t.l)
-              && !(ARTIKEL.has(t.l) || REFLEXIV.has(t.l) || DAT.has(t.l) || AKK.has(t.l) || POSS_RE.test(t.l) || POSS2_RE.test(t.l))) {
-            V[i] = { tier: 2, labels: new Set(["فعل احتمالی"]), pairs: [], roles: new Set(["fin"]) };
-          } else if (PART_RE.test(t.l)) {
-            V[i] = { tier: 2, labels: new Set(["فعل احتمالی"]), pairs: [], roles: new Set(t.l.endsWith("t") ? ["part"] : ["part", "inf"]) };
-          } else if (prev && t.l.endsWith("en") && !DET_FORMS.has(t.l) && (prev.l === "zu" || (prev.i in V &&
-                     V[prev.i].pairs.some(([, e]) => e && (MODALS.has((this.meta.get(e) || {}).inf) || (this.meta.get(e) || {}).inf === "werden"))))) {
-            V[i] = { tier: 2, labels: new Set(["فعل احتمالی"]), pairs: [], roles: new Set(["inf"]) };
-          }
-        });
-      }
-      // ---------- جمع اسم‌ها ----------
-      const P = {};
-      for (const t of toks) {
-        if (t.alpha && t.cap && !(t.i in V)) {
-          let e = this.nounsPl.get(t.l), kind = "Plural";
-          if (!e && t.l.endsWith("n") && this.nounsPl.has(t.l.slice(0, -1))) { e = this.nounsPl.get(t.l.slice(0, -1)); kind = "Dativ-Plural"; }
-          if (e) P[t.i] = [e, kind];
-        }
-      }
-      const res = { tokens: toks, sents, verbs: V, plurals: P };
-      res.grammar = this.grammar(res, ends, lessons);
-      return res;
-    }
-
-    grammar(res, ends, lessons) {
-      const { tokens: toks, sents, verbs: V, plurals: P } = res;
-      const hits = {};
-      const hit = (lid, idxs, note = true) => {
-        const h = hits[lid] || (hits[lid] = { tokens: new Set(), notes: [] });
-        idxs.forEach(i => h.tokens.add(i));
-        const txt = [...idxs].sort((a, b) => a - b).map(i => toks[i].w).join(" … ");
-        if (note && txt && !h.notes.includes(txt) && h.notes.length < 3) h.notes.push(txt);
-      };
-      const meta = e => (e && this.meta.get(e)) || {};
-
-      sents.forEach((idxs, k) => {
-        if (!idxs.length) return;
-        const n = idxs.length, end = ends[k];
-        const L = idxs.map(i => toks[i].l);
-        const roles = j => (V[idxs[j]] ? V[idxs[j]].roles : new Set());
-        const isPart = j => roles(j).has("part");
-        const infOf = j => { const v = V[idxs[j]]; return new Set(v ? v.pairs.filter(([, e]) => e).map(([, e]) => meta(e).inf) : []); };
-        const isFinite_ = j => {
-          const v = V[idxs[j]];
-          if (!v || !v.roles.has("fin")) return false;
-          if (!v.roles.has("inf")) return true;
-          const prev = idxs[j] ? toks[idxs[j] - 1] : null;
-          return j <= 1 || (j > 0 && SUBJ.has(L[j - 1])) || (j + 1 < n && SUBJ.has(L[j + 1])) || (prev !== null && prev.w === ",");
-        };
-        const AUXMOD = new Set([...AUX, ...MODALS]);
-
-        for (let j = 0; j < n; j++) if (HABEN_P.has(L[j]) || SEIN_P.has(L[j])) hit("A1-01", [idxs[j]]);
-        for (let j = 0; j < n; j++) {
-          const v = V[idxs[j]];
-          if (v && v.tier === 1 && v.labels.has("Präsens") && isFinite_(j) && !hasAny(infOf(j), AUXMOD)) hit("A1-02", [idxs[j]]);
-        }
-        for (let j = 0; j < n; j++) if (ARTIKEL.has(L[j]) && j + 1 < n) hit("A1-03", [idxs[j], idxs[j + 1]]);
-        for (let j = 0; j < n; j++) if (idxs[j] in P) hit("A1-04", [idxs[j]]);
-        for (let j = 0; j < n; j++) if (NEG.has(L[j])) hit("A1-05", [idxs[j]]);
-        if (end === "?" || WQ.has(L[0])) hit("A1-06", [idxs[0]]);
-        const reflHere = idxs.some(i => i in V && V[i].pairs.some(([, e]) => meta(e).refl));
-        for (let j = 0; j < n; j++) if (AKK.has(L[j]) && !((L[j] === "mich" || L[j] === "dich") && reflHere)) hit("A1-07", [idxs[j]]);
-        for (let j = 0; j < n; j++) {
-          const v = V[idxs[j]];
-          if (v && v.tier === 1 && ((v.labels.has("Präsens") && hasAny(infOf(j), MODALS)) || v.labels.has("Möchte-Form"))) hit("A1-08", [idxs[j]]);
-        }
-        for (let j = 0; j < n; j++) {
-          if (idxs[j] in V && roles(j).has("fin")) {
-            for (const [particle] of (this.sep.get(L[j]) || [])) {
-              for (let j2 = j + 1; j2 < n; j2++) if (L[j2] === particle) { hit("A1-09", [idxs[j], idxs[j2]]); break; }
-            }
-          }
-        }
-        for (let j = 0; j < n; j++) {
-          if (POSS_RE.test(L[j]) && j + 1 < n) hit("A1-10", [idxs[j], idxs[j + 1]]);
-          else if (POSS2_RE.test(L[j]) && j + 1 < n && toks[idxs[j + 1]].cap && !(j > 0 && (idxs[j - 1] in V)) && !(idxs[j] in V)) hit("A1-10", [idxs[j], idxs[j + 1]]);
-        }
-        for (let j = 0; j < n; j++) {
-          if (DAT.has(L[j]) || DAT_PREP.has(L[j]) || (L[j] === "zu" && !(j + 1 < n && (roles(j + 1).has("inf") || L[j + 1].endsWith("en")) && !toks[idxs[j + 1]].cap))) hit("A2-01", [idxs[j]]);
-        }
-        const particles = new Set();
-        for (let x = 0; x < n; x++) if (idxs[x] in V) for (const [p] of (this.sep.get(L[x]) || [])) particles.add(p);
-        for (let j = 0; j < n; j++) {
-          if (CONTR.has(L[j]) || (WECHSEL.has(L[j]) && !particles.has(L[j]) && j + 1 < n && (ARTIKEL.has(L[j + 1]) || toks[idxs[j + 1]].cap || POSS_RE.test(L[j + 1])))) {
-            hit("A2-02", [idxs[j]].concat(j + 1 < n && WECHSEL.has(L[j]) ? [idxs[j + 1]] : []));
-          }
-        }
-        const usedPraet = new Set();
-        for (let j = 0; j < n; j++) {
-          const laterPart = [], laterInf = [];
-          for (let x = j + 1; x < n; x++) { if (isPart(x)) laterPart.push(x); if (roles(x).has("inf")) laterInf.push(x); }
-          if ((HABEN_P.has(L[j]) || SEIN_P.has(L[j])) && laterPart.length) hit("A2-03", [idxs[j], idxs[laterPart[laterPart.length - 1]]]);
-          if (WERDEN_ALL.has(L[j]) && laterPart.length) hit("B1-04", [idxs[j], idxs[laterPart[laterPart.length - 1]]]);
-          else if (WERDEN_P.has(L[j]) && laterInf.length) hit("B1-03", [idxs[j], idxs[laterInf[laterInf.length - 1]]]);
-          if (PLUSQ_AUX.has(L[j]) && laterPart.length) { hit("B1-02", [idxs[j], idxs[laterPart[laterPart.length - 1]]]); usedPraet.add(j); }
-        }
-        for (let j = 0; j < n; j++) if (PRAET_AUX_MOD.has(L[j]) && !usedPraet.has(j)) hit("A2-04", [idxs[j]]);
-        for (let j = 0; j < n; j++) {
-          const v = V[idxs[j]];
-          if (v && v.tier === 1 && v.labels.has("Präteritum") && !v.labels.has("Präsens") && !hasAny(infOf(j), AUXMOD)) hit("B1-01", [idxs[j]]);
-        }
-        for (let j = 0; j < n; j++) if (L[j] === "weil" || L[j] === "dass" || L[j] === "daß") hit("A2-05", [idxs[j]]);
-        for (let j = 0; j < n; j++) if (CONJ.has(L[j])) hit("A2-06", [idxs[j]]);
-        for (let j = 0; j < n; j++) {
-          const v = V[idxs[j]];
-          if (v && v.tier === 1 && v.pairs.some(([, e]) => meta(e).refl)) {
-            const refl = []; for (let x = 0; x < n; x++) if (REFLEXIV.has(L[x])) refl.push(x);
-            hit("A2-07", [idxs[j]].concat(refl.length ? [idxs[refl[0]]] : []));
-          }
-        }
-        const compAls = new Set();
-        for (let j = 0; j < n; j++) {
-          if (L[j].length >= 4 && L[j].endsWith("er") && !COMP_SKIP.has(L[j])) {
-            for (let j2 = j + 1; j2 < Math.min(n, j + 5); j2++) if (L[j2] === "als") { hit("A2-08", [idxs[j], idxs[j2]]); compAls.add(j2); break; }
-          }
-          if (L[j] === "am" && j + 1 < n && (L[j + 1].endsWith("sten") || L[j + 1].endsWith("esten"))) hit("A2-08", [idxs[j], idxs[j + 1]]);
-        }
-        for (let j = 0; j < n - 2; j++) {
-          const a = toks[idxs[j + 1]];
-          if ((ARTIKEL.has(L[j]) || POSS_RE.test(L[j])) && a.alpha && !a.cap && a.l.length > 3 && /(e|en|er|em|es)$/.test(a.l) && !(idxs[j + 1] in V) && toks[idxs[j + 2]].cap) hit("A2-09", [idxs[j], idxs[j + 1], idxs[j + 2]]);
-        }
-        if (V[idxs[0]] && end !== "?" && (end === "!" || (n > 1 && ["sie", "doch", "bitte", "mal"].includes(L[1]))) && (roles(0).has("fin") || roles(0).has("inf"))) hit("A2-10", [idxs[0]]);
-        for (let j = 0; j < n - 1; j++) {
-          const nxt = L[j + 1], w1 = toks[idxs[j + 1]].w;
-          if ((L[j] === "um" && /\d/.test(w1[0])) || (L[j] === "am" && (WEEKDAYS.has(nxt) || DAYPARTS.has(nxt) || /\d/.test(w1[0]))) ||
-              (L[j] === "im" && MONTHS.has(nxt)) || ((L[j] === "vor" || L[j] === "nach") && L.slice(j + 1, j + 3).some(x => TIME_UNITS.has(x)))) hit("A2-11", [idxs[j], idxs[j + 1]]);
-        }
-        for (let j = 0; j < n; j++) if (L[j] === "seit" || L[j] === "bis") hit("A2-11", [idxs[j]]);
-        for (let j = 0; j < n; j++) {
-          const v = V[idxs[j]];
-          if (v && v.labels.has("Konjunktiv II") && BUILTIN_FORMS.has(L[j])) hit("B1-05", [idxs[j]]);
-        }
-        for (let j = 0; j < n; j++) {
-          if (L[j] === "zu" && j + 1 < n && !toks[idxs[j + 1]].cap && !DET_FORMS.has(L[j + 1]) && (roles(j + 1).has("inf") || (L[j + 1].endsWith("en") && L[j + 1].length >= 5))) hit("B1-07", [idxs[j], idxs[j + 1]]);
-          if (L[j] === "um" && L.slice(j + 1).includes("zu")) hit("B1-07", [idxs[j], idxs[j + 1 + L.slice(j + 1).indexOf("zu")]]);
-          if (L[j] === "damit") hit("B1-07", [idxs[j]]);
-        }
-        for (let j = 0; j < n; j++) {
-          if (SUBCONJ.has(L[j]) || (L[j] === "als" && !compAls.has(j)) || (L[j] === "während" && !(j + 1 < n && ARTIKEL.has(L[j + 1])))) hit("B1-08", [idxs[j]]);
-        }
-        for (let j = 0; j < n; j++) if (GEN.has(L[j]) || (L[j] === "während" && j + 1 < n && ARTIKEL.has(L[j + 1]))) hit("B1-09", [idxs[j]]);
-        for (let j = 0; j < n; j++) {
-          const v = V[idxs[j]];
-          if (v && v.tier === 1) {
-            for (const [, e] of v.pairs) {
-              const pr = meta(e).prep;
-              if (pr) { for (let j2 = 0; j2 < n; j2++) if (j2 !== j && L[j2] === pr && Math.abs(j2 - j) <= 7) { hit("B1-10", [idxs[j], idxs[j2]]); break; } }
-            }
-          }
-        }
-        const tj = [], pj = [], mj = [];
-        for (let j = 0; j < n; j++) {
-          if (TIME_ADV.has(L[j]) && !(L[j] === "morgen" && toks[idxs[j]].cap)) tj.push(j);
-          if (PLACE_ADV.has(L[j]) || (L[j] === "hause" && j > 0 && (L[j - 1] === "zu" || L[j - 1] === "nach"))) pj.push(j);
-          if (MANNER_ADV.has(L[j])) mj.push(j);
-        }
-        if (tj.length && pj.length && tj[0] < pj[0]) hit("B1-12", [idxs[tj[0]]].concat(mj.slice(0, 1).map(x => idxs[x]), [idxs[pj[0]]]));
-      });
-
-      for (let i = 0; i < toks.length - 2; i++) {
-        if (toks[i].w !== ",") continue;
-        const a = toks[i + 1], b = toks[i + 2];
-        if (a.alpha && b.alpha) {
-          if (REL.has(a.l) && b.w[0] === b.w[0].toLowerCase() && b.w[0] !== b.w[0].toUpperCase() && b.l !== "und" && b.l !== "oder") hit("B1-06", [a.i, b.i]);
-          if (a.l === "ob" || WQ.has(a.l)) hit("B1-11", [a.i]);
-        }
-      }
-      return lessons.filter(l => hits[l.id]).map(l => ({
-        id: l.id, level: l.level, title: l.title, title_fa: l.title_fa,
-        tokens: [...hits[l.id].tokens].sort((a, b) => a - b), notes: hits[l.id].notes
-      }));
-    }
-
-    // متن راهنما برای یک توکن (هنگام کلیک)
-    describe(res, i) {
-      const t = res.tokens[i];
-      if (!t.alpha) return "";
-      const lines = [], v = res.verbs[i];
-      if (v && v.tier === 1) {
-        for (const [lab, e] of v.pairs) if (e) lines.push(`فعل · ${t.w}: ${lab} (${LABEL_FA[lab] || ""}) از «${(this.meta.get(e) || {}).inf || ""}» — ${e.p}`);
-      } else if (v) lines.push(`فعل احتمالی · ${t.w} (در لیست لغات نیست؛ شکل کلمه شبیه فعل است)`);
-      if (res.plurals[i]) {
-        const [e, kind] = res.plurals[i];
-        lines.push(`اسم · ${t.w}: جمع (${kind}) از ${e.g} — ${e.p}`);
-      } else {
-        let es = this.lex.get(t.l) || [];
-        if (t.cap && this.nounsSg.has(t.l)) es = [this.nounsSg.get(t.l)];
-        for (const e of es.slice(0, 2)) {
-          if (v && e.kp) continue;
-          const pl = (e.pl || "").trim();
-          let extra = "";
-          if (pl && pl !== "-" && pl !== "Pl.") extra = ` · Plural: die ${pl}`;
-          else if (pl === "-") extra = " · (kein Plural)";
-          lines.push(`${e.g}  ${e.i || ""} — ${e.p}${extra}`);
-        }
-      }
-      return lines.length ? lines.join("\n") : "«" + t.w + "» در لیست لغات برنامه نیست.";
-    }
-
-    // معنی کلمه‌به‌کلمه (وقتی ترجمهٔ جمله‌ای در دسترس نیست)
-    gloss(text) {
-      const seen = new Set(), out = [];
-      for (const m of text.matchAll(TOKEN_RE)) {
-        const w = m[0], l = w.toLowerCase();
-        if (!/^\p{L}/u.test(w) || seen.has(l)) continue;
-        let es = this.lex.get(l) || (this.nounsPl.has(l) ? [this.nounsPl.get(l)] : null);
-        if (es && es.length > 1) {   // حرف بزرگ → اسم؛ حرف کوچک → غیراسم (مثلاً essen = خوردن، Essen = غذا)
-          const cap = w[0] !== w[0].toLowerCase();
-          const f = es.filter(e => NOUN_RE.test(e.g) === cap);
-          if (f.length) es = f;
-        }
-        if (es && es.length) { seen.add(l); out.push(`${w} = ${es[0].p}`); }
-      }
-      return out;
-    }
-  };
-
-  // ==================================================================
-  // ترجمه: کش مرورگر → آنلاین (Google / MyMemory / AI) → مترجم روی دستگاه → معنی کلمه‌ها
-  // ==================================================================
-  GD.TR = {
-    KEY: "gd_trcache_v1", MAX: 600, cache: null,
-    load() { if (this.cache) return; try { this.cache = JSON.parse(localStorage.getItem(this.KEY) || "{}"); } catch (_) { this.cache = {}; } },
-    get(k) { this.load(); const v = this.cache[k]; return v ? v.t : null; },
-    set(k, t) {
-      this.load();
-      this.cache[k] = { t, ts: Date.now() };
-      const keys = Object.keys(this.cache);
-      if (keys.length > this.MAX) keys.sort((a, b) => this.cache[a].ts - this.cache[b].ts).slice(0, keys.length - this.MAX).forEach(x => delete this.cache[x]);
-      try { localStorage.setItem(this.KEY, JSON.stringify(this.cache)); } catch (_) {}
-    },
-    size() { this.load(); return Object.keys(this.cache).length; }
-  };
-
-  GD.fetchJSON = async function (url, ms) {
-    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), ms || 8000);
-    try {
-      const r = await fetch(url, { signal: ctl.signal });
-      if (!r.ok) throw new Error("HTTP " + r.status);
-      return await r.json();
-    } finally { clearTimeout(timer); }
-  };
-  GD.trGoogle = async function (q, sl, tl) {
-    const d = await GD.fetchJSON("https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl=" + sl + "&tl=" + tl + "&q=" + encodeURIComponent(q));
-    return d[0].map(p => (p && p[0]) || "").join("");
-  };
-  GD.trMyMemory = async function (q, sl, tl) {
-    if (q.length > 480) throw new Error("too long");
-    const d = await GD.fetchJSON("https://api.mymemory.translated.net/get?q=" + encodeURIComponent(q) + "&langpair=" + sl + "|" + tl);
-    if (String(d.responseStatus) !== "200") throw new Error("MyMemory");
-    const ta = document.createElement("textarea");
-    ta.innerHTML = d.responseData.translatedText;       // رمزگشایی موجودیت‌های HTML
-    return ta.value;
-  };
-  // اگر کلید API تنظیم شده باشد، به‌عنوان راه سوم
-  GD.trAI = async function (q, sl, tl) {
-    const { key, base, model } = GD.getApiConfig();
-    if (!key) throw new Error("no key");
-    const names = { de: "German", fa: "Persian (Farsi)" };
-    const res = await fetch(base + "/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + key },
-      body: JSON.stringify({ model, temperature: 0.2, messages: [
-        { role: "system", content: `Translate the user's text from ${names[sl]} to ${names[tl]}. Return ONLY the translation, nothing else.` },
-        { role: "user", content: q }] })
-    });
-    if (!res.ok) throw new Error("AI " + res.status);
-    const data = await res.json();
-    return (data.choices?.[0]?.message?.content || "").trim();
-  };
-  // مترجم داخلی مرورگر (Chrome) — فقط اگر مدل زبان از قبل روی دستگاه باشد
-  // (برخی مرورگرها availability را معلق می‌گذارند؛ پس همه‌چیز با timeout و بعد از اولین شکست غیرفعال می‌شود)
-  GD.withTimeout = (p, ms) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
-  GD.trDevice = async function (q, sl, tl) {
-    if (!("Translator" in self) || GD._devBad) throw new Error("no device translator");
-    const opts = { sourceLanguage: sl, targetLanguage: tl };
-    try {
-      if ((await GD.withTimeout(self.Translator.availability(opts), 2500)) !== "available") throw new Error("not ready");
-      GD._dev = GD._dev || {};
-      const k = sl + tl;
-      const tr = GD._dev[k] || (GD._dev[k] = await GD.withTimeout(self.Translator.create(opts), 5000));
-      return await GD.withTimeout(tr.translate(q), 8000);
-    } catch (e) { GD._devBad = true; throw e; }
-  };
-
-  // ترجمهٔ یک جمله؛ خروجی: {text, src}  (src: cache | online | ai | device)
-  GD.translateChunk = async function (q, sl, tl) {
-    const key = sl + "|" + tl + "|" + q;
-    const hitC = GD.TR.get(key);
-    if (hitC) return { text: hitC, src: "cache" };
-    if (navigator.onLine !== false) {
-      for (const [src, fn] of [["online", GD.trGoogle], ["online", GD.trMyMemory], ["ai", GD.trAI]]) {
-        try {
-          const t = (await fn(q, sl, tl) || "").trim();
-          if (t) { GD.TR.set(key, t); return { text: t, src }; }
-        } catch (_) {}
-      }
-    }
-    try {
-      const t = ((await GD.trDevice(q, sl, tl)) || "").trim();
-      if (t) { GD.TR.set(key, t); return { text: t, src: "device" }; }
-    } catch (_) {}
-    throw new Error("unavailable");
-  };
-
-  // شکستن متن به سطرها و جمله‌ها (حداکثر ~۴۵۰ نویسه برای هر جمله)
-  GD.splitSentences = function (text) {
-    const lines = text.split(/\r?\n/), out = [];
-    for (const line of lines) {
-      const parts = [];
-      if (line.trim()) {
-        for (const m of line.matchAll(/[^.!?]+[.!?]*\s*/g)) {
-          let s = m[0].trim();
-          while (s.length > 450) {
-            let cut = s.lastIndexOf(" ", 450); if (cut < 50) cut = 450;
-            parts.push(s.slice(0, cut).trim()); s = s.slice(cut).trim();
-          }
-          if (s) parts.push(s);
-        }
-      }
-      out.push(parts);
-    }
-    return out;
-  };
-
-  // ==================================================================
-  // تب «متن»: ترجمه + هایلایت فعل‌ها + لینک گرامر
-  // ==================================================================
-  GD.getAnalyzer = function () {
-    const S = GD.state;
-    if (!GD._an || GD._anN !== S.words.length || GD._anC !== S.customWords.length) {
-      GD._an = new GD.Analyzer(S.words);
-      GD._anN = S.words.length; GD._anC = S.customWords.length;
-    }
-    return GD._an;
-  };
-
-  GD.trStatus = function (msg, isErr) {
-    const el = GD.$("tr-status");
-    el.textContent = msg;
-    el.classList.remove("hidden");
-    el.classList.toggle("error", !!isErr);
-  };
-
-  GD.runText = async function () {
-    const btn0 = GD.$("btn-tr-go");
-    try { await GD.runText2(); }
-    catch (e) { GD.trStatus("خطا: " + (e.message || e), true); }
-    finally { btn0.disabled = false; GD.updateNet(); }
-  };
-  GD.runText2 = async function () {
-    const S = GD.state, esc = GD.esc;
-    const text = GD.$("tr-input").value.replace(/\s+$/g, "");
-    const dir = GD.$("tr-dir").value.split("|"), sl = dir[0], tl = dir[1];
-    const out = GD.$("tr-out");
-    if (!text.trim()) { GD.trStatus("متن را وارد کنید", true); return; }
-    if (text.length > 4000) { GD.trStatus("متن حداکثر ۴۰۰۰ نویسه می‌تواند باشد", true); return; }
-    const btn = GD.$("btn-tr-go");
-    btn.disabled = true;
-    GD.trStatus("در حال تحلیل…");
-
-    // ۱) تحلیل محلی (بدون اینترنت): فقط برای متن آلمانی
-    let res = null, an = null, html = "";
-    if (sl === "de") {
-      an = GD.getAnalyzer();
-      res = an.analyze(text, S.grammar);
-      GD._res = res; GD._text = text;
-      html += GD.renderAnalysis(res, text, an);
-    } else {
-      GD._res = null;
-    }
-    html += `<div class="card" id="tr-trans-card"><h3 class="tr-h">ترجمه</h3><div id="tr-trans"><div class="loader">در حال ترجمه</div></div></div>`;
-    if (res) html += GD.renderLists(res, an);
-    out.innerHTML = html;
-
-    // ۲) ترجمه، جمله‌به‌جمله
-    const lines = GD.splitSentences(text);
-    const jobs = [];
-    lines.forEach((parts, li) => parts.forEach((s, pi) => jobs.push({ li, pi, s })));
-    if (jobs.length > 60) { GD.trStatus("متن بیش از ۶۰ جمله است؛ کوتاه‌ترش کنید", true); btn.disabled = false; return; }
-    const result = {}, srcCount = { cache: 0, online: 0, ai: 0, device: 0, fail: 0 };
-    let next = 0, done = 0;
-    const worker = async () => {
-      while (next < jobs.length) {
-        const j = jobs[next++];
-        try {
-          const r = await GD.translateChunk(j.s, sl, tl);
-          result[j.li + ":" + j.pi] = { t: r.text };
-          srcCount[r.src]++;
-        } catch (_) {
-          result[j.li + ":" + j.pi] = { t: null };
-          srcCount.fail++;
-        }
-        done++;
-        GD.trStatus(`ترجمه ${done}/${jobs.length}…`);
-      }
-    };
-    await Promise.all([worker(), worker(), worker()]);
-
-    // ۳) نمایش ترجمه؛ برای جمله‌های ترجمه‌نشده، معنی کلمه‌ها از لغت‌نامهٔ داخلی
-    let th = "";
-    lines.forEach((parts, li) => {
-      if (!parts.length) return;
-      const tr = [], gl = [];
-      parts.forEach((s, pi) => {
-        const r = result[li + ":" + pi];
-        if (r && r.t) tr.push(r.t);
-        else if (an) { const g = an.gloss(s); if (g.length) gl.push(g.join(" · ")); }
-      });
-      if (tr.length) th += `<div class="${tl === "fa" ? "tr-fa" : "tr-de"}">${esc(tr.join(" "))}</div>`;
-      if (gl.length) th += `<div class="tr-gloss">🔤 ${esc(gl.join(" | "))}</div>`;
-    });
-    GD.$("tr-trans").innerHTML = th || `<div class="empty" style="padding:14px">ترجمه‌ای در دسترس نیست</div>`;
-
-    const okN = srcCount.cache + srcCount.online + srcCount.ai + srcCount.device;
-    let msg;
-    if (srcCount.fail === 0) {
-      msg = srcCount.cache === okN ? "✅ ترجمه از حافظهٔ ذخیره‌شدهٔ مرورگر (کش) انجام شد"
-          : srcCount.cache ? `✅ ترجمه کامل شد (${srcCount.cache} جمله از کش، بقیه آنلاین)` : "✅ ترجمه کامل شد (آنلاین) و برای استفادهٔ آفلاین ذخیره شد";
-      GD.trStatus(msg);
-    } else if (okN === 0) {
-      GD.trStatus((navigator.onLine === false ? "📴 اینترنت قطع است" : "⚠️ سرویس ترجمه در دسترس نیست") +
-        " و این جمله‌ها قبلاً ذخیره نشده‌اند؛ فقط تحلیل و معنی کلمه‌ها نمایش داده شد.", true);
-    } else {
-      GD.trStatus(`📴 ${okN} جمله ترجمه شد (از کش/آنلاین)؛ ${srcCount.fail} جمله بدون اینترنت و ذخیره‌نشده بود → معنی کلمه‌ها نمایش داده شد.`, true);
-    }
-    btn.disabled = false;
-  };
-
-  // متن آلمانی با هایلایت: فعل (آبی) · جمع اسم (زرد) · شاهد گرامر (خط‌زیر بنفش)
-  GD.renderAnalysis = function (res, text, an) {
-    const esc = GD.esc, toks = res.tokens;
-    const gr = new Map();
-    for (const g of res.grammar) for (const i of g.tokens) { if (!gr.has(i)) gr.set(i, []); gr.get(i).push(g.id); }
-    let h = `<div class="card"><h3 class="tr-h">متن آلمانی (روی کلمه‌ها بزنید)</h3>
-      <div class="legend"><span class="tk tk-verb">فعل</span><span class="tk tk-verb2">فعل احتمالی</span><span class="tk tk-pl">جمع اسم</span><span class="tk tk-gr">شاهد گرامر</span></div>
-      <div class="tr-text" id="tr-text">`;
-    let pos = 0;
-    const nl = s => esc(s).replace(/\n/g, "<br>");
-    for (const t of toks) {
-      h += nl(text.slice(pos, t.s));
-      const cls = [];
-      if (res.verbs[t.i]) cls.push(res.verbs[t.i].tier === 1 ? "tk-verb" : "tk-verb2");
-      if (res.plurals[t.i]) cls.push("tk-pl");
-      if (gr.has(t.i)) cls.push("tk-gr");
-      if (!cls.length && t.alpha && (an.lex.has(t.l) || an.nounsPl.has(t.l))) cls.push("tk-known");
-      h += t.alpha ? `<span class="tk ${cls.join(" ")}" data-tok="${t.i}">${esc(t.w)}</span>` : esc(t.w);
-      pos = t.e;
-    }
-    h += nl(text.slice(pos)) + `</div></div>
-      <div class="card hidden" id="tr-info"></div>`;
-    return h;
-  };
-
-  // فهرست فعل‌ها، جمع‌ها و درس‌های گرامرِ پیداشده (همه لینک‌اند)
-  GD.renderLists = function (res, an) {
-    const esc = GD.esc;
-    let h = "";
-    // فعل‌ها (گروه‌بندی بر اساس مدخل)
-    const byE = new Map(), maybe = [];
-    for (const i in res.verbs) {
-      const v = res.verbs[i], t = res.tokens[i];
-      if (v.tier === 1) {
-        for (const [lab, e] of v.pairs) if (e) {
-          if (!byE.has(e)) byE.set(e, new Set());
-          byE.get(e).add(t.w + " (" + lab + ")");
-        }
-      } else maybe.push(t.w);
-    }
-    h += `<div class="card"><h3 class="tr-h">فعل‌های متن</h3>`;
-    if (byE.size) {
-      for (const [e, forms] of byE) {
-        h += `<div class="result-item" ${e.kp ? `data-conj="${esc(e.g)}"` : `data-word="${esc(e.g)}"`}><div class="g">${esc(e.g)} <span class="tag">فعل</span></div><div class="p">${esc(e.p)} · ${esc([...forms].join("، "))}</div></div>`;
-      }
-    } else h += `<div class="hint">فعلی از لیست لغات در متن پیدا نشد.</div>`;
-    if (maybe.length) h += `<div class="hint" style="margin-top:8px">فعل‌های احتمالی (در لیست نیستند): ${esc([...new Set(maybe)].join("، "))}</div>`;
-    h += `</div>`;
-    // جمع اسم‌ها
-    const pls = [];
-    for (const i in res.plurals) pls.push([res.tokens[i].w, res.plurals[i][0]]);
-    if (pls.length) {
-      h += `<div class="card"><h3 class="tr-h">اسم‌های جمع</h3>`;
-      for (const [w, e] of pls) h += `<div class="result-item" data-word="${esc(e.g)}"><div class="g">${esc(w)} ← ${esc(e.g)}</div><div class="p">${esc(e.p)}</div></div>`;
-      h += `</div>`;
-    }
-    // گرامر
-    h += `<div class="card"><h3 class="tr-h">گرامرهای این متن</h3>`;
-    if (res.grammar.length) {
-      for (const g of res.grammar) {
-        h += `<div class="grammar-item" data-gram="${esc(g.id)}"><div><div style="font-weight:600">${esc(g.title_fa || g.title)}</div><div style="font-size:.76rem;color:var(--muted);direction:ltr;text-align:right">${esc(g.notes.join("  |  "))}</div></div><span class="level">${esc(g.level)}</span></div>`;
-      }
-    } else h += `<div class="hint">قاعدهٔ گرامری مشخصی تشخیص داده نشد.</div>`;
-    h += `</div>`;
-    return h;
-  };
-
-  // کلیک روی یک کلمه: معنی + دکمه‌های صرف فعل / جزئیات واژه / درس‌های گرامر مربوط
-  GD.showTokenInfo = function (i) {
-    const res = GD._res; if (!res) return;
-    const an = GD.getAnalyzer(), esc = GD.esc, t = res.tokens[i];
-    document.querySelectorAll("#tr-text .tk.sel").forEach(x => x.classList.remove("sel"));
-    const sp = document.querySelector(`#tr-text [data-tok="${i}"]`);
-    if (sp) sp.classList.add("sel");
-    let h = `<div style="font-weight:700;direction:ltr;text-align:left;margin-bottom:6px">${esc(t.w)}</div><div style="white-space:pre-line;font-size:.9rem;line-height:1.7">${esc(an.describe(res, i))}</div><div class="btn-row">`;
-    const seen = new Set();
-    const v = res.verbs[i];
-    if (v) for (const [, e] of v.pairs) if (e && !seen.has(e)) {
-      seen.add(e);
-      h += e.kp ? `<button class="btn secondary" data-conj="${esc(e.g)}">صرف کامل: ${esc(e.g)}</button>` : `<button class="btn secondary" data-word="${esc(e.g)}">جزئیات: ${esc(e.g)}</button>`;
-    }
-    const pe = res.plurals[i];
-    if (pe && !seen.has(pe[0])) { seen.add(pe[0]); h += `<button class="btn secondary" data-word="${esc(pe[0].g)}">جزئیات: ${esc(pe[0].g)}</button>`; }
-    if (!v && !pe) {
-      const es = (an.nounsSg.has(t.l) && t.cap) ? [an.nounsSg.get(t.l)] : (an.lex.get(t.l) || []);
-      for (const e of es.slice(0, 2)) if (!seen.has(e)) { seen.add(e); h += `<button class="btn secondary" data-word="${esc(e.g)}">جزئیات: ${esc(e.g)}</button>`; }
-    }
-    for (const g of res.grammar) if (g.tokens.includes(i)) h += `<button class="btn ai" data-gram="${esc(g.id)}">📖 ${esc(g.title_fa || g.title)}</button>`;
-    h += `</div>`;
-    const box = GD.$("tr-info");
-    box.innerHTML = h;
-    box.classList.remove("hidden");
-  };
-
-  // ==================================================================
-  // تب‌ها و رویدادها
-  // ==================================================================
-  // تعویض تب فعال
-  GD.switchTab = function (tab) {
-    document.querySelectorAll("#main-nav button")
-      .forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
-    for (const t of ["daily", "leitner", "text", "search", "verbs", "grammar", "ai", "settings"]) {
-      const el = GD.$("tab-" + t);
-      if (el) el.classList.toggle("hidden", t !== tab);
-    }
-    // رندر تنبل (lazy) محتوای تب‌ها هنگام ورود
-    if (tab === "verbs") GD.renderVerbList();
-    if (tab === "grammar") GD.renderGrammar();
-    if (tab === "ai") GD.renderCustomList();
-    if (tab === "leitner") GD.renderLeitner();
-    if (tab === "text") GD.updateNet();
-    if (tab === "daily") GD.updateDailyLeitner();
-  };
-
-  // وضعیت اینترنت و تعداد جمله‌های ذخیره‌شده برای ترجمهٔ آفلاین
-  GD.updateNet = function () {
-    const el = GD.$("tr-net");
-    if (!el) return;
-    const n = GD.TR.size();
-    el.textContent = navigator.onLine === false
-      ? `📴 آفلاین — فقط تحلیل، جمله‌های ترجمه‌شدهٔ قبلی (${n} جمله در کش) و معنی کلمه‌ها`
-      : `🟢 آنلاین — ترجمه‌ها برای استفادهٔ آفلاین ذخیره می‌شوند (الان ${n} جمله در کش)`;
-  };
-
-  // مقداردهی اولیه UI پس از بارگذاری داده‌ها
-  GD.initApp = function () {
-    const S = GD.state, $ = GD.$;
-
-    // پر کردن لیست فصل‌ها (از روی داده‌ها)
-    const chapters = [...new Set(S.words.map(w => w.c).filter(Boolean))].sort();
-    const sel = $("filter-chapter");
-    sel.innerHTML = `<option value="">همه</option>`;
-    for (const c of chapters) {
-      const o = document.createElement("option");
-      o.value = c; o.textContent = c;
-      sel.appendChild(o);
-    }
-
-    // اعمال تنظیمات ذخیره‌شده روی فرم
-    $("per-day").value = S.settings.perDay;
-    $("only-verbs").checked = S.settings.onlyVerbs;
-    $("filter-chapter").value = S.settings.chapter || "";
-    $("api-key").value = S.settings.apiKey || "";
-    $("api-base").value = S.settings.apiBase || "";
-    // مهاجرت مدل‌های حذف‌شده به مدل جایگزین
-    const MODEL_MIGRATE = { "google/gemini-2.0-flash-001": "google/gemini-3.8-flash" };
-    if (MODEL_MIGRATE[S.settings.apiModel]) { S.settings.apiModel = MODEL_MIGRATE[S.settings.apiModel]; GD.saveSettings(); }
-
-    // اگر مدل ذخیره‌شده در لیست نبود، در فیلد «مدل دلخواه» نمایش داده می‌شود
-    const modelSel = $("api-model"), m = S.settings.apiModel || "gpt-4o-mini";
-    const inList = [...modelSel.options].some(o => o.value === m);
-    modelSel.value = inList ? m : "gpt-4o-mini";
-    $("api-model-custom").value = inList ? "" : m;
-
-    GD.buildDailyList();
-    GD.renderCustomList();
-  };
-
-  // ثبت همه‌ی رویدادهای رابط کاربری
-  GD.bindEvents = function () {
-    const S = GD.state, $ = GD.$;
-
-    // --- ناوبری تب‌ها ---
-    $("main-nav").addEventListener("click", e => {
-      const btn = e.target.closest("button");
-      if (btn) GD.switchTab(btn.dataset.tab);
-    });
-
-    // --- تب امروز: قبلی / بعدی / تلفظ / یاد گرفتم ---
-    $("btn-next").onclick = () => { if (S.dailyIndex < S.dailyList.length - 1) { S.dailyIndex++; GD.showDailyCard(); } };
-    $("btn-prev").onclick = () => { if (S.dailyIndex > 0) { S.dailyIndex--; GD.showDailyCard(); } };
-    $("btn-speak").onclick = () => { if (S.dailyList[S.dailyIndex]) GD.speak(S.dailyList[S.dailyIndex].g); };
-    $("btn-known").onclick = () => {
-      if (!S.dailyList[S.dailyIndex]) return;
-      S.settings.known[S.dailyList[S.dailyIndex].g] = 1;
-      GD.leitnerAdd(S.dailyList[S.dailyIndex].g);      // وارد لایتنر (جعبه ۱، مرور از فردا)
-      GD.saveSettings();
-      GD.updateDailyLeitner();
-      if (S.dailyIndex < S.dailyList.length - 1) { S.dailyIndex++; GD.showDailyCard(); }
-      else alert("آفرین! واژه‌های امروز تمام شد.");
-    };
-
-    // --- جستجو (با debounce ۱۸۰ میلی‌ثانیه) ---
-    $("search-input").addEventListener("input", e => {
-      clearTimeout(S.searchTimer);
-      S.searchTimer = setTimeout(() => GD.doSearch(e.target.value), 180);
-    });
-    $("verb-search").addEventListener("input", e => {
-      clearTimeout(S.verbTimer);
-      S.verbTimer = setTimeout(() => GD.renderVerbList(e.target.value), 180);
-    });
-
-    // --- کلیک‌های محتوای اصلی (event delegation) ---
-    $("content").addEventListener("click", e => {
-      // صرف کامل فعل
-      const conj = e.target.closest("[data-conj]");
-      if (conj) { GD.showFullConj(conj.dataset.conj); return; }
-      // جزئیات واژه
-      const word = e.target.closest("[data-word]");
-      if (word) { GD.showWordDetail(word.dataset.word); return; }
-      // درس گرامر
-      const gram = e.target.closest("[data-gram]");
-      if (gram) { GD.showGrammar(gram.dataset.gram); return; }
-      // تقویت درس گرامر با AI
-      const expand = e.target.closest("[data-expand-gram]");
-      if (expand) {
-        const id = expand.dataset.expandGram;
-        const lesson = S.grammar.find(x => x.id === id);
-        if (!lesson) return;
-        expand.disabled = true;
-        expand.textContent = "در حال تقویت...";
-        GD.expandGrammar(lesson).then(data => {
-          if (data.explain) lesson.explain = (lesson.explain || []).concat(data.explain);
-          if (data.examples) lesson.examples = (lesson.examples || []).concat(data.examples);
-          try { localStorage.setItem(GD.KEYS.GRAMMAR, JSON.stringify(S.grammar)); } catch (_) {}
-          GD.showGrammar(id);
-        }).catch(err => alert(err.message || err))
-          .finally(() => { expand.disabled = false; expand.textContent = "✨ تقویت این درس با هوش مصنوعی"; });
-      }
-    });
-
-    // --- لایتنر، تب متن ---
-    $("content").addEventListener("click", e => {
-      const rv = e.target.closest("[data-rev]");
-      if (rv) {
-        const a = rv.dataset.rev, r = S.rev;
-        if (a === "start") GD.startReview();
-        else if (a === "show") { r.shown = true; GD.renderReviewCard(); }
-        else if (a === "yes") GD.reviewAnswer(true);
-        else if (a === "no") GD.reviewAnswer(false);
-        else if (a === "speak") { const w = r.list[r.idx]; if (w) GD.speak(w.g); }
-        else if (a === "stop") {
-          r.active = false;
-          r.summary = (r.ok + r.no) ? `درست: ${r.ok} · نادرست: ${r.no}` : "";
-          GD.renderLeitner(); GD.updateDailyLeitner();
-        } else if (a === "addtoday") {
-          let n = 0;
-          for (const w of S.dailyList) if (GD.leitnerAdd(w.g)) n++;
-          r.summary = ""; r.note = n ? `${n} واژهٔ امروز به جعبهٔ ۱ اضافه شد (مرور از فردا)` : "واژه‌های امروز قبلاً در لایتنر هستند";
-          GD.renderLeitner(); GD.updateDailyLeitner();
-        }
-        return;
-      }
-      const go = e.target.closest("[data-goto]");
-      if (go) { GD.switchTab(go.dataset.goto); return; }
-      const tk = e.target.closest("[data-tok]");
-      if (tk) GD.showTokenInfo(+tk.dataset.tok);
-    });
-    $("btn-tr-go").onclick = () => GD.runText();
-    $("btn-tr-clear").onclick = () => { $("tr-input").value = ""; $("tr-out").innerHTML = ""; $("tr-status").classList.add("hidden"); GD._res = null; };
-    $("btn-tr-speak").onclick = () => { const t = $("tr-input").value.trim(); if (t) GD.speak(t.slice(0, 400)); };
-    $("btn-tr-paste").onclick = () => {
-      if (!navigator.clipboard || !navigator.clipboard.readText) { alert("مرورگر اجازهٔ Paste خودکار نمی‌دهد؛ متن را دستی جایگذاری کنید."); return; }
-      navigator.clipboard.readText().then(t => { $("tr-input").value = t; }).catch(() => alert("دسترسی به کلیپ‌بورد داده نشد."));
-    };
-    $("tr-dir").onchange = e => {
-      const fa = e.target.value === "fa|de";
-      const ta = $("tr-input");
-      ta.style.direction = fa ? "rtl" : "ltr"; ta.style.textAlign = fa ? "right" : "left";
-      ta.placeholder = fa ? "متن فارسی را بنویسید…" : "متن آلمانی را بنویسید یا Paste کنید…";
-    };
-    window.addEventListener("online", GD.updateNet);
-    window.addEventListener("offline", GD.updateNet);
-
-    // --- مودال ---
-    $("modal-close").onclick = GD.closeModal;
-    $("modal").addEventListener("click", e => { if (e.target.id === "modal") GD.closeModal(); });
-
-    // --- تنظیمات ---
-    $("per-day").onchange = e => {
-      S.settings.perDay = Math.max(1, Math.min(20, +e.target.value || 5));
-      GD.saveSettings(); GD.buildDailyList();
-    };
-    $("only-verbs").onchange = e => { S.settings.onlyVerbs = e.target.checked; GD.saveSettings(); GD.buildDailyList(); };
-    $("filter-chapter").onchange = e => { S.settings.chapter = e.target.value; GD.saveSettings(); GD.buildDailyList(); };
-    $("btn-reset").onclick = () => {
-      if (confirm("روز شمار از اول شروع شود؟")) {
-        S.settings.startDate = new Date().toISOString().slice(0, 10);
-        S.settings.known = {};
-        GD.saveSettings(); GD.buildDailyList();
-      }
-    };
-    $("btn-save-api").onclick = () => {
-      S.settings.apiKey = $("api-key").value.trim();
-      S.settings.apiBase = $("api-base").value.trim();
-      // مدل دلخواه (در صورت پر بودن) بر لیست اولویت دارد
-      S.settings.apiModel = $("api-model-custom").value.trim() || $("api-model").value;
-      GD.saveSettings();
-      alert("تنظیمات هوش مصنوعی ذخیره شد");
-    };
-
-    // --- هوش مصنوعی ---
-    $("btn-ai-generate").onclick = () => GD.handleGenerate($("ai-word-input").value);
-    $("btn-search-ai").onclick = () => {
-      GD.switchTab("ai");
-      $("ai-word-input").value = S.lastSearchQ;
-      GD.handleGenerate(S.lastSearchQ);
-    };
-  };
-
-  // ==================================================================
-  // نقطه شروع
-  // ==================================================================
-  // ثبت Service Worker برای کار آفلاین (PWA)
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
   }
-
-  // ترتیب راه‌اندازی:
-  // ۱) ثبت رویدادها  ۲) خواندن تنظیمات  ۳) خواندن واژه‌های شخصی  ۴) بارگذاری داده‌ها (که در پایان initApp را صدا می‌زند)
-  GD.bindEvents();
-  GD.loadSettings();
-  GD.loadCustom();
-  GD.loadData();
+  function refreshQR() {
+    const v = input.value.trim();
+    const ok = /^https?:\/\/\S+$/i.test(v) && drawQR(v);
+    if (!ok) drawQR("");
+    $("qr-download").disabled = !ok; $("qr-copy").disabled = !ok;
+    const local = /^https?:\/\/(localhost|127\.|192\.168\.|10\.)/i.test(v);
+    note.textContent = !v ? "برای ساخت QR، آدرس نهایی برنامه را (مثلاً https://example.com/german-daily/) وارد کنید."
+      : !ok ? "آدرس معتبر نیست (باید با http:// یا https:// شروع شود)."
+      : local ? "⚠️ این آدرس فقط روی شبکهٔ خودتان کار می‌کند. پس از انتشار، آدرس نهایی را اینجا وارد و QR را دانلود کنید."
+      : "";
+  }
+  input.addEventListener("input", refreshQR);
+  refreshQR();
+  $("qr-download").addEventListener("click", () => {
+    // خروجی بزرگ‌تر و واضح برای چاپ
+    const big = document.createElement("canvas"); big.width = big.height = 1024;
+    const keep = canvas.width; canvas.width = canvas.height = 1024; drawQR(input.value.trim());
+    big.getContext("2d").drawImage(canvas, 0, 0);
+    canvas.width = canvas.height = keep; drawQR(input.value.trim());
+    big.toBlob(b => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "german-daily-qr.png"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); }, "image/png");
+  });
+  $("qr-copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(input.value.trim()); $("qr-copy").textContent = "کپی شد ✅"; }
+    catch (_) { input.select(); document.execCommand && document.execCommand("copy"); $("qr-copy").textContent = "کپی شد ✅"; }
+    setTimeout(() => { $("qr-copy").textContent = "کپی لینک"; }, 1800);
+  });
+  if (navigator.share) {
+    $("qr-share").hidden = false;
+    $("qr-share").addEventListener("click", () => navigator.share({ title: "German Daily", text: "یادگیری روزانهٔ آلمانی", url: input.value.trim() }).catch(() => {}));
+  }
 })();
   </script>
 </body>
